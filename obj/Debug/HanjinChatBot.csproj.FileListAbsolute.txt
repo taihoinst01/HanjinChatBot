@@ -1,0 +1,58 @@
+D:\taihoinst\HanjinChatBot\bin\Bot Application.dll.config
+D:\taihoinst\HanjinChatBot\bin\Bot Application.dll
+D:\taihoinst\HanjinChatBot\bin\Bot Application.pdb
+D:\taihoinst\HanjinChatBot\bin\Autofac.dll
+D:\taihoinst\HanjinChatBot\bin\Castle.Core.dll
+D:\taihoinst\HanjinChatBot\bin\Chronic.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Bot.Builder.Autofac.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Bot.Builder.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Bot.Connector.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Logging.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Protocols.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Tokens.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Rest.ClientRuntime.dll
+D:\taihoinst\HanjinChatBot\bin\Microsoft.WindowsAzure.Configuration.dll
+D:\taihoinst\HanjinChatBot\bin\Moq.dll
+D:\taihoinst\HanjinChatBot\bin\Newtonsoft.Json.dll
+D:\taihoinst\HanjinChatBot\bin\System.IdentityModel.Tokens.Jwt.dll
+D:\taihoinst\HanjinChatBot\bin\System.Net.Http.Formatting.dll
+D:\taihoinst\HanjinChatBot\bin\System.Web.Http.dll
+D:\taihoinst\HanjinChatBot\bin\System.Web.Http.WebHost.dll
+D:\taihoinst\HanjinChatBot\bin\Autofac.xml
+D:\taihoinst\HanjinChatBot\bin\Castle.Core.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Bot.Builder.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Bot.Builder.Autofac.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Bot.Connector.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Logging.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Protocols.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.IdentityModel.Tokens.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.Rest.ClientRuntime.xml
+D:\taihoinst\HanjinChatBot\bin\Microsoft.WindowsAzure.Configuration.xml
+D:\taihoinst\HanjinChatBot\bin\Moq.pdb
+D:\taihoinst\HanjinChatBot\bin\Moq.xml
+D:\taihoinst\HanjinChatBot\bin\Newtonsoft.Json.xml
+D:\taihoinst\HanjinChatBot\bin\System.IdentityModel.Tokens.Jwt.xml
+D:\taihoinst\HanjinChatBot\bin\System.Net.Http.Formatting.xml
+D:\taihoinst\HanjinChatBot\bin\System.Web.Http.xml
+D:\taihoinst\HanjinChatBot\bin\System.Web.Http.WebHost.xml
+D:\taihoinst\HanjinChatBot\bin\ar\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\cs\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\de-dE\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\en\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\es\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\fa\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\fr\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\it\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\ja\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\nl\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\ru\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
+D:\taihoinst\HanjinChatBot\obj\Debug\HanjinChatBot.csprojResolveAssemblyReference.cache
+D:\taihoinst\HanjinChatBot\obj\Debug\HanjinChatBot.csproj.CoreCompileInputs.cache
+D:\taihoinst\HanjinChatBot\obj\Debug\Bot Application.dll
+D:\taihoinst\HanjinChatBot\obj\Debug\Bot Application.pdb

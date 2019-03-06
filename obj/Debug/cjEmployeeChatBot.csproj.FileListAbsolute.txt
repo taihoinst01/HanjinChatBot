@@ -1,0 +1,61 @@
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Bot Application.dll.config
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Bot Application.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Bot Application.pdb
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Autofac.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Castle.Core.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Chronic.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Bot.Builder.Autofac.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Bot.Builder.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Bot.Connector.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Protocols.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Rest.ClientRuntime.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Moq.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Newtonsoft.Json.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\SmartCJ.SSO.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\SSODecodeCJW.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.Net.Http.Formatting.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.Web.Http.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.Web.Http.WebHost.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\transceiverxnet.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Autofac.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Castle.Core.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Bot.Builder.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Bot.Builder.Autofac.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Bot.Connector.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Protocols.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.Rest.ClientRuntime.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Microsoft.WindowsAzure.Configuration.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Moq.pdb
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Moq.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\Newtonsoft.Json.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.Net.Http.Formatting.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.Web.Http.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\System.Web.Http.WebHost.xml
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\ar\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\cs\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\de-dE\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\en\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\es\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\fa\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\fr\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\it\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\ja\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\nl\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\ru\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\obj\Debug\cjEmployeeChatBot.csproj.CoreCompileInputs.cache
+C:\Users\User\Source\Repos\cjEmployeeChatBot\obj\Debug\cjEmployeeChatBot.csproj.CopyComplete
+C:\Users\User\Source\Repos\cjEmployeeChatBot\obj\Debug\Bot Application.dll
+C:\Users\User\Source\Repos\cjEmployeeChatBot\obj\Debug\Bot Application.pdb

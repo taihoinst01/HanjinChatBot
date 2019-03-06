@@ -1,0 +1,108 @@
+03-06-2019 11:34:14.142: db connect !! 
+03-06-2019 11:34:14.145: activity.CreateReply() !! 
+03-06-2019 11:34:14.227: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 11:34:14.229: activity.CreateReply() !! 
+03-06-2019 11:34:14.249: SetActivity!! 
+03-06-2019 11:34:14.270: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 11:35:59.901: db connect !! 
+03-06-2019 11:35:59.902: activity.CreateReply() !! 
+03-06-2019 11:35:59.982: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 11:35:59.984: activity.CreateReply() !! 
+03-06-2019 11:35:59.992: SetActivity!! 
+03-06-2019 11:36:00.005: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 11:36:03.086: db connect !! 
+03-06-2019 11:36:03.088: activity.CreateReply() !! 
+03-06-2019 11:36:03.090: SetActivity!! 
+03-06-2019 11:36:03.139: db connect !! 
+03-06-2019 11:36:03.141: activity.CreateReply() !! 
+03-06-2019 11:36:03.143: SetActivity!! 
+03-06-2019 11:37:20.103: db connect !! 
+03-06-2019 11:37:20.104: activity.CreateReply() !! 
+03-06-2019 11:37:20.107: db connect !! 
+03-06-2019 11:37:20.109: activity.CreateReply() !! 
+03-06-2019 11:37:20.175: SetActivity!! 
+03-06-2019 11:37:20.189: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 12:37:55.282: db connect !! 
+03-06-2019 12:37:55.324: activity.CreateReply() !! 
+03-06-2019 12:37:55.413: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 12:37:55.414: SetActivity!! 
+03-06-2019 12:37:55.435: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 12:37:55.437: SetActivity!! 
+03-06-2019 12:39:59.689: db connect !! 
+03-06-2019 12:39:59.690: activity.CreateReply() !! 
+03-06-2019 12:39:59.692: db connect !! 
+03-06-2019 12:39:59.694: activity.CreateReply() !! 
+03-06-2019 12:39:59.767: SetActivity!! 
+03-06-2019 12:39:59.786: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 12:42:04.043: db connect !! 
+03-06-2019 12:42:04.118: activity.CreateReply() !! 
+03-06-2019 12:42:04.154: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 12:42:04.156: activity.CreateReply() !! 
+03-06-2019 12:42:04.175: SetActivity!! 
+03-06-2019 12:42:04.193: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 12:42:05.837: userData insert end 
+03-06-2019 12:42:06.716: userData insert end 
+03-06-2019 12:42:06.718: db SelectConfig start !! 
+03-06-2019 12:42:06.720: db conn SelectConfig !!
+03-06-2019 12:42:06.903: * cnfNm : 루이스제한 || cnfValue : 3000
+03-06-2019 12:42:06.907: * cnfNm : 루이스구독 || cnfValue : 7e7d6269616e47dbbcb630390df222cc
+03-06-2019 12:42:06.911: * cnfNm : 루이스스코어 || cnfValue : 0.7
+03-06-2019 12:42:06.914: * cnfNm : TaihoChatBotV4_1 || cnfValue : af6fd97c-c643-4343-a954-c54b54477efe
+03-06-2019 12:42:06.918: * cnfNm : TaihoChatBotV4_2 || cnfValue : 76b6d1e2-f683-40b1-8b47-febf51214b56
+03-06-2019 12:42:06.921: * cnfNm : TaihoChatBotV4_3 || cnfValue : 5b0473e9-b42b-4406-9f9b-ab5e0a704749
+03-06-2019 12:42:06.923: * cnfNm : TaihoChatBotV4_4 || cnfValue : 2128ba2d-52ef-4cb1-a969-b3f24fe1f0c6
+03-06-2019 12:42:06.926: * cnfNm : TaihoChatBotV4_5 || cnfValue : b61b146a-20be-455b-b0a9-9976c5dd1741
+03-06-2019 12:42:06.928: * cnfNm : API || cnfValue : 
+03-06-2019 12:42:06.930: db SelectConfig end!! 
+03-06-2019 12:42:06.933: *conf type : API* conf value : 
+03-06-2019 12:42:06.935: * DB conn : conversationUpdate
+03-06-2019 12:42:07.116:  db SelectInitDialog !! 
+03-06-2019 12:42:07.875: FB CARD IMG https://cjemployeechatbot-web.azurewebsites.net/assets/image/chatbotStyle/cj_img_190131.png
+03-06-2019 12:42:09.326: FB CARD IMG 
+03-06-2019 12:42:09.338: FB CARD IMG 
+03-06-2019 12:42:09.342: FB CARD IMG 
+03-06-2019 12:42:09.345: FB CARD IMG 
+03-06-2019 12:42:09.349: FB CARD IMG 
+03-06-2019 12:42:09.351: FB CARD IMG 
+03-06-2019 12:42:09.353: FB CARD IMG 
+03-06-2019 12:42:09.355: FB CARD IMG 
+03-06-2019 12:42:09.357: FB CARD IMG 
+03-06-2019 12:42:09.375: * activity.Type : 
+03-06-2019 12:42:09.377: * activity.Recipient.Id : b7eecjhdhn55
+03-06-2019 12:42:09.379: * activity.ServiceUrl : http://localhost:56039
+03-06-2019 04:21:54.399: db connect !! 
+03-06-2019 04:21:54.442: activity.CreateReply() !! 
+03-06-2019 04:21:54.526: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 04:21:54.527: activity.CreateReply() !! 
+03-06-2019 04:21:54.535: SetActivity!! 
+03-06-2019 04:21:54.566: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 04:21:54.856: userData insert end 
+03-06-2019 04:21:54.858: db SelectConfig start !! 
+03-06-2019 04:21:54.859: db conn SelectConfig !!
+03-06-2019 04:21:54.872: userData insert end 
+03-06-2019 04:21:54.894: 'D:\taihoinst\HanjinChatBot\LOG\2019-03-06.LOG' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+03-06-2019 04:21:54.898: * cnfNm : 루이스구독 || cnfValue : 5193a586b5e446629ff5d82475d5d413
+03-06-2019 04:21:54.902: * cnfNm : 루이스스코어 || cnfValue : 0.7
+03-06-2019 04:21:54.906: * cnfNm : cjEmployeeCB1 || cnfValue : 14e6a9f8-058d-449a-9f30-464ad5c9708d
+03-06-2019 04:21:54.910: * cnfNm : cjEmployeeCB2 || cnfValue : 0a2aa7ba-5375-4524-8ff1-3e1b36a2d45c
+03-06-2019 04:21:54.914: * cnfNm : cjEmployeeCB3 || cnfValue : 2cff4117-fc31-4f0f-a66c-5cdd3c9516a0
+03-06-2019 04:21:54.917: * cnfNm : cjEmployeeCB4 || cnfValue : 0957a8bc-1eee-4700-b6a4-f2bd826160f5
+03-06-2019 04:21:54.922: * cnfNm : cjEmployeeCB5 || cnfValue : 97078397-4eb4-4e34-93b0-0d181b2c7cad
+03-06-2019 04:21:54.925: * cnfNm : API || cnfValue : 
+03-06-2019 04:21:54.933: db SelectConfig end!! 
+03-06-2019 04:21:55.027: *conf type : API* conf value : 
+03-06-2019 04:21:55.125: * DB conn : conversationUpdate
+03-06-2019 04:21:55.148:  db SelectInitDialog !! 
+03-06-2019 04:21:55.293: FB CARD IMG https://cjemployeechatbot-web.azurewebsites.net/assets/image/chatbotStyle/cj_img_190131.png
+03-06-2019 04:21:56.442: FB CARD IMG 
+03-06-2019 04:21:56.458: FB CARD IMG 
+03-06-2019 04:21:56.460: FB CARD IMG 
+03-06-2019 04:21:56.463: FB CARD IMG 
+03-06-2019 04:21:56.467: FB CARD IMG 
+03-06-2019 04:21:56.470: FB CARD IMG 
+03-06-2019 04:21:56.474: FB CARD IMG 
+03-06-2019 04:21:56.476: FB CARD IMG 
+03-06-2019 04:21:56.478: FB CARD IMG 
+03-06-2019 04:21:56.494: * activity.Type : 
+03-06-2019 04:21:56.495: * activity.Recipient.Id : b7eecjhdhn55
+03-06-2019 04:21:56.497: * activity.ServiceUrl : http://localhost:56039

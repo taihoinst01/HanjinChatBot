@@ -1,0 +1,59 @@
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Bot Application.dll.config
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Bot Application.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Bot Application.pdb
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Autofac.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Castle.Core.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Bot.Builder.Autofac.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Bot.Builder.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Bot.Connector.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Protocols.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Rest.ClientRuntime.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Moq.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Newtonsoft.Json.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Autofac.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Castle.Core.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Bot.Builder.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Bot.Builder.Autofac.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Bot.Connector.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Protocols.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.Rest.ClientRuntime.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.WindowsAzure.Configuration.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Moq.pdb
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Moq.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Newtonsoft.Json.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\ar\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\cs\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\de-dE\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\en\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\es\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\fa\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\fr\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\it\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\ja\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\nl\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\ru\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\obj\Debug\TaihoChatBotV4.csproj.CoreCompileInputs.cache
+C:\Users\sokan\source\repos\TaihoChatBotV4\obj\Debug\TaihoChatBotV4.csproj.CopyComplete
+C:\Users\sokan\source\repos\TaihoChatBotV4\obj\Debug\Bot Application.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\obj\Debug\Bot Application.pdb
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Chronic.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.Net.Http.Formatting.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.Web.Http.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.Web.Http.WebHost.dll
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.Net.Http.Formatting.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.Web.Http.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\bin\System.Web.Http.WebHost.xml
+C:\Users\sokan\source\repos\TaihoChatBotV4\obj\Debug\TaihoChatBotV4.csprojAssemblyReference.cache

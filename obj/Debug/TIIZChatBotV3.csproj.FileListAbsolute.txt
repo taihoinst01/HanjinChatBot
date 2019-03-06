@@ -1,0 +1,59 @@
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Bot Application.dll.config
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Bot Application.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Bot Application.pdb
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Autofac.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Castle.Core.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Chronic.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Bot.Builder.Autofac.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Bot.Builder.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Bot.Connector.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Logging.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Protocol.Extensions.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Protocols.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Tokens.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Rest.ClientRuntime.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.WindowsAzure.Configuration.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Moq.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Newtonsoft.Json.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.Net.Http.Formatting.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.Web.Http.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.Web.Http.WebHost.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Autofac.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Castle.Core.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Bot.Builder.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Bot.Builder.Autofac.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Bot.Connector.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Logging.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Protocol.Extensions.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Protocols.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Protocols.OpenIdConnect.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.IdentityModel.Tokens.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.Rest.ClientRuntime.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Microsoft.WindowsAzure.Configuration.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Moq.pdb
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Moq.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\Newtonsoft.Json.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.IdentityModel.Tokens.Jwt.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.Net.Http.Formatting.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.Web.Http.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\System.Web.Http.WebHost.xml
+C:\Users\User\source\repos\TIIZChatBotV3\bin\ar\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\cs\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\de-dE\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\en\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\es\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\fa\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\fr\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\it\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\ja\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\nl\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\pt-BR\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\ru\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\bin\zh-hans\Microsoft.Bot.Builder.resources.dll
+C:\Users\User\source\repos\TIIZChatBotV3\obj\Debug\TIIZChatBotV3.csprojAssemblyReference.cache
+C:\Users\User\source\repos\TIIZChatBotV3\obj\Debug\TIIZChatBotV3.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\TIIZChatBotV3\obj\Debug\TIIZChatBotV3.csproj.CopyComplete
+C:\Users\User\source\repos\TIIZChatBotV3\obj\Debug\Bot Application.dll
+C:\Users\User\source\repos\TIIZChatBotV3\obj\Debug\Bot Application.pdb
