@@ -503,8 +503,10 @@ namespace HanjinChatBot
                                 //if (Luis != null || Luis.Count > 0)
                                 if (Luis.Count != 0)
                                 {
-                                    if ((int)Luis["entities"].Count() != 0)
-                                    {
+                                    
+                                    //if ((int)Luis["entities"].Count() != 0)
+                                    if (1 != 0)
+                                        {
                                         float luisScore = (float)Luis["intents"][0]["score"];
                                         int luisEntityCount = (int)Luis["entities"].Count();
 
@@ -1250,8 +1252,9 @@ namespace HanjinChatBot
             for (int i = 0; i < 5; i++)
             {
                 //entities 0일 경우 PASS
-                if ((int)Luis_before[i]["entities"].Count() > 0)
-                {
+                //if ((int)Luis_before[i]["entities"].Count() > 0)
+                    if (1 != 0)
+                    {
                     //intent None일 경우 PASS
                     if (Luis_before[i]["intents"][0]["intent"].ToString() != "None")
                     {
