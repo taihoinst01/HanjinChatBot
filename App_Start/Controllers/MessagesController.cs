@@ -2156,6 +2156,7 @@ namespace HanjinChatBot
                                     {
                                         authNumber = "";//기존 인증번호 삭제
                                         authCheck = "T";//인증성공
+                                        apiOldIntent = "";
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
