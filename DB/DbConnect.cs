@@ -1475,5 +1475,55 @@ namespace HanjinChatBot.DB
             return result;
         }
 
+        /*
+         * API INTENT DATA 검색
+         * */
+        public String getAPITFData(string luisIntent)
+        {
+
+            String luis_intent = luisIntent;
+            SqlDataReader rdr = null;
+            String apiTFData = "";
+            int checkCount = 0;
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText += "SELECT API_INTENT ";
+                cmd.CommandText += "FROM TBL_DLG_RELATION_LUIS ";
+                cmd.CommandText += "WHERE LUIS_INTENT = @luis_intent";
+
+                cmd.Parameters.AddWithValue("@luis_intent", luis_intent);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                try
+                {
+                    while (rdr.Read())
+                    {
+                        apiTFData = rdr["API_INTENT"] as string;
+                        checkCount++;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                rdr.Close();
+
+                if (checkCount == 0)
+                {
+                    apiTFData = "F";
+                }
+
+            }
+            return apiTFData;
+
+        }
+
     }
 }

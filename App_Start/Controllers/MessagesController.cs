@@ -69,7 +69,7 @@ namespace HanjinChatBot
         static public string APIDelayListData = "";                 //택배방문지연 json 데이터
         static public string APIFindListData = "";                 //집배점기사찾기 json 데이터
         static public string apiIntent = "";                 //api 용 intent
-        //static public string apiOldIntent = "";                 //api 용 intent(old)
+        static public string apiOldIntent = "None";                 //api 용 intent(old)
         static public string invoiceNumber = "";                 //운송장 번호
         static public string bookNumber = "";                 //예약 번호
         static public string APIResult = "";                 //api 결과-쏘리메세지 안 나오게 하기 위해서.
@@ -460,68 +460,67 @@ namespace HanjinChatBot
                         else
                         {
                             apiTFdata = db.getAPITFData(luisIntent);
-                            apiIntent = "None";
-                        }
-                        Debug.WriteLine("apiIntentapiIntent : " + apiIntent);
-                        
-                        
-                        if (apiTFdata.Equals("T"))
-                        {
-                            //API 용 루이스 INTENT
-                            List<string[]> apiTextList = new List<string[]>(2);
-
-                            for (int i = 0; i < 2; i++)
+                            if (apiTFdata.Equals("T"))
                             {
-                                apiTextList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APPAPI_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
-                                Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
-                            }
-                            DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
-                            Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
+                                //API 용 루이스 INTENT
+                                List<string[]> apiTextList = new List<string[]>(2);
 
-                            //JObject Luis_before = new JObject();
-                            float APIluisScoreCompare = 0.0f;
-                            JObject APILuis = new JObject();
-
-                            //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
-                            //루이스 처리
-                            Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery));
-
-                            //결과값 받기
-                            await Task.Delay(1000);
-                            t1.Wait();
-                            APILuis = t1.Result;
-                            //결과값 받기
-                            await Task.Delay(1000);
-                            t1.Wait();
-                            APILuis = t1.Result;
-
-                            //Debug.WriteLine("Luis : " + Luis); 
-                            //entities 갯수가 0일겨우 intent를 None으로 처리
-
-                            //if (Luis != null || Luis.Count > 0)
-                            if (APILuis.Count != 0)
-                            {
-                                //if ((int)Luis["entities"].Count() != 0)
-                                if (1 != 0)
+                                for (int i = 0; i < 2; i++)
                                 {
-                                    float luisScore = (float)APILuis["intents"][0]["score"];
-                                    int luisEntityCount = (int)APILuis["entities"].Count();
-
-                                    APILuisIntent = APILuis["topScoringIntent"]["intent"].ToString();//add
-                                    luisScore = APIluisScoreCompare;
-                                    Debug.WriteLine("GetMultiLUIS() LUIS APILuisIntent : " + APILuisIntent);
+                                    apiTextList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APPAPI_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
+                                    Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
                                 }
+                                DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
+                                Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
+
+                                //JObject Luis_before = new JObject();
+                                float APIluisScoreCompare = 0.0f;
+                                JObject APILuis = new JObject();
+
+                                //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
+                                //루이스 처리
+                                Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery));
+
+                                //결과값 받기
+                                await Task.Delay(1000);
+                                t1.Wait();
+                                APILuis = t1.Result;
+                                //결과값 받기
+                                await Task.Delay(1000);
+                                t1.Wait();
+                                APILuis = t1.Result;
+
+                                //Debug.WriteLine("Luis : " + Luis); 
+                                //entities 갯수가 0일겨우 intent를 None으로 처리
+
+                                //if (Luis != null || Luis.Count > 0)
+                                if (APILuis.Count != 0)
+                                {
+                                    //if ((int)Luis["entities"].Count() != 0)
+                                    if (1 != 0)
+                                    {
+                                        float luisScore = (float)APILuis["intents"][0]["score"];
+                                        int luisEntityCount = (int)APILuis["entities"].Count();
+
+                                        APILuisIntent = APILuis["topScoringIntent"]["intent"].ToString();//add
+                                        luisScore = APIluisScoreCompare;
+                                        Debug.WriteLine("GetMultiLUIS() LUIS APILuisIntent : " + APILuisIntent);
+                                    }
+                                }
+                                else
+                                {
+                                    APILuisIntent = "None";
+                                }
+                                apiIntent = APILuisIntent;
                             }
                             else
                             {
-                                APILuisIntent = "None";
+                                apiIntent = "None";
                             }
-                            apiIntent = APILuisIntent;
+
                         }
-                        else
-                        {
-                            apiIntent = "None";
-                        }
+                        Debug.WriteLine("apiIntentapiIntent : " + apiIntent);
+                        
                         
                         //////////////////////////////////////////////
 
@@ -724,13 +723,34 @@ namespace HanjinChatBot
                             }
                             Debug.WriteLine("apiIntent2-------------" + apiIntent);
 
+                            /*
+                             * old intent 초기화 시키기
+                             * */
+                            if (apiIntent.Equals("None"))
+                            {
 
+                            }
+                            else
+                            {
+                                apiOldIntent = "None";
+                            }
+                            
+                            if (apiOldIntent.Equals("None"))
+                            {
+
+                            }
+                            else
+                            {
+                                apiIntent = apiOldIntent;
+                            }
+                            Debug.WriteLine("apiIntent3-------------" + apiIntent);
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
                             ************************************************************** */
                             if (apiIntent.Equals("F_예약"))
                             {
+                                apiOldIntent = apiIntent;
                                 //개인택배예약
                                 if (apiActiveText.Contains("개인택배예약"))
                                 {
@@ -901,6 +921,7 @@ namespace HanjinChatBot
                                  ************************************************************** */
                             if (apiIntent.Equals("F_예약확인"))
                             {
+                                apiOldIntent = apiIntent;
                                 if (apiActiveText.Equals("집하예정일확인"))
                                 {
                                     WebClient webClient = new WebClient();
@@ -1068,19 +1089,36 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_예약취소"))
                             {
+                                apiOldIntent = apiIntent;
                                 if (apiActiveText.Contains("반품예약취소선택"))
                                 {
                                     invoiceNumber = Regex.Replace(activity.Text, @"\D", "");
                                     List<CardAction> cardButtons = new List<CardAction>();
 
-                                    CardAction yesButton = new CardAction();
-                                    yesButton = new CardAction()
+                                    CardAction cancel1Button = new CardAction();
+                                    cancel1Button = new CardAction()
                                     {
                                         Type = "imBack",
-                                        Value = "운송장 번호 " + invoiceNumber + " 반품예약 취소진행",
-                                        Title = "예"
+                                        Value = "운송장 번호 " + invoiceNumber + " <br>취소사유: aaaaaaaa<br>반품예약 취소진행",
+                                        Title = "취소사유 1"
                                     };
-                                    cardButtons.Add(yesButton);
+                                    cardButtons.Add(cancel1Button);
+                                    CardAction cancel2Button = new CardAction();
+                                    cancel2Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "운송장 번호 " + invoiceNumber + " <br>취소사유: aaaaaaaa<br>반품예약 취소진행",
+                                        Title = "취소사유 2"
+                                    };
+                                    cardButtons.Add(cancel2Button);
+                                    CardAction cancel3Button = new CardAction();
+                                    cancel3Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "운송장 번호 " + invoiceNumber + " <br>취소사유: aaaaaaaa<br>반품예약 취소진행",
+                                        Title = "취소사유 3"
+                                    };
+                                    cardButtons.Add(cancel3Button);
 
                                     CardAction noButton = new CardAction();
                                     noButton = new CardAction()
@@ -1108,14 +1146,30 @@ namespace HanjinChatBot
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     List<CardAction> cardButtons = new List<CardAction>();
 
-                                    CardAction yesButton = new CardAction();
-                                    yesButton = new CardAction()
+                                    CardAction cancel1Button = new CardAction();
+                                    cancel1Button = new CardAction()
                                     {
                                         Type = "imBack",
-                                        Value = "예약 번호 " + bookNumber + " 택배예약 취소진행",
-                                        Title = "예"
+                                        Value = "예약 번호 " + bookNumber + " <br>취소사유: aaaaaaaa<br>택배예약 취소진행",
+                                        Title = "취소사유 1"
                                     };
-                                    cardButtons.Add(yesButton);
+                                    cardButtons.Add(cancel1Button);
+                                    CardAction cancel2Button = new CardAction();
+                                    cancel2Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "예약 번호 " + bookNumber + " <br>취소사유: aaaaaaaa<br>택배예약 취소진행",
+                                        Title = "취소사유 2"
+                                    };
+                                    cardButtons.Add(cancel2Button);
+                                    CardAction cancel3Button = new CardAction();
+                                    cancel3Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "예약 번호 " + bookNumber + " <br>취소사유: aaaaaaaa<br>택배예약 취소진행",
+                                        Title = "취소사유 3"
+                                    };
+                                    cardButtons.Add(cancel3Button);
 
                                     CardAction noButton = new CardAction();
                                     noButton = new CardAction()
@@ -1153,7 +1207,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "운송장번호 " + jobj["운송장번호"].ToString() + " 반품예약 취소처리가 완료되었습니다.",
+                                            Text = "운송장번호 " + jobj["운송장번호"].ToString() + " 반품예약 취소처리가 완료되었습니다.<br>취소사유: aaaaaaaaaaaaaaa",
                                         };
 
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1176,7 +1230,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "예약번호 " + jobj["예약번호"].ToString() + " 택배예약 취소처리가 완료되었습니다.",
+                                            Text = "예약번호 " + jobj["예약번호"].ToString() + " 택배예약 취소처리가 완료되었습니다.<br>취소사유: bbbbbbbbbbb",
                                         };
 
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1350,7 +1404,7 @@ namespace HanjinChatBot
                                                     bookButton = new CardAction()
                                                     {
                                                         Type = "imBack",
-                                                        Value = "운송장번호 " + jobj["운송장번호"].ToString() + " 반품예약 확인",
+                                                        Value = "운송장번호 " + jobj["운송장번호"].ToString() + " 반품예약확인",
                                                         Title = "예약 내용 확인"
                                                     };
                                                     cardButtons.Add(bookButton);
@@ -1358,7 +1412,7 @@ namespace HanjinChatBot
                                                     UserHeroCard plCard = new UserHeroCard()
                                                     {
                                                         Title = "",
-                                                        Text = "고객님! 예약번호 " + jobj["예약번호"].ToString() + " 로 " + jobj["예약일자"].ToString() + " 에 " + jobj["예약종류"].ToString() + " 있습니다.<br>집배점 전화번호는 " + jobj["집배점전화번호"].ToString() + " 입니다.",
+                                                        Text = "고객님! 운송장번호 " + jobj["운송장번호"].ToString() + " 로 " + jobj["예약일자"].ToString() + " 에 " + jobj["예약종류"].ToString() + " 있습니다.<br>집배점 전화번호는 " + jobj["집배점전화번호"].ToString() + " 입니다.",
                                                         Buttons = cardButtons,
                                                     };
 
@@ -1523,6 +1577,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_택배예약방문지연"))
                             {
+                                apiOldIntent = apiIntent;
                                 if (apiActiveText.Equals("택배예약방문지연"))
                                 {
                                     WebClient webClient = new WebClient();
@@ -1646,6 +1701,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_택배배송일정조회"))
                             {
+                                apiOldIntent = apiIntent;
                                 if (apiActiveText.Contains("운송장번호") || containNum == true)//직접이던 선택이던
                                 {
                                     if (containNum == true) //숫자가 포함(직접이던 선택이던)
@@ -1746,6 +1802,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_집배점/기사연락처"))
                             {
+                                apiOldIntent = apiIntent;
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("연락처찾기"))
                                 {
                                     WebClient webClient = new WebClient();
@@ -1788,7 +1845,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "고객님! 요청하신 정보는 다음과 같습니다.",
+                                                Text = "고객님! 요청하신 정보는 다음과 같습니다.<br>운송장번호: " + jobj["운송장번호"].ToString() ,
                                                 Buttons = cardButtons,
                                             };
 
