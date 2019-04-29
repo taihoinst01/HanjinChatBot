@@ -221,7 +221,7 @@ namespace HanjinChatBot.DB
         }
 
 
-        public Attachment getAttachmentFromDialog(CardList card, Activity activity)
+        public Attachment getAttachmentFromDialog(CardList card, Activity activity, string userSSO)
         {
             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
             Attachment returnAttachment = new Attachment();
@@ -240,7 +240,12 @@ namespace HanjinChatBot.DB
 
 
             //HistoryLog("CARD BTN1 START");
-            
+
+            if (!userSSO.Equals("INIT"))
+            {
+                card = chkOpenUrlDlg(card, userSSO);
+            }
+
             if (activity.ChannelId.Equals("facebook") && card.btn1Type == null && !string.IsNullOrEmpty(card.cardDivision) && card.cardDivision.Equals("play") && !string.IsNullOrEmpty(card.cardValue))
             {
                 CardAction plButton = new CardAction();

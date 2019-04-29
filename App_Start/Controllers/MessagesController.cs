@@ -208,7 +208,7 @@ namespace HanjinChatBot
                     {
                         foreach (CardList tempcard in dialogs.dialogCard)
                         {
-                            tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity);
+                            tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity, "INIT");
                             initReply.Attachments.Add(tempAttachment);
 
                             //2018-11-26:KSO:INIT Carousel 만드는부분 추가
@@ -557,12 +557,14 @@ namespace HanjinChatBot
                                 Activity commonReply = activity.CreateReply();
                                 Attachment tempAttachment = new Attachment();
                                 DButil.HistoryLog("dlg.dlgType : " + dlg.dlgType);
+
+                                string userSSO = "NONE";
                                 
                                 if (dlg.dlgType.Equals(CARDDLG))
                                 {
                                     foreach (CardList tempcard in dlg.dialogCard)
                                     {
-                                        tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity);
+                                        tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity, userSSO);
 
                                         if (tempAttachment != null)
                                         {
