@@ -2029,92 +2029,62 @@ namespace HanjinChatBot
                                 apiOldIntent = apiIntent;
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("연락처찾기"))
                                 {
-                                    //모바일 인증 체크
-                                    if (authCheck.Equals("F"))
+
+
+
+                                    WebClient webClient = new WebClient();
+                                    Stream stream = webClient.OpenRead(API4Url);
+                                    String API4JsonData = new StreamReader(stream).ReadToEnd();
+
+                                    JObject obj = JObject.Parse(API4JsonData);
+                                    JArray sample = (JArray)obj["예약상세내용확인"];
+
+                                    APIFindListData = API4JsonData;
+                                    int checkInt = sample.Count;
+
+                                    if (checkInt == 0)
                                     {
-                                        List<CardAction> cardButtons = new List<CardAction>();
-
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 핸드폰인증 하겠습니다",
-                                            Title = "예"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                            Title = "아니오"
-                                        };
-                                        cardButtons.Add(returnButton);
-
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
-                                            Buttons = cardButtons,
+                                            Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
                                         };
+
                                         Attachment plAttachment = plCard.ToAttachment();
                                         apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
-                                        WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(API4Url);
-                                        String API4JsonData = new StreamReader(stream).ReadToEnd();
-
-                                        JObject obj = JObject.Parse(API4JsonData);
-                                        JArray sample = (JArray)obj["예약상세내용확인"];
-
-                                        APIFindListData = API4JsonData;
-                                        int checkInt = sample.Count;
-
-                                        if (checkInt == 0)
+                                        foreach (JObject jobj in sample)
                                         {
+                                            List<CardList> text = new List<CardList>();
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction bookButton = new CardAction();
+                                            bookButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "운송장 번호 " + jobj["운송장번호"].ToString() + " 집배점/기사 연락처",
+                                                Title = "집배점/기사연락처 찾기"
+                                            };
+                                            cardButtons.Add(bookButton);
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
+                                                Text = "고객님! 요청하신 정보는 다음과 같습니다.<br>운송장번호: " + jobj["운송장번호"].ToString(),
+                                                Buttons = cardButtons,
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
                                             apiMakerReply.Attachments.Add(plAttachment);
                                         }
-                                        else
-                                        {
-                                            foreach (JObject jobj in sample)
-                                            {
-                                                List<CardList> text = new List<CardList>();
-                                                List<CardAction> cardButtons = new List<CardAction>();
-
-                                                CardAction bookButton = new CardAction();
-                                                bookButton = new CardAction()
-                                                {
-                                                    Type = "imBack",
-                                                    Value = "운송장 번호 " + jobj["운송장번호"].ToString() + " 집배점/기사 연락처",
-                                                    Title = "집배점/기사연락처 찾기"
-                                                };
-                                                cardButtons.Add(bookButton);
-
-                                                UserHeroCard plCard = new UserHeroCard()
-                                                {
-                                                    Title = "",
-                                                    Text = "고객님! 요청하신 정보는 다음과 같습니다.<br>운송장번호: " + jobj["운송장번호"].ToString(),
-                                                    Buttons = cardButtons,
-                                                };
-
-                                                Attachment plAttachment = plCard.ToAttachment();
-                                                apiMakerReply.Attachments.Add(plAttachment);
-                                            }
-                                        }
-
-                                        SetActivity(apiMakerReply);
                                     }
+
+                                    SetActivity(apiMakerReply);
+
+
+
                                 }
                                 else if (apiActiveText.Contains("운송장 번호") || containNum == true)//직접이던 선택이던
                                 {
