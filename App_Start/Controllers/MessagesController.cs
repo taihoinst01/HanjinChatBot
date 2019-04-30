@@ -645,8 +645,17 @@ namespace HanjinChatBot
 
                         /*
                          * relationList 가 null 이고 apiIntent 가 null 이면 sorry message
+                         * 예외처리 : 동의란 단어가 있고 문장길이가 8글자 미만일시에는 relationList = null
                          * add JunHyoung Park
                          * */
+                        String checkText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
+                        int chectTextLength = checkText.Length;
+                        if(checkText.Contains("동의")&& chectTextLength < 9)
+                        {
+                            relationList = null;
+                        }
+
+
                         if (relationList == null && apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("no dialogue-------------");
@@ -2029,9 +2038,6 @@ namespace HanjinChatBot
                                 apiOldIntent = apiIntent;
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("연락처찾기"))
                                 {
-
-
-
                                     WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(API4Url);
                                     String API4JsonData = new StreamReader(stream).ReadToEnd();
@@ -2082,8 +2088,6 @@ namespace HanjinChatBot
                                     }
 
                                     SetActivity(apiMakerReply);
-
-
 
                                 }
                                 else if (apiActiveText.Contains("운송장 번호") || containNum == true)//직접이던 선택이던
