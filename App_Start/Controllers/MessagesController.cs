@@ -838,44 +838,81 @@ namespace HanjinChatBot
                                 }
                                 else if (apiActiveText.Contains("반품택배예약"))
                                 {
-                                    WebClient webClient = new WebClient();
-                                    Stream stream = webClient.OpenRead(API1Url);
-                                    String API1JsonData = new StreamReader(stream).ReadToEnd();
-
-                                    JObject obj = JObject.Parse(API1JsonData);
-                                    JArray sample = (JArray)obj["반품예약"];
-
-                                    APIDeliverListData = API1JsonData;
-
-                                    apiIntent = luisIntent;
-                                    List<CardList> text = new List<CardList>();
-                                    List<CardAction> cardButtons = new List<CardAction>();
-
-                                    int i = 1;
-                                    foreach (JObject jobj in sample)
+                                    //모바일 인증 체크
+                                    if (authCheck.Equals("F"))
                                     {
-                                        CardAction plButton = new CardAction();
-                                        plButton = new CardAction()
+                                        List<CardAction> cardButtons = new List<CardAction>();
+
+                                        CardAction deliveryButton = new CardAction();
+                                        deliveryButton = new CardAction()
                                         {
                                             Type = "imBack",
-                                            Value = "[F_예약]::운송장번호 " + jobj["운송장번호"].ToString() + " 반품택배예약",
-                                            Title = "운송장번호" + i + ""
+                                            Value = "예. 핸드폰인증 하겠습니다",
+                                            Title = "예"
                                         };
-                                        cardButtons.Add(plButton);
-                                        i++;
+                                        cardButtons.Add(deliveryButton);
+
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                            Title = "아니오"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
                                     }
-
-                                    UserHeroCard plCard = new UserHeroCard()
+                                    else
                                     {
-                                        Title = "",
-                                        //Text = "네~ 고객님. 문의하신 정보에 해당하는 운송장 목록(" + apiIntent + ")입니다.",
-                                        Text = "반품 접수를 원하시는 택배를 선택해 주세요",
-                                        Buttons = cardButtons,
-                                    };
+                                        WebClient webClient = new WebClient();
+                                        Stream stream = webClient.OpenRead(API1Url);
+                                        String API1JsonData = new StreamReader(stream).ReadToEnd();
 
-                                    Attachment plAttachment = plCard.ToAttachment();
-                                    apiMakerReply.Attachments.Add(plAttachment);
-                                    SetActivity(apiMakerReply);
+                                        JObject obj = JObject.Parse(API1JsonData);
+                                        JArray sample = (JArray)obj["반품예약"];
+
+                                        APIDeliverListData = API1JsonData;
+
+                                        apiIntent = luisIntent;
+                                        List<CardList> text = new List<CardList>();
+                                        List<CardAction> cardButtons = new List<CardAction>();
+
+                                        int i = 1;
+                                        foreach (JObject jobj in sample)
+                                        {
+                                            CardAction plButton = new CardAction();
+                                            plButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "[F_예약]::운송장번호 " + jobj["운송장번호"].ToString() + " 반품택배예약",
+                                                Title = "운송장번호" + i + ""
+                                            };
+                                            cardButtons.Add(plButton);
+                                            i++;
+                                        }
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            //Text = "네~ 고객님. 문의하신 정보에 해당하는 운송장 목록(" + apiIntent + ")입니다.",
+                                            Text = "반품 접수를 원하시는 택배를 선택해 주세요",
+                                            Buttons = cardButtons,
+                                        };
+
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                        
                                 }
                                 //예약초기화면
                                 else
@@ -1923,6 +1960,128 @@ namespace HanjinChatBot
                             {
 
                             }
+
+                            /*****************************************************************
+                            * apiIntent F_모바일 인증
+                            * 
+                            ************************************************************** */
+                            if (apiIntent.Equals("F_모바일인증"))
+                            {
+                                apiOldIntent = apiIntent;
+                                if (apiActiveText.Contains("예핸드폰인증"))
+                                {
+                                    List<CardList> text = new List<CardList>();
+                                    List<CardAction> cardButtons = new List<CardAction>();
+
+                                    CardAction find1Button = new CardAction();
+                                    find1Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "동의",
+                                        Title = "동의"
+                                    };
+                                    cardButtons.Add(find1Button);
+
+                                    CardAction find2Button = new CardAction();
+                                    find2Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "미동의",
+                                        Title = "미동의"
+                                    };
+                                    cardButtons.Add(find2Button);
+
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "고객님의 휴대폰 번호로 인증에 동의하시면 고객님의 택배목옥을 확인하실 수 있습니다<br>본 인증 절차는 고객님의 택배목록을 조회/제공하기 위한 목적으로만 활용되며, 별도 보관하지 않습니다<br><br>인증 절차에 동의하시겠습니까?",
+                                        Buttons = cardButtons,
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Contains("아니오핸드폰인증"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "핸드폰 인증 진행이 취소되었습니다.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Equals("동의"))
+                                {
+                                    //전화번호 넘기고 인증번호 받는 API 넣기
+                                    authNumber = "123456";
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "전달받으신 인증번호 6자리(123456)를 정확히 입력해 주세요",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Equals("미동의"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "택배목록 조회등을 위해서는 휴대폰인증이 반드시 필요합니다.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (checkNum == true) //입력값이 숫자이면 인증번호라 판단한다.
+                                {
+                                    //인증번호 넘기고 결과 받는 api 넣기
+                                    if (apiActiveText.Equals(authNumber))
+                                    {
+                                        authNumber = "";//기존 인증번호 삭제
+                                        authCheck = "T";//인증성공
+                                        apiOldIntent = "";
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "인증되었습니다. 감사합니다.",
+                                        };
+
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                    else
+                                    {
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "인증에 실패되었습니다. 동의부터 다시 진행해 주세요",
+                                        };
+
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else
+                            {
+
+                            }
+
                             /********************************************/
                         }
 
