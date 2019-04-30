@@ -317,6 +317,14 @@ namespace HanjinChatBot
                                                                                                //cacheList.luisIntent 초기화
                                                                                                //cacheList.luisIntent = null;
 
+                        String checkText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
+                        int chectTextLength = checkText.Length;
+
+                        if (checkText.Contains("동의") && chectTextLength < 9)
+                        {
+                            luisIntent = "None";
+                        }
+
                         //smalltalk 문자 확인  
                         DButil.HistoryLog("smalltalk 체크");
                         String smallTalkSentenceConfirm = db.SmallTalkSentenceConfirm(orgMent);
@@ -336,6 +344,10 @@ namespace HanjinChatBot
                             bool containNum = r.IsMatch(activity.Text); //숫자여부 확인
 
                             if (containNum == true) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
+                            {
+                                luisIntent = "None";
+                            }
+                            else if (checkText.Contains("동의") && chectTextLength < 9)
                             {
                                 luisIntent = "None";
                             }
@@ -645,17 +657,9 @@ namespace HanjinChatBot
 
                         /*
                          * relationList 가 null 이고 apiIntent 가 null 이면 sorry message
-                         * 예외처리 : 동의란 단어가 있고 문장길이가 8글자 미만일시에는 relationList = null
                          * add JunHyoung Park
                          * */
-                        String checkText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
-                        int chectTextLength = checkText.Length;
-                        if(checkText.Contains("동의")&& chectTextLength < 9)
-                        {
-                            luisIntent = "None";
-                        }
-
-
+                        
                         if (relationList == null && apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("no dialogue-------------");
@@ -1738,7 +1742,60 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_택배예약방문지연"))
                             {
                                 apiOldIntent = apiIntent;
-                                if (apiActiveText.Equals("택배예약방문지연"))
+                               if (apiActiveText.Contains("방문지연확인") && containNum == true)
+                                {
+                                    bookNumber = Regex.Replace(activity.Text, @"\D", "");
+                                    JObject obj = JObject.Parse(APIDelayListData);
+                                    JArray sample = (JArray)obj["예약상세내용확인"];
+                                    foreach (JObject jobj in sample)
+                                    {
+                                        if (jobj["방문지연여부"].ToString().Equals("YES") && jobj["예약번호"].ToString().Equals(bookNumber))
+                                        {
+                                            List<CardList> text = new List<CardList>();
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction bookButton = new CardAction();
+                                            bookButton = new CardAction()
+                                            {
+                                                Type = "openUrl",
+                                                Value = "http://www.daum.net",
+                                                Title = "고객의 말씀"
+                                            };
+                                            cardButtons.Add(bookButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "고객님의 예약번호는 " + bookNumber + " 입니다<br> 방문지연으로 인해 고객님께 불편드려 죄송합니다.<br> " + jobj["집배점전화번호"].ToString() + " 로 문의부탁 드립니다. ",
+                                                Buttons = cardButtons,
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                            break;
+                                        }
+                                        else if (jobj["방문지연여부"].ToString().Equals("NO") && jobj["예약번호"].ToString().Equals(bookNumber))
+                                        {
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "고객님의 예약번호는 " + bookNumber + " 입니다<br> 정상적으로 방문했습니다",
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            //NOTHING
+                                        }
+
+                                    }
+                                }
+                                else
                                 {
                                     //모바일 인증 체크
                                     if (authCheck.Equals("F"))
@@ -1827,64 +1884,6 @@ namespace HanjinChatBot
 
                                         SetActivity(apiMakerReply);
                                     }
-                                    
-                                }
-                                else if (apiActiveText.Contains("방문지연확인") && containNum == true)
-                                {
-                                    bookNumber = Regex.Replace(activity.Text, @"\D", "");
-                                    JObject obj = JObject.Parse(APIDelayListData);
-                                    JArray sample = (JArray)obj["예약상세내용확인"];
-                                    foreach (JObject jobj in sample)
-                                    {
-                                        if (jobj["방문지연여부"].ToString().Equals("YES") && jobj["예약번호"].ToString().Equals(bookNumber))
-                                        {
-                                            List<CardList> text = new List<CardList>();
-                                            List<CardAction> cardButtons = new List<CardAction>();
-
-                                            CardAction bookButton = new CardAction();
-                                            bookButton = new CardAction()
-                                            {
-                                                Type = "openUrl",
-                                                Value = "http://www.daum.net",
-                                                Title = "고객의 말씀"
-                                            };
-                                            cardButtons.Add(bookButton);
-
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                Text = "고객님의 예약번호는 " + bookNumber + " 입니다<br> 방문지연으로 인해 고객님께 불편드려 죄송합니다.<br> " + jobj["집배점전화번호"].ToString() + " 로 문의부탁 드립니다. ",
-                                                Buttons = cardButtons,
-                                            };
-
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            SetActivity(apiMakerReply);
-                                            break;
-                                        }
-                                        else if (jobj["방문지연여부"].ToString().Equals("NO") && jobj["예약번호"].ToString().Equals(bookNumber))
-                                        {
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                Text = "고객님의 예약번호는 " + bookNumber + " 입니다<br> 정상적으로 방문했습니다",
-                                            };
-
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            SetActivity(apiMakerReply);
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            //NOTHING
-                                        }
-
-                                    }
-                                }
-                                else
-                                {
-
                                 }
                             }
                             else
