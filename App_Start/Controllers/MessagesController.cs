@@ -68,12 +68,14 @@ namespace HanjinChatBot
         static public string APIReturnBookListData = "";                 //반품예약리스트 json 데이터
         static public string APIDelayListData = "";                 //택배방문지연 json 데이터
         static public string APIFindListData = "";                 //집배점기사찾기 json 데이터
-        static public string apiIntent = "";                 //api 용 intent
+        static public string apiIntent = "None";                 //api 용 intent
         static public string apiOldIntent = "None";                 //api 용 intent(old)
         static public string invoiceNumber = "";                 //운송장 번호
         static public string bookNumber = "";                 //예약 번호
         static public string APIResult = "";                 //api 결과-쏘리메세지 안 나오게 하기 위해서.
         static public string APILuisIntent = null;                 //API 용 루이스 INTENT
+        static public string authCheck = "F";                 //인증 체크-리스트 추출용(T/F)
+        static public string authNumber = "";                 //인증 번호
 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
@@ -645,7 +647,7 @@ namespace HanjinChatBot
                          * relationList 가 null 이고 apiIntent 가 null 이면 sorry message
                          * add JunHyoung Park
                          * */
-                        if (relationList == null && apiIntent == null)
+                        if (relationList == null && apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("no dialogue-------------");
 
