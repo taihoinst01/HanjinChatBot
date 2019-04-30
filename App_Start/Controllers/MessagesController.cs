@@ -1040,13 +1040,38 @@ namespace HanjinChatBot
                                 {
                                     if (authCheck.Equals("F"))
                                     {
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
-                                    }
-                                    else
-                                    {
+                                        CardAction deliveryButton = new CardAction();
+                                        deliveryButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "예. 핸드폰인증 하겠습니다",
+                                            Title = "예"
+                                        };
+                                        cardButtons.Add(deliveryButton);
 
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                            Title = "아니오"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
                                     }
-                                        WebClient webClient = new WebClient();
+                                   
+                                    WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(API4Url);
                                     String API4JsonData = new StreamReader(stream).ReadToEnd();
 
