@@ -117,11 +117,11 @@ namespace HanjinChatBot
 
                 }
             };
-
+            
             if (activity.Type == ActivityTypes.ConversationUpdate && activity.MembersAdded.Any(m => m.Id == activity.Recipient.Id))
             {
                 startTime = DateTime.Now;
-
+                authCheck = "F";
                 //파라메터 호출
                 if (LUIS_NM.Count(s => s != null) > 0)
                 {
@@ -237,6 +237,7 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.Type : " + activity.ChannelData);
                 DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
+                
             }
             else if (activity.Type == ActivityTypes.Message)
             {
@@ -257,6 +258,7 @@ namespace HanjinChatBot
                     string dlgId = "";
                     //결과 플레그 H : 정상 답변,  G : 건의사항, D : 답변 실패, E : 에러, S : SMALLTALK, I : SAPINIT, Q : SAP용어, Z : SAP용어 실피, B : 금칙어 및 비속어 
                     string replyresult = "";
+                    
 
                     //대화 시작 시간
                     startTime = DateTime.Now;
@@ -405,6 +407,11 @@ namespace HanjinChatBot
                             luisIntent = cacheList.luisIntent;
                             luisEntities = cacheList.luisEntities;
                             luisIntentScore = cacheList.luisScore;
+
+                            if (checkText.Contains("동의") && chectTextLength < 9)
+                            {
+                                luisIntent = "None";
+                            }
                         }
 
                         DButil.HistoryLog("luisId : " + luisId);
