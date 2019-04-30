@@ -53,8 +53,7 @@ namespace HanjinChatBot.DB
                 HistoryLog(e.Message);
             }
         }
-
-
+        
         public Attachment getAttachmentFromDialog(DialogList dlg, Activity activity)
         {
             Attachment returnAttachment = new Attachment();
@@ -240,12 +239,12 @@ namespace HanjinChatBot.DB
 
 
             //HistoryLog("CARD BTN1 START");
-
+            /*
             if (!userSSO.Equals("INIT"))
             {
                 card = chkOpenUrlDlg(card, userSSO);
             }
-
+            */
             if (activity.ChannelId.Equals("facebook") && card.btn1Type == null && !string.IsNullOrEmpty(card.cardDivision) && card.cardDivision.Equals("play") && !string.IsNullOrEmpty(card.cardValue))
             {
                 CardAction plButton = new CardAction();
@@ -420,129 +419,7 @@ namespace HanjinChatBot.DB
             return heroCard.ToAttachment();
         }
 
-        public String GetQnAMaker(string query)
-        {
-            var task = Task<string>.Run(() => GetQnAMakerBot(query));
-            var msg = (string)task.Result;
-            return msg;
-        }
-
-        public static async Task<string> GetQnAMakerBot(string query)
-        {
-            //QnAMaker
-            var url =
-               "https://cjsapqna.azurewebsites.net/qnamaker/knowledgebases/de5cd645-059a-4e0b-b2a6-d084240d31a8/generateAnswer";
-            var httpContent = new StringContent("{'question':'" + query + "'}", Encoding.UTF8, "application/json");
-
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Authorization", "EndpointKey a5379adc-3395-431b-bfd4-ef53017e3323");
-            var httpResponse = await httpClient.PostAsync(url, httpContent);
-            var httpResponseMessage = await httpResponse.Content.ReadAsStringAsync();
-            dynamic httpResponseJson = JsonConvert.DeserializeObject(httpResponseMessage);
-            //var replyMessage = (string)httpResponseJson.answers[0].answer;
-            var replyMessage = "";
-
-            //점수제한
-            if (httpResponseJson.answers[0].score > 90.00)
-            {
-                replyMessage = httpResponseJson.answers[0].answer;
-            } else
-            {
-                replyMessage = "No good match";
-            }            
-
-            return replyMessage;         
-
-        }
-
-        //SSO 관련
-        public String GetSSO(string query)
-        {
-            var task = Task<string>.Run(() => GetSSORef(query));
-            var msg = (string)task.Result;
-            return msg;
-        }
-
-        public static async Task<string> GetSSORef(string id)
-        {
-            var url = "";
-            if (id.Substring(0,1) == "M")
-            {
-                url = "https://cjemployeeconnect3.azurewebsites.net?M=" + System.Web.HttpUtility.UrlEncode(id.Replace("Msso:", ""));
-            }
-            else 
-            {
-                url = "https://cjemployeeconnect3.azurewebsites.net?P=" + System.Web.HttpUtility.UrlEncode(id.Replace("Psso:", ""));
-            }
-            
-            HistoryLog("sso url====" + url);
-            var httpClient = new HttpClient();
-            var httpResponse = await httpClient.GetAsync(url);
-            var httpResponseMessage = await httpResponse.Content.ReadAsStringAsync();
-
-            return httpResponseMessage;
-        }
-
-        //SAP 비밀번호 초기화 관련
-        public String GetSapInit(string query)
-        {
-            var task = Task<string>.Run(() => GetSapInitRef(query));
-            var msg = (string)task.Result;
-            return msg;
-        }
-
-        public static async Task<string> GetSapInitRef(string id)
-        {
-            var url = "";
-
-            url = "https://cjemployeeconnect3.azurewebsites.net?T="+ id;
-            HistoryLog("url==" + url);
-            var httpClient = new HttpClient();
-            var httpResponse = await httpClient.GetAsync(url);
-            var httpResponseMessage = await httpResponse.Content.ReadAsStringAsync();
-
-            return httpResponseMessage;
-        }
-
-        public CardList chkOpenUrlDlg(CardList inputCardList, string userSSO)
-        {
-            HistoryLog("userSSO == " + userSSO);
-            if (inputCardList.btn1Type != null && inputCardList.btn1Type.Equals("openUrl"))
-            {
-                inputCardList.btn1Context = chkUrlStr(inputCardList.btn1Context, userSSO);
-            }
-            if (inputCardList.btn2Type != null && inputCardList.btn2Type.Equals("openUrl"))
-            {
-                inputCardList.btn2Context = chkUrlStr(inputCardList.btn2Context, userSSO);
-            }
-            if (inputCardList.btn3Type != null && inputCardList.btn3Type.Equals("openUrl"))
-            {
-                inputCardList.btn3Context = chkUrlStr(inputCardList.btn3Context, userSSO);
-            }
-            if (inputCardList.btn4Type != null && inputCardList.btn4Type.Equals("openUrl"))
-            {
-                inputCardList.btn4Context = chkUrlStr(inputCardList.btn4Context, userSSO);
-            }
-
-            return inputCardList;
-        }
-
-        public string chkUrlStr(string btnContext, string userSSO)
-        {
-            string returnStr = btnContext;
-            //총무도움방
-            if (btnContext.Contains("http://cjhelpdesk.cj.net/CJWorldLogin.jsp?movetype=2") && btnContext.Contains("&cjworld_id="))
-            {
-                returnStr += userSSO;
-            }
-            //정보보호
-            else if (btnContext.Contains("http://itsecu.cj.net/ism_back/common/sso/ismMain.fo") && btnContext.Contains("&cjworld_id="))
-            {
-                returnStr += userSSO;
-            }
-            return returnStr;
-        }
-
+        
         //태그 제거
         public string StripHtml(string Txt)
         {
