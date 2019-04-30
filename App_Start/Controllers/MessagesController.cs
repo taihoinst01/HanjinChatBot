@@ -652,7 +652,7 @@ namespace HanjinChatBot
                         int chectTextLength = checkText.Length;
                         if(checkText.Contains("동의")&& chectTextLength < 9)
                         {
-                            relationList = null;
+                            luisIntent = "None";
                         }
 
 
