@@ -117,11 +117,20 @@ namespace HanjinChatBot
 
                 }
             };
-            
+
+            /*
+             * USER DATA CHECK
+             * */
+            List<UserCheck> userCheck = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+            if (userCheck.Count() == 0)
+            {
+                int userDataResult = db.UserCheckDataInsert(activity.ChannelId, activity.Conversation.Id);
+            }
+            DButil.HistoryLog("userCheck insert end ");
+
             if (activity.Type == ActivityTypes.ConversationUpdate && activity.MembersAdded.Any(m => m.Id == activity.Recipient.Id))
             {
                 startTime = DateTime.Now;
-                authCheck = "F";
                 //파라메터 호출
                 if (LUIS_NM.Count(s => s != null) > 0)
                 {
@@ -237,9 +246,15 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.Type : " + activity.ChannelData);
                 DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
-                
+
             }
-            else if (activity.Type == ActivityTypes.Message)
+            else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) //전화번호 받아오는 부분 처리
+            {
+                String telNumber = "01012341234";
+                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", telNumber);
+            }
+            //else if (activity.Type == ActivityTypes.Message)
+            else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 try
@@ -258,7 +273,7 @@ namespace HanjinChatBot
                     string dlgId = "";
                     //결과 플레그 H : 정상 답변,  G : 건의사항, D : 답변 실패, E : 에러, S : SMALLTALK, I : SAPINIT, Q : SAP용어, Z : SAP용어 실피, B : 금칙어 및 비속어 
                     string replyresult = "";
-                    
+
 
                     //대화 시작 시간
                     startTime = DateTime.Now;
@@ -304,7 +319,6 @@ namespace HanjinChatBot
                     }
                     else
                     {
-
 
                         string queryStr = "";
                         string luisQuery = "";
@@ -477,6 +491,7 @@ namespace HanjinChatBot
                                 APILuisIntent = "None";
                             }
                             apiIntent = APILuisIntent;
+                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
                         }
                         else
                         {
@@ -538,7 +553,7 @@ namespace HanjinChatBot
                             {
                                 apiIntent = "None";
                             }
-
+                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
                         }
                         Debug.WriteLine("apiIntentapiIntent : " + apiIntent);
 
@@ -666,7 +681,11 @@ namespace HanjinChatBot
                          * relationList 가 null 이고 apiIntent 가 null 이면 sorry message
                          * add JunHyoung Park
                          * */
-                        
+                        List<UserCheck> uData = new List<UserCheck>();
+                        uData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                        apiIntent = uData[0].apiIntent;
+                        apiOldIntent = uData[0].apiOldIntent;
+
                         if (relationList == null && apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("no dialogue-------------");
@@ -766,6 +785,12 @@ namespace HanjinChatBot
                                 apiIntent = apiOldIntent;
                             }
                             Debug.WriteLine("apiIntent3-------------" + apiIntent);
+                            /*
+                             * DB 에서 API 관련부분 처리
+                             * 동의어 부분
+                             * */
+
+                            authCheck = uData[0].authCheck;
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -773,6 +798,7 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_예약"))
                             {
                                 apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 //개인택배예약
                                 if (apiActiveText.Contains("개인택배예약"))
                                 {
@@ -932,7 +958,7 @@ namespace HanjinChatBot
                                         apiMakerReply.Attachments.Add(plAttachment);
                                         SetActivity(apiMakerReply);
                                     }
-                                        
+
                                 }
                                 //예약초기화면
                                 else
@@ -981,6 +1007,7 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_예약확인"))
                             {
                                 apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Equals("집하예정일확인"))
                                 {
                                     //모바일 인증 체크
@@ -1054,7 +1081,7 @@ namespace HanjinChatBot
                                         SetActivity(apiMakerReply);
                                     }
 
-                                        
+
                                 }
                                 else if (apiActiveText.Equals("예약번호확인"))
                                 {
@@ -1152,8 +1179,8 @@ namespace HanjinChatBot
 
                                         SetActivity(apiMakerReply);
                                     }
-                                   
-                                    
+
+
                                 }
                                 else if (apiActiveText.Contains("예약내용확인"))
                                 {
@@ -1224,6 +1251,7 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_예약취소"))
                             {
                                 apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("반품예약취소선택"))
                                 {
                                     invoiceNumber = Regex.Replace(activity.Text, @"\D", "");
@@ -1603,7 +1631,7 @@ namespace HanjinChatBot
                                             //error
                                         }
                                     }
-                                    
+
                                 }
                                 else if (apiActiveText.Contains("반품예약확인") || apiActiveText.Contains("택배예약확인"))
                                 {
@@ -1749,7 +1777,8 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_택배예약방문지연"))
                             {
                                 apiOldIntent = apiIntent;
-                               if (apiActiveText.Contains("방문지연확인") && containNum == true)
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
+                                if (apiActiveText.Contains("방문지연확인") && containNum == true)
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     JObject obj = JObject.Parse(APIDelayListData);
@@ -1905,6 +1934,7 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_택배배송일정조회"))
                             {
                                 apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("운송장번호") || containNum == true)//직접이던 선택이던
                                 {
                                     if (containNum == true) //숫자가 포함(직접이던 선택이던)
@@ -2042,6 +2072,7 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_집배점/기사연락처"))
                             {
                                 apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("연락처찾기"))
                                 {
                                     WebClient webClient = new WebClient();
@@ -2169,6 +2200,7 @@ namespace HanjinChatBot
                             if (apiIntent.Equals("F_모바일인증"))
                             {
                                 apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("예핸드폰인증"))
                                 {
                                     List<CardList> text = new List<CardList>();
@@ -2248,6 +2280,7 @@ namespace HanjinChatBot
                                     {
                                         authNumber = "";//기존 인증번호 삭제
                                         authCheck = "T";//인증성공
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_CHECK", authCheck); //AUTH_CHECK UPDATE
                                         apiOldIntent = "";
                                         UserHeroCard plCard = new UserHeroCard()
                                         {

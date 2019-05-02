@@ -1166,7 +1166,7 @@ namespace HanjinChatBot.DB
         }
 
 
-        public int UserDataInsert(string channelData, string conversationsId)
+        public int UserCheckDataInsert(string channelData, string conversationsId)
         {
 
             SqlDataReader rdr = null;
@@ -1179,8 +1179,8 @@ namespace HanjinChatBot.DB
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "INSERT INTO TBL_USERDATA(CHANNELDATA, CONVERSATIONSID, LOOP, SAP) ";
-                cmd.CommandText += " VALUES (@channeldata, @conversationsid,0,0)";
+                cmd.CommandText += "INSERT INTO TBL_USERCHECK(CHANNELDATA, CONVERSATIONSID, AUTH_CHECK) ";
+                cmd.CommandText += " VALUES (@channeldata, @conversationsid,'F')";
 
                 cmd.Parameters.AddWithValue("@channeldata", channelData);
                 cmd.Parameters.AddWithValue("@conversationsid", conversationsId);
@@ -1245,10 +1245,10 @@ namespace HanjinChatBot.DB
             return result;
         }
 
-        public List<UserData> UserDataConfirm(string channelData, string conversationsId)
+        public List<UserCheck> UserDataConfirm(string channelData, string conversationsId)
         {
             SqlDataReader rdr = null;
-            List<UserData> userdata = new List<UserData>();
+            List<UserCheck> userdata = new List<UserCheck>();
             SqlCommand cmd = new SqlCommand();
 
             using (SqlConnection conn = new SqlConnection(connStr))
@@ -1257,8 +1257,8 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "SELECT  TOP 1 USER_ID, CHANNELDATA, CONVERSATIONSID, LOOP, SAP, SSO, ISNULL(MOBILE_YN, 'P') AS MOBILE_YN ";
-                cmd.CommandText += "FROM    TBL_USERDATA ";
+                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER ";
+                cmd.CommandText += "FROM    TBL_USERCHECK ";
                 cmd.CommandText += "WHERE  CHANNELDATA = @channeldata ";
                 cmd.CommandText += "AND      CONVERSATIONSID = @conversationsId ";
 
@@ -1271,15 +1271,15 @@ namespace HanjinChatBot.DB
                 {
                     while (rdr.Read())
                     {
-                        UserData userData = new UserData();
+                        UserCheck userData = new UserCheck();
                         
-                        userData.userId = rdr["USER_ID"] as string;
                         userData.channelData = rdr["CHANNELDATA"] as string;
                         userData.conversationsId = rdr["CONVERSATIONSID"] as string;
-                        userData.loop = Convert.ToInt32(rdr["LOOP"]);
-                        userData.sap = Convert.ToInt32(rdr["SAP"]);
-                        userData.sso = rdr["SSO"] as string;
-                        userData.mobileYN = rdr["MOBILE_YN"] as string;
+                        userData.userPhone = rdr["USER_PHONE"] as string;
+                        userData.apiIntent = rdr["API_INTENT"] as string;
+                        userData.apiOldIntent = rdr["API_OLDINTENT"] as string;
+                        userData.authCheck = rdr["AUTH_CHECK"] as string;
+                        userData.authNumber = rdr["AUTH_NUMBER"] as string;
                         
                         userdata.Add(userData);
                     }
@@ -1293,7 +1293,7 @@ namespace HanjinChatBot.DB
             return userdata;
         }
 
-        public int UserDataUpdateUserID(string channelData, string conversationsId, string gubun, string val)
+        public int UserCheckUpdate(string channelData, string conversationsId, string gubun, string val)
         {
 
             SqlDataReader rdr = null;
@@ -1306,24 +1306,24 @@ namespace HanjinChatBot.DB
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
 
-                if (gubun.Equals("OPTIONAL_1"))
+                if (gubun.Equals("AUTH_CHECK"))
                 {
-                    cmd.CommandText += " UPDATE     TBL_USERDATA ";
-                    cmd.CommandText += " SET           OPTIONAL_1 = @val ";
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           AUTH_CHECK = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
-                else if (gubun.Equals("sabun"))
+                else if (gubun.Equals("API_INTENT"))
                 {
-                    cmd.CommandText += " UPDATE     TBL_USERDATA ";
-                    cmd.CommandText += " SET           SABUN = @val ";
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           API_INTENT = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
-                else if (gubun.Equals("reissue"))
+                else if (gubun.Equals("API_OLDINTENT"))
                 {
-                    cmd.CommandText += " UPDATE     TBL_USERDATA ";
-                    cmd.CommandText += " SET           REISSUE = @val ";
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           API_OLDINTENT = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
