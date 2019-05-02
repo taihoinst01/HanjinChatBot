@@ -122,6 +122,8 @@ namespace HanjinChatBot
              * USER DATA CHECK
              * */
             List<UserCheck> userCheck = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+            Debug.WriteLine("*activity.ChannelId : " + activity.ChannelId + "* activity.Conversation.Id : " + activity.Conversation.Id);
+            Debug.WriteLine("*userCheck.Count() : " + userCheck.Count());
             if (userCheck.Count() == 0)
             {
                 int userDataResult = db.UserCheckDataInsert(activity.ChannelId, activity.Conversation.Id);
