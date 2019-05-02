@@ -164,6 +164,7 @@
     <Compile Include="Models\DialogList.cs" />
     <Compile Include="Models\LuisList.cs" />
     <Compile Include="Models\MediaList.cs" />
+    <Compile Include="Models\UserCheck.cs" />
     <Compile Include="Models\UserData.cs" />
     <Compile Include="Models\TextList.cs" />
     <Compile Include="Models\TrendList.cs" />
