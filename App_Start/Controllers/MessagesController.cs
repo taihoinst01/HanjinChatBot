@@ -576,6 +576,11 @@ namespace HanjinChatBot
                         if (!string.IsNullOrEmpty(luisIntent))
                         {
                             relationList = db.DefineTypeChkSpare(luisIntent, luisEntities);
+                            
+                            if (relationList.Count == 0)
+                            {
+                                relationList = null;
+                            }
                         }
                         else
                         {
@@ -592,7 +597,7 @@ namespace HanjinChatBot
                             }
 
                         }
-
+                        
                         if (relationList != null)
                         {
                             dlgId = "";
@@ -712,6 +717,7 @@ namespace HanjinChatBot
                             apiOldIntent = uData[0].apiOldIntent;
                         }
                         Debug.WriteLine("apiIntent CHECK-------------"+ apiIntent);
+                        Debug.WriteLine("relationList-------------" + relationList);
                         if (relationList == null && apiIntent.Equals("None"))
                         //if (relationList.Count == 0 && apiIntent.Equals("None"))
                         {
@@ -813,6 +819,18 @@ namespace HanjinChatBot
                                 apiIntent = apiOldIntent;
                             }
                             Debug.WriteLine("apiIntent3-------------" + apiIntent);
+
+                            if(luisIntent.Equals("None"))
+                            {
+
+                            }
+                            else
+                            {
+                                if (apiTFdata.Equals("F"))
+                                {
+                                    apiIntent = "None";
+                                }
+                            }
                             /*
                              * DB 에서 API 관련부분 처리
                              * 동의어 부분
