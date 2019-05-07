@@ -716,6 +716,37 @@ namespace HanjinChatBot
                         {
                             apiOldIntent = uData[0].apiOldIntent;
                         }
+
+                        if (apiIntent.Equals("None") || apiIntent.Equals(""))
+                        {
+
+                        }
+                        else
+                        {
+                            apiOldIntent = "None";
+                        }
+
+                        if (apiOldIntent.Equals("None") || apiOldIntent.Equals(""))
+                        {
+
+                        }
+                        else
+                        {
+                            apiIntent = apiOldIntent;
+                        }
+                        Debug.WriteLine("apiIntent3-------------" + apiIntent);
+
+                        if (luisIntent.Equals("None"))
+                        {
+
+                        }
+                        else
+                        {
+                            if (apiTFdata.Equals("F"))
+                            {
+                                apiIntent = "None";
+                            }
+                        }
                         Debug.WriteLine("apiIntent CHECK-------------"+ apiIntent);
                         Debug.WriteLine("relationList-------------" + relationList);
                         if (relationList == null && apiIntent.Equals("None"))
@@ -831,6 +862,7 @@ namespace HanjinChatBot
                                     apiIntent = "None";
                                 }
                             }
+                            Debug.WriteLine("apiIntent4-------------" + apiIntent);
                             /*
                              * DB 에서 API 관련부분 처리
                              * 동의어 부분
