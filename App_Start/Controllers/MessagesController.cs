@@ -367,8 +367,10 @@ namespace HanjinChatBot
                             Debug.WriteLine("cache none : " + orgMent);
                             Regex r = new Regex("[0-9]");
                             bool containNum = r.IsMatch(activity.Text); //숫자여부 확인
+                            String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
+                            int checkNumberLength = onlyNumber.Length;
 
-                            if (containNum == true) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
+                            if (containNum == true&&checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
                             {
                                 luisIntent = "None";
                             }
@@ -709,8 +711,9 @@ namespace HanjinChatBot
                         {
                             apiOldIntent = uData[0].apiOldIntent;
                         }
-                        
+                        Debug.WriteLine("apiIntent CHECK-------------"+ apiIntent);
                         if (relationList == null && apiIntent.Equals("None"))
+                        //if (relationList.Count == 0 && apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("no dialogue-------------");
 
@@ -816,6 +819,7 @@ namespace HanjinChatBot
                              * */
 
                             authCheck = uData[0].authCheck;
+                            Debug.WriteLine("authCheck-------------" + authCheck);
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -1003,7 +1007,7 @@ namespace HanjinChatBot
                                             String yearText = tempDate.Substring(0, 4);
                                             String monthText = tempDate.Substring(5, 2);
                                             String dayText = tempDate.Substring(8, 2);
-                                            String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_yd"].ToString() + "요일)";
+                                            String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
 
                                             CardAction plButton = new CardAction();
                                             plButton = new CardAction()
