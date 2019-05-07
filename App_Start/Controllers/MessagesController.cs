@@ -83,6 +83,7 @@ namespace HanjinChatBot
         static public string APILuisIntent = null;                 //API 용 루이스 INTENT
         static public string authCheck = "F";                 //인증 체크-리스트 추출용(T/F)
         static public string authNumber = "";                 //인증 번호
+        static public string checkFindAddressCnt = "F";                 //주소로서 집배점 찾기 검토
 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
@@ -830,7 +831,7 @@ namespace HanjinChatBot
                             Debug.WriteLine("apiIntent2-------------" + apiIntent);
 
                             /*
-                             * old intent 초기화 시키기
+                             * API 처리부분
                              * */
                             if (apiIntent.Equals("None")|| apiIntent.Equals(""))
                             {
@@ -993,7 +994,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = returnText +" 운송장 번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 또는 모바일 고객센터(m.hanjin.co.kr)에서 개인택배로 예약접수가 가능합니다.",
+                                            Text = "["+returnText +"] 운송장 번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 또는 모바일 고객센터(m.hanjin.co.kr)에서 개인택배로 예약접수가 가능합니다.",
                                             Buttons = cardButtons,
                                         };
 
@@ -1032,7 +1033,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1237,7 +1238,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 운송장번호나 예약번호를 직접 입력해 주세요",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1314,7 +1315,7 @@ namespace HanjinChatBot
 
 
                                 }
-                                else if (apiActiveText.Contains("예약내용확인"))
+                                else if (apiActiveText.Contains("예약내용확인")||containNum==true)//리스트버튼 클릭이거나 직접 입력일 경우
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     WebClient webClient = new WebClient();
@@ -1404,7 +1405,332 @@ namespace HanjinChatBot
                             {
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
-                                if (apiActiveText.Contains("반품예약취소선택"))
+                                if (apiActiveText.Contains("예약취소선택"))
+                                {
+                                    bookNumber = Regex.Replace(activity.Text, @"\D", "");
+                                    List<CardAction> cardButtons = new List<CardAction>();
+
+                                    CardAction cancel1Button = new CardAction();
+                                    cancel1Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "예약취소진행1",
+                                        Title = "발송취소"
+                                    };
+                                    cardButtons.Add(cancel1Button);
+                                    CardAction cancel2Button = new CardAction();
+                                    cancel2Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "예약취소진행2",
+                                        Title = "기집하"
+                                    };
+                                    cardButtons.Add(cancel2Button);
+                                    CardAction cancel3Button = new CardAction();
+                                    cancel3Button = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "예약취소진행3",
+                                        Title = "이중예약"
+                                    };
+                                    cardButtons.Add(cancel3Button);
+
+                                    CardAction noButton = new CardAction();
+                                    noButton = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "아니오. " + bookNumber + " 예약 취소하지 않습니다.",
+                                        Title = "아니오"
+                                    };
+                                    cardButtons.Add(noButton);
+
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "예약 번호 " + bookNumber + " 예약 취소를 진행합니다.<br>취소사유를 선택해 주세요",
+                                        Buttons = cardButtons,
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Contains("예약취소진행"))
+                                {
+                                    cancelNumber = Regex.Replace(activity.Text, @"\D", "");
+                                    WebClient webClient = new WebClient();
+                                    Stream stream = webClient.OpenRead(bookCancelResult);
+                                    String bookCancelResultJsonData = new StreamReader(stream).ReadToEnd();
+
+                                    JArray obj = JArray.Parse(bookCancelResultJsonData);
+
+                                    foreach (JObject jobj in obj)
+                                    {
+                                        if (jobj["ret_cod"].ToString().Equals("9001"))
+                                        {
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction serviceCenterButton = new CardAction();
+                                            serviceCenterButton = new CardAction()
+                                            {
+                                                Type = "openUrl",
+                                                Value = "http://m.hanjin.co.kr",
+                                                Title = "모바일 고객센터"
+                                            };
+                                            cardButtons.Add(serviceCenterButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.",
+                                                Buttons = cardButtons,
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9999"))
+                                        {
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction serviceCenterButton = new CardAction();
+                                            serviceCenterButton = new CardAction()
+                                            {
+                                                Type = "openUrl",
+                                                Value = "http://m.hanjin.co.kr",
+                                                Title = "모바일 고객센터"
+                                            };
+                                            cardButtons.Add(serviceCenterButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.",
+                                                Buttons = cardButtons,
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+                                        else
+                                        {
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "예약번호 " + bookNumber + " 의 예약취소 처리가 완료되었습니다.",
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+
+                                    }
+                                }
+                                else if (apiActiveText.Contains("아니오") && apiActiveText.Contains("예약취소"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "예약번호 " + invoiceNumber + " 예약처리 취소작업이 종료되었습니다.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Contains("예약확인")||checkNum==true)
+                                {
+                                    bookNumber = Regex.Replace(activity.Text, @"\D", "");
+                                    WebClient webClient = new WebClient();
+                                    Stream stream = webClient.OpenRead(bookCancelYN);
+                                    String bookCancelYNJsonData = new StreamReader(stream).ReadToEnd();
+
+                                    JArray obj = JArray.Parse(bookCancelYNJsonData);
+                                    foreach (JObject jobj in obj)
+                                    {
+                                        String tempDate = jobj["apc_ymd"].ToString();
+                                        String yearText = tempDate.Substring(0, 4);
+                                        String monthText = tempDate.Substring(4, 2);
+                                        String dayText = tempDate.Substring(6, 2);
+                                        String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
+                                        String heroCardText = "";
+
+                                        if (jobj["ret_cod"].ToString().Equals("1000"))
+                                        {
+                                            heroCardText = dateText + "에 예약하신 예약번호 " + bookNumber + "를 취소하시려면 하단의 버튼을 클릭해주세요";
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9001"))
+                                        {
+                                            heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.";
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9999"))
+                                        {
+                                            heroCardText = "예약번호가 존재하지 않습니다.";
+                                        }
+                                        else
+                                        {
+                                            heroCardText = "예약번호가 존재하지 않습니다.";
+                                        }
+
+                                        List<CardAction> cardButtons = new List<CardAction>();
+                                        CardAction bookButton = new CardAction();
+
+                                        if (jobj["ret_cod"].ToString().Equals("1000"))
+                                        {
+                                            bookButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "예약번호 " + bookNumber + " 예약 취소선택",
+                                                Title = "예약 취소"
+                                            };
+
+                                            cardButtons.Add(bookButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = heroCardText,
+                                                Buttons = cardButtons,
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+                                        else
+                                        {
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = heroCardText,
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                    //모바일 인증 체크
+                                    if (authCheck.Equals("F"))
+                                    {
+                                        List<CardAction> cardButtons = new List<CardAction>();
+
+                                        CardAction deliveryButton = new CardAction();
+                                        deliveryButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "예. 핸드폰인증 하겠습니다",
+                                            Title = "예"
+                                        };
+                                        cardButtons.Add(deliveryButton);
+
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                            Title = "아니오"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                    else
+                                    {
+                                        WebClient webClient = new WebClient();
+                                        Stream stream = webClient.OpenRead(DeliveryList);
+                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+
+                                        JArray obj = JArray.Parse(DeliveryListJsonData);
+                                        int checkInt = obj.Count;
+
+                                        if (checkInt == 0)
+                                        {
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction bookButton = new CardAction();
+                                            bookButton = new CardAction()
+                                            {
+                                                Type = "openUrl",
+                                                Value = "http://www.hanjin.co.kr/Delivery_html/reserve/login1.jsp?rsr_gbn=",
+                                                Title = "신규택배 예약하기"
+                                            };
+                                            cardButtons.Add(bookButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "예약된 정보가 없습니다.",
+                                                Buttons = cardButtons,
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                        }
+                                        else
+                                        {
+                                            foreach (JObject jobj in obj)
+                                            {
+                                                List<CardList> text = new List<CardList>();
+                                                List<CardAction> cardButtons = new List<CardAction>();
+
+                                                String tempDate = jobj["dlv_ymd"].ToString();
+                                                String yearText = tempDate.Substring(0, 4);
+                                                String monthText = tempDate.Substring(5, 2);
+                                                String dayText = tempDate.Substring(8, 2);
+                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
+
+                                                CardAction bookButton = new CardAction();
+                                                bookButton = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = jobj["wbl_num"].ToString() + " 예약확인",
+                                                    Title = "예약 내용 확인"
+                                                };
+                                                cardButtons.Add(bookButton);
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = dateText + " " + jobj["god_nam"].ToString() + jobj["wrk_nam"].ToString() + "<br>" + jobj["wbl_num"].ToString(),
+                                                    Buttons = cardButtons,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                            }
+                                        }
+
+                                        SetActivity(apiMakerReply);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                //if (apiIntent.Equals("F_예약취소"))
+                            }
+                            
+
+                            if (apiIntent.Equals("F_예약취소_old"))
+                            {
+                                apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
+                                if (apiActiveText.Contains("반품예약취소선택")||checkNum==true)
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     List<CardAction> cardButtons = new List<CardAction>();
@@ -1454,7 +1780,7 @@ namespace HanjinChatBot
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("택배예약취소선택"))
+                                else if (apiActiveText.Contains("택배예약취소선택")||checkNum==true)
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     List<CardAction> cardButtons = new List<CardAction>();
@@ -1531,7 +1857,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "운송장번호 " + jobj["운송장번호"].ToString() + " 반품예약 취소처리가 완료되었습니다.<br>취소사유: aaaaaaaaaaaaaaa",
+                                                Text = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.",
                                                 Buttons = cardButtons,
                                             };
 
@@ -1605,7 +1931,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "운송장번호 " + jobj["운송장번호"].ToString() + " 반품예약 취소처리가 완료되었습니다.<br>취소사유: aaaaaaaaaaaaaaa",
+                                                Text = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.",
                                                 Buttons = cardButtons,
                                             };
 
@@ -1704,7 +2030,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -2538,98 +2864,143 @@ namespace HanjinChatBot
                                 }
                                 else if (apiActiveText.Contains("주소") && apiActiveText.Contains("연락처찾기"))
                                 {
+                                    checkFindAddressCnt = "T";
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 정확한 조소를 입력해 주세요.",
+                                        Text = "고객님의 정확한 주소를 입력해 주세요.",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
-                                    /*
-                                    WebClient webClient = new WebClient();
-                                    Stream stream = webClient.OpenRead(findOrgInfo);
-                                    String findOrgInfoJsonData = new StreamReader(stream).ReadToEnd();
-
-                                    JArray obj = JArray.Parse(findOrgInfoJsonData);
-                                    foreach (JObject jobj in obj)
+                                }
+                                else if (apiActiveText.Equals("주소다시입력"))
+                                {
+                                    checkFindAddressCnt = "T";
+                                    UserHeroCard plCard = new UserHeroCard()
                                     {
-                                        if (jobj["ret_cod"].ToString().Equals("9001"))//조회실패
-                                        {
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                Text = "고객님! 죄송합니다.<br>입력하신 주소로 조회가 실패되었습니다<br>좀더 자세히 주소를 적어주시겠어요?",
-                                            };
+                                        Title = "",
+                                        Text = "고객님의 정확한 주소를 다시 입력해 주세요.",
+                                    };
 
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            SetActivity(apiMakerReply);
-                                        }else if (jobj["ret_cod"].ToString().Equals("9999"))
-                                        {
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                Text = "고객님! 죄송합니다.<br>에러가 발생되었습니다. 다시 한번 시도해 주세요.",
-                                            };
-
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            SetActivity(apiMakerReply);
-                                        }
-                                        else if (jobj["ret_cod"].ToString().Equals("1000"))
-                                        {
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                Text = "고객님! 죄송합니다.<br>입력하신 주소로 조회가 실패되었습니다<br>좀더 자세히 주소를 적어주시겠어요?",
-                                            };
-
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            SetActivity(apiMakerReply);
-                                        }
-                                        else
-                                        {
-
-                                        }
-                                    }
-                                    */
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
                                 }
                                 else
                                 {
-                                    List<CardList> text = new List<CardList>();
-                                    List<CardAction> cardButtons = new List<CardAction>();
-
-                                    CardAction find1Button = new CardAction();
-                                    find1Button = new CardAction()
+                                    if (checkFindAddressCnt.Equals("T")) //주소로서 데이터를 찾아야 한다
                                     {
-                                        Type = "imBack",
-                                        Value = "운송장번호로 집배점/기사 연락처 찾기",
-                                        Title = "운송장번호로 집배점/기사 연락처 찾기"
-                                    };
-                                    cardButtons.Add(find1Button);
+                                        WebClient webClient = new WebClient();
+                                        Stream stream = webClient.OpenRead(findOrgInfo);
+                                        String findOrgInfoJsonData = new StreamReader(stream).ReadToEnd();
 
-                                    CardAction find2Button = new CardAction();
-                                    find2Button = new CardAction()
+                                        JArray obj = JArray.Parse(findOrgInfoJsonData);
+                                        foreach (JObject jobj in obj)
+                                        {
+                                            if (jobj["ret_cod"].ToString().Equals("9001"))//조회실패
+                                            {
+                                                List<CardAction> cardButtons = new List<CardAction>();
+
+                                                CardAction retryButton = new CardAction();
+                                                retryButton = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = "주소다시입력",
+                                                    Title = "주소 다시 입력"
+                                                };
+                                                cardButtons.Add(retryButton);
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = "고객님! 죄송합니다.<br>입력하신 주소로 조회가 실패되었습니다",
+                                                    Buttons = cardButtons,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["ret_cod"].ToString().Equals("9999"))
+                                            {
+                                                List<CardAction> cardButtons = new List<CardAction>();
+
+                                                CardAction retryButton = new CardAction();
+                                                retryButton = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = "주소다시입력",
+                                                    Title = "주소 다시 입력"
+                                                };
+                                                cardButtons.Add(retryButton);
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = "고객님! 죄송합니다.<br>에러가 발생되었습니다.",
+                                                    Buttons = cardButtons,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["ret_cod"].ToString().Equals("1000"))
+                                            {
+                                                checkFindAddressCnt = "F";
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: "+ jobj["emp_tel"].ToString() + "<br>집배점: "+ jobj["org_nam"].ToString()+" "+ jobj["tel_num"].ToString() + "<br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else
+                                            {
+
+                                            }
+                                        }
+                                    }
+                                    else
                                     {
-                                        Type = "imBack",
-                                        Value = "주소로 집배점/기사 연락처 찾기",
-                                        Title = "주소로 집배점/기사 연락처 찾기"
-                                    };
-                                    cardButtons.Add(find2Button);
+                                        List<CardList> text = new List<CardList>();
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
-                                    UserHeroCard plCard = new UserHeroCard()
-                                    {
-                                        Title = "",
-                                        Text = "고객님. 문의하실 항목을 선택해 주세요",
-                                        Buttons = cardButtons,
-                                    };
+                                        CardAction find1Button = new CardAction();
+                                        find1Button = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "운송장번호로 집배점/기사 연락처 찾기",
+                                            Title = "운송장번호로 집배점/기사 연락처 찾기"
+                                        };
+                                        cardButtons.Add(find1Button);
 
-                                    Attachment plAttachment = plCard.ToAttachment();
-                                    apiMakerReply.Attachments.Add(plAttachment);
-                                    SetActivity(apiMakerReply);
+                                        CardAction find2Button = new CardAction();
+                                        find2Button = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "주소로 집배점/기사 연락처 찾기",
+                                            Title = "주소로 집배점/기사 연락처 찾기"
+                                        };
+                                        cardButtons.Add(find2Button);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "고객님. 문의하실 항목을 선택해 주세요",
+                                            Buttons = cardButtons,
+                                        };
+
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                    
                                 }
                             }
                             else
