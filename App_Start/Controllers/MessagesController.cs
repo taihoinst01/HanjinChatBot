@@ -692,9 +692,24 @@ namespace HanjinChatBot
                          * */
                         List<UserCheck> uData = new List<UserCheck>();
                         uData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
-                        apiIntent = uData[0].apiIntent;
-                        apiOldIntent = uData[0].apiOldIntent;
+                        if (string.IsNullOrEmpty(uData[0].apiIntent))
+                        {
+                            apiIntent = "None";
+                        }
+                        else
+                        {
+                            apiIntent = uData[0].apiIntent;
+                        }
 
+                        if (string.IsNullOrEmpty(uData[0].apiOldIntent))
+                        {
+                            apiOldIntent = "None";
+                        }
+                        else
+                        {
+                            apiOldIntent = uData[0].apiOldIntent;
+                        }
+                        
                         if (relationList == null && apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("no dialogue-------------");
@@ -777,7 +792,7 @@ namespace HanjinChatBot
                             /*
                              * old intent 초기화 시키기
                              * */
-                            if (apiIntent.Equals("None"))
+                            if (apiIntent.Equals("None")|| apiIntent.Equals(""))
                             {
 
                             }
@@ -786,7 +801,7 @@ namespace HanjinChatBot
                                 apiOldIntent = "None";
                             }
 
-                            if (apiOldIntent.Equals("None"))
+                            if (apiOldIntent.Equals("None")|| apiOldIntent.Equals(""))
                             {
 
                             }
