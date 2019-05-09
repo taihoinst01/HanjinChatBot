@@ -1004,6 +1004,7 @@ namespace HanjinChatBot
                                 }
                                 else if (apiActiveText.Contains("반품택배예약"))
                                 {
+                                    authCheck = "T";//TEST 용
                                     //모바일 인증 체크
                                     if (authCheck.Equals("F"))
                                     {
@@ -1070,7 +1071,8 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = ""+ jobj["wbl_num"].ToString(),
-                                                Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                Text = "<div class=\"takeBack\"><a href=\"#\"><div class=\"endDate\"><span class=\"dateDay\">3.7</span><span class=\"dateWeek\">목요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">면바지</span><span class=\"prodNum\">123456789/G마켓</span><span class=\"prodStatus\">상품이동중</span></div></a></div>",
                                                 Buttons = cardButtons,
                                             };
 
