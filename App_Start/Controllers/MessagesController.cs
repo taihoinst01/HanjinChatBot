@@ -869,7 +869,12 @@ namespace HanjinChatBot
                             Debug.WriteLine("apiIntent4-------------" + apiIntent);
 
                             authCheck = uData[0].authCheck;//모바일 인증 체크
-                            
+
+                            IPHostEntry host = Dns.GetHostByName(Dns.GetHostName());
+                            string myip = host.AddressList[0].ToString();
+                            Debug.WriteLine("myip-------------" + myip);
+                            DButil.HistoryLog("myip===" + myip);
+
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -1042,9 +1047,8 @@ namespace HanjinChatBot
                                     }
                                     else
                                     {
-                                        String sampleTel = "01097444750";
                                         WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryList+"?tel_num="+ sampleTel);
+                                        Stream stream = webClient.OpenRead(DeliveryList+ "?tel_num=01097444750");
                                         String DeliveryListJsonData = new StreamReader(stream,Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
@@ -1252,7 +1256,7 @@ namespace HanjinChatBot
                                     else
                                     {
                                         WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryList);
+                                        Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
                                         String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
@@ -1657,7 +1661,7 @@ namespace HanjinChatBot
                                     else
                                     {
                                         WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryList);
+                                        Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
                                         String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
@@ -2052,7 +2056,7 @@ namespace HanjinChatBot
                                     else
                                     {
                                         WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryList);
+                                        Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
                                         String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
