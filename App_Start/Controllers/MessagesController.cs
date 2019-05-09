@@ -870,11 +870,8 @@ namespace HanjinChatBot
 
                             authCheck = uData[0].authCheck;//모바일 인증 체크
 
-                            string strHostName = "";
-                            strHostName = System.Net.Dns.GetHostName();
-                            IPHostEntry ipEntry = System.Net.Dns.GetHostEntry(strHostName);
-                            IPAddress[] addr = ipEntry.AddressList;
-                            String myip = addr[addr.Length - 1].ToString();
+                            IPHostEntry host = Dns.GetHostByName(Dns.GetHostName());
+                            string myip = host.AddressList[0].ToString();
                             
                             Debug.WriteLine("myip-------------" + myip);
                             DButil.HistoryLog("myip===" + myip);
