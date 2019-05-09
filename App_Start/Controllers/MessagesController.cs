@@ -57,7 +57,9 @@ namespace HanjinChatBot
         public static string channelID = "";
 
         //API변수선언
-        static public string DeliveryList = "http://www.jobible.co.kr/DeliveryList.data";                 //택배목록
+        static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //택배목록
+        //static public string DeliveryList = "http://www.jobible.co.kr/DeliveryList.data";                 //택배목록
+        static public string DeliveryList = apiUrl+"ipcc_api.get_wbls";                 //택배목록
         static public string ReturnDeliveryResult = "http://www.jobible.co.kr/ReturnDeliveryResult.data";                 //반품예약가능여부
         //static public string API2Url = "http://www.jobible.co.kr/json1.data";                 //반품예약취소
         static public string DeliveryCollection = "http://www.jobible.co.kr/DeliveryCollection.data";                 //집하예정일확인
@@ -907,7 +909,7 @@ namespace HanjinChatBot
                                 {
                                     WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(ReturnDeliveryResult);
-                                    String ReturnDeliveryResultJsonData = new StreamReader(stream).ReadToEnd();
+                                    String ReturnDeliveryResultJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                     JArray obj = JArray.Parse(ReturnDeliveryResultJsonData);
 
@@ -1004,7 +1006,7 @@ namespace HanjinChatBot
                                 }
                                 else if (apiActiveText.Contains("반품택배예약"))
                                 {
-                                    authCheck = "T";//TEST 용
+                                    authCheck = "T";//TEST 용 반드시 지울 것!!!!
                                     //모바일 인증 체크
                                     if (authCheck.Equals("F"))
                                     {
@@ -1040,9 +1042,10 @@ namespace HanjinChatBot
                                     }
                                     else
                                     {
+                                        String sampleTel = "01097444750";
                                         WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryList);
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                        Stream stream = webClient.OpenRead(DeliveryList+"?tel_num="+ sampleTel);
+                                        String DeliveryListJsonData = new StreamReader(stream,Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
                                         
@@ -1070,9 +1073,9 @@ namespace HanjinChatBot
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
-                                                Title = ""+ jobj["wbl_num"].ToString(),
+                                                Title = "",
                                                 //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
-                                                Text = "<div class=\"takeBack\"><a href=\"#\"><div class=\"endDate\"><span class=\"dateDay\">3.7</span><span class=\"dateWeek\">목요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">면바지</span><span class=\"prodNum\">123456789/G마켓</span><span class=\"prodStatus\">상품이동중</span></div></a></div>",
+                                                Text = "<div class=\"takeBack\"><a href=\"#\"><div class=\"endDate\"><span class=\"dateDay\">"+ monthText + "."+ dayText + "</span><span class=\"dateWeek\">"+ jobj["dlv_dy"].ToString()+"요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">"+ jobj["god_nam"].ToString()+"</span><span class=\"prodNum\">"+ jobj["wbl_num"].ToString()+"/G마켓</span><span class=\"prodStatus\">"+ jobj["wrk_nam"].ToString()+"</span></div></a></div>",
                                                 Buttons = cardButtons,
                                             };
 
@@ -1172,7 +1175,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(DeliveryCollection);
-                                        String DeliveryCollectionJsonData = new StreamReader(stream).ReadToEnd();
+                                        String DeliveryCollectionJsonData = new StreamReader(stream,Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryCollectionJsonData);
                                         int checkInt = obj.Count;
@@ -1250,7 +1253,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(DeliveryList);
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                        String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
                                         int checkInt = obj.Count;
@@ -1321,7 +1324,7 @@ namespace HanjinChatBot
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(bookCheck);
-                                    String bookCheckJsonData = new StreamReader(stream).ReadToEnd();
+                                    String bookCheckJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                     JArray obj = JArray.Parse(bookCheckJsonData);
 
@@ -1461,7 +1464,7 @@ namespace HanjinChatBot
                                     cancelNumber = Regex.Replace(activity.Text, @"\D", "");
                                     WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(bookCancelResult);
-                                    String bookCancelResultJsonData = new StreamReader(stream).ReadToEnd();
+                                    String bookCancelResultJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                     JArray obj = JArray.Parse(bookCancelResultJsonData);
 
@@ -1547,7 +1550,7 @@ namespace HanjinChatBot
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(bookCancelYN);
-                                    String bookCancelYNJsonData = new StreamReader(stream).ReadToEnd();
+                                    String bookCancelYNJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                     JArray obj = JArray.Parse(bookCancelYNJsonData);
                                     foreach (JObject jobj in obj)
@@ -1655,7 +1658,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(DeliveryList);
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                        String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
                                         int checkInt = obj.Count;
@@ -1826,7 +1829,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(API4Url);
-                                        String API4JsonData = new StreamReader(stream).ReadToEnd();
+                                        String API4JsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JObject obj = JObject.Parse(API4JsonData);
                                         JArray sample = (JArray)obj["예약상세내용확인"];
@@ -1898,7 +1901,7 @@ namespace HanjinChatBot
                                         invoiceNumber = Regex.Replace(activity.Text, @"\D", "");
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(goodLocation);
-                                        String goodLocationJsonData = new StreamReader(stream).ReadToEnd();
+                                        String goodLocationJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(goodLocationJsonData);
                                         String wrkCod = "";//상태코드
@@ -2050,7 +2053,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(DeliveryList);
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                        String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
                                         int checkInt = obj.Count;
@@ -2121,7 +2124,7 @@ namespace HanjinChatBot
                                 {
                                     WebClient webClient = new WebClient();
                                     Stream stream = webClient.OpenRead(API4Url);
-                                    String API4JsonData = new StreamReader(stream).ReadToEnd();
+                                    String API4JsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                     JObject obj = JObject.Parse(API4JsonData);
                                     JArray sample = (JArray)obj["예약상세내용확인"];
@@ -2225,7 +2228,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(findOrgInfo);
-                                        String findOrgInfoJsonData = new StreamReader(stream).ReadToEnd();
+                                        String findOrgInfoJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(findOrgInfoJsonData);
                                         foreach (JObject jobj in obj)
