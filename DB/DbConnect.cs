@@ -1165,6 +1165,46 @@ namespace HanjinChatBot.DB
 
         }
 
+        public String getIntentFromSmallTalk(string queryStr)
+        {
+
+            String query = Regex.Replace(queryStr, @"[^a-zA-Z0-9ㄱ-힣-]", "", RegexOptions.Singleline).Replace(" ", "").ToLower();
+            SqlDataReader rdr = null;
+            String smallTalkIntent = "";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText += "SELECT INTENT FROM TBL_SMALLTALK ";
+                cmd.CommandText += "WHERE  S_QUERY = @kr_query ";
+                cmd.CommandText += "AND      USE_YN = 'Y' ";
+
+                cmd.Parameters.AddWithValue("@kr_query", query);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                try
+                {
+                    while (rdr.Read())
+                    {
+                        smallTalkIntent = rdr["INTENT"] as string;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                rdr.Close();
+
+            }
+            return smallTalkIntent;
+
+        }
+
 
         public int UserCheckDataInsert(string channelData, string conversationsId)
         {
@@ -1327,10 +1367,10 @@ namespace HanjinChatBot.DB
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
-                else if (gubun.Equals("mobileyn"))
+                else if (gubun.Equals("USER_PHONE"))
                 {
                     cmd.CommandText += " UPDATE     TBL_USERDATA ";
-                    cmd.CommandText += " SET           MOBILE_YN = @val ";
+                    cmd.CommandText += " SET           USER_PHONE = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
