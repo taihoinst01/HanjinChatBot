@@ -1101,25 +1101,25 @@ namespace HanjinChatBot
                                             {
                                                 Type = "imBack",
                                                 Value = "운송장번호 " + jobj["wbl_num"].ToString() + " 반품택배예약",
-                                                //Title = "반품택배예약",
-                                                Title = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
+                                                Title = "반품택배예약",
                                             };
                                             cardButtons.Add(plButton);
                                             i++;
 
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
+                                                Tap = plButton
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+
                                         }
 
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
-                                            //Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
-                                            Title = "",
-                                            Text = "",
-                                            Buttons = cardButtons
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        
                                         SetActivity(apiMakerReply);
 
                                     }
