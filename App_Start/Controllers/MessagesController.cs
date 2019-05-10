@@ -1080,8 +1080,8 @@ namespace HanjinChatBot
                                         String sample = "http://www.nhanjinexpress.hanjin.net/ipcc/ipcc_api.get_wbls?tel_num=01097444750";
                                         //Stream stream = webClient.OpenRead(DeliveryList+ "?tel_num=01097444750");
                                         Stream stream = webClient.OpenRead(sample);
-                                        //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                        String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                        //String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
 
