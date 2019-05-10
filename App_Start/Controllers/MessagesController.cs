@@ -1077,7 +1077,7 @@ namespace HanjinChatBot
                                     else
                                     {
                                         WebClient webClient = new WebClient();
-                                        String sample = "http://www.nhanjinexpress.hanjin.net/ipcc/ipcc_api.get_wbls?tel_num=01097444750";
+                                        String sample = "http://211.210.94.46:7777/customer/ipcc_api.get_wbls?tel_num=01027185020";
                                         //Stream stream = webClient.OpenRead(DeliveryList+ "?tel_num=01097444750");
                                         Stream stream = webClient.OpenRead(sample);
                                         String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
