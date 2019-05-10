@@ -362,6 +362,7 @@ namespace HanjinChatBot
                         {
                             DButil.HistoryLog("smalltalk 답변이 있을경우");
                             luisId = "";
+                            cacheList.luisIntent = "None";//하단의 로직을 수행하지 않기 위해서
                         }
                         //luis 호출
                         else if (cacheList.luisIntent == null || cacheList.luisEntities == null)
@@ -373,7 +374,7 @@ namespace HanjinChatBot
                             String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
                             int checkNumberLength = onlyNumber.Length;
 
-                            if (containNum == true&&checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
+                            if (containNum == true && checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
                             {
                                 luisIntent = "None";
                             }
@@ -579,7 +580,7 @@ namespace HanjinChatBot
                         if (!string.IsNullOrEmpty(luisIntent))
                         {
                             relationList = db.DefineTypeChkSpare(luisIntent, luisEntities);
-                            
+
                             if (relationList.Count == 0)
                             {
                                 relationList = null;
@@ -589,10 +590,23 @@ namespace HanjinChatBot
                         {
                             relationList = null;
                             //smalltalk 답변가져오기
-
+                            String checkSmallIntent = "";
                             if (orgMent.Length < 11)
                             {
-                                smallTalkConfirm = db.SmallTalkConfirm(orgMent);
+                                /*
+                                 * smalltalk intent 가 smalltalk 가 아닐 경우 relationList에 정보를 담는다.
+                                 * */
+                                checkSmallIntent = db.getIntentFromSmallTalk(orgMent);
+                                if (checkSmallIntent.Equals("smalltalk"))
+                                {
+                                    smallTalkConfirm = db.SmallTalkConfirm(orgMent);
+                                }
+                                else
+                                {
+                                    smallTalkConfirm = "";
+                                    relationList = db.DefineTypeChkSpare(checkSmallIntent, luisEntities);
+                                }
+
                             }
                             else
                             {
@@ -600,7 +614,7 @@ namespace HanjinChatBot
                             }
 
                         }
-                        
+
                         if (relationList != null)
                         {
                             dlgId = "";
@@ -689,7 +703,6 @@ namespace HanjinChatBot
 
                             SetActivity(smallTalkReply);
                             replyresult = "S";
-                            db.UserDataUpdate(activity.ChannelId, activity.Conversation.Id, 0, "loop");
                         }
                         else
                         {
@@ -750,53 +763,61 @@ namespace HanjinChatBot
                                 apiIntent = "None";
                             }
                         }
-                        Debug.WriteLine("apiIntent CHECK-------------"+ apiIntent);
+                        Debug.WriteLine("apiIntent CHECK-------------" + apiIntent);
                         Debug.WriteLine("relationList-------------" + relationList);
                         if (relationList == null && apiIntent.Equals("None"))
                         //if (relationList.Count == 0 && apiIntent.Equals("None"))
                         {
-                            Debug.WriteLine("no dialogue-------------");
-
-                            Activity intentNoneReply = activity.CreateReply();
-
-                            var message = queryStr;
-
-                            Debug.WriteLine("NO DIALOGUE MESSAGE : " + message);
-
-                            Activity sorryReply = activity.CreateReply();
-                            sorryReply.Recipient = activity.From;
-                            sorryReply.Type = "message";
-                            sorryReply.Attachments = new List<Attachment>();
-                            //sorryReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-
-                            List<CardList> text = new List<CardList>();
-                            List<CardAction> cardButtons = new List<CardAction>();
-
-                            text = db.SelectSorryDialogText("5");
-                            for (int i = 0; i < text.Count; i++)
+                            if (!string.IsNullOrEmpty(smallTalkConfirm))
                             {
-                                CardAction plButton = new CardAction();
-                                plButton = new CardAction()
-                                {
-                                    Type = text[i].btn1Type,
-                                    Value = text[i].btn1Context,
-                                    Title = text[i].btn1Title
-                                };
-                                cardButtons.Add(plButton);
+                                //smalltalk 답변 있으니, sorry message 는 그만..
+                            }
+                            else
+                            {
+                                Debug.WriteLine("no dialogue-------------");
 
-                                UserHeroCard plCard = new UserHeroCard()
-                                {
-                                    //Title = text[i].cardTitle,
-                                    Text = text[i].cardText,
-                                    Buttons = cardButtons
-                                };
+                                Activity intentNoneReply = activity.CreateReply();
 
-                                Attachment plAttachment = plCard.ToAttachment();
-                                sorryReply.Attachments.Add(plAttachment);
+                                var message = queryStr;
+
+                                Debug.WriteLine("NO DIALOGUE MESSAGE : " + message);
+
+                                Activity sorryReply = activity.CreateReply();
+                                sorryReply.Recipient = activity.From;
+                                sorryReply.Type = "message";
+                                sorryReply.Attachments = new List<Attachment>();
+                                //sorryReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+                                List<CardList> text = new List<CardList>();
+                                List<CardAction> cardButtons = new List<CardAction>();
+
+                                text = db.SelectSorryDialogText("5");
+                                for (int i = 0; i < text.Count; i++)
+                                {
+                                    CardAction plButton = new CardAction();
+                                    plButton = new CardAction()
+                                    {
+                                        Type = text[i].btn1Type,
+                                        Value = text[i].btn1Context,
+                                        Title = text[i].btn1Title
+                                    };
+                                    cardButtons.Add(plButton);
+
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        //Title = text[i].cardTitle,
+                                        Text = text[i].cardText,
+                                        Buttons = cardButtons
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    sorryReply.Attachments.Add(plAttachment);
+                                }
+
+                                SetActivity(sorryReply);
+                                replyresult = "D";
                             }
 
-                            SetActivity(sorryReply);
-                            replyresult = "D";
                         }
                         else
                         {
@@ -836,7 +857,7 @@ namespace HanjinChatBot
                              * API 처리부분 INTENT 처리
                              * 단어별로 API INTENT 처리 구분할 것.
                              * */
-                            if (apiIntent.Equals("None")|| apiIntent.Equals(""))
+                            if (apiIntent.Equals("None") || apiIntent.Equals(""))
                             {
 
                             }
@@ -845,7 +866,7 @@ namespace HanjinChatBot
                                 apiOldIntent = "None";
                             }
 
-                            if (apiOldIntent.Equals("None")|| apiOldIntent.Equals(""))
+                            if (apiOldIntent.Equals("None") || apiOldIntent.Equals(""))
                             {
 
                             }
@@ -855,7 +876,7 @@ namespace HanjinChatBot
                             }
                             Debug.WriteLine("apiIntent3-------------" + apiIntent);
 
-                            if(luisIntent.Equals("None"))
+                            if (luisIntent.Equals("None"))
                             {
 
                             }
@@ -872,7 +893,7 @@ namespace HanjinChatBot
 
                             IPHostEntry host = Dns.GetHostByName(Dns.GetHostName());
                             string myip = host.AddressList[0].ToString();
-                            
+
                             Debug.WriteLine("myip-------------" + myip);
                             DButil.HistoryLog("myip===" + myip);
 
@@ -931,31 +952,38 @@ namespace HanjinChatBot
                                         {
                                             returnYN = "no";
                                             returnText = "운송장 미등록";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9002"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9002"))
                                         {
                                             returnYN = "no";
                                             returnText = "배송출발전 모든상태(배송출발부터 반품가능)";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9003"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9003"))
                                         {
                                             returnYN = "no";
                                             returnText = "신용번호 미존재";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9004"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9004"))
                                         {
                                             returnYN = "no";
                                             returnText = "EDI화주/멀티화주/반품계약 미 적용화주";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9005"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9005"))
                                         {
                                             returnYN = "no";
                                             returnText = "주소 오입력";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9006"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9006"))
                                         {
                                             returnYN = "no";
                                             returnText = "이중예약";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9007"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9007"))
                                         {
                                             returnYN = "no";
                                             returnText = "집하집배점 할당실패";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9999"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9999"))
                                         {
                                             returnYN = "no";
                                             returnText = "기타에러";
@@ -999,7 +1027,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "["+returnText +"] 운송장 번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 또는 모바일 고객센터(m.hanjin.co.kr)에서 개인택배로 예약접수가 가능합니다.",
+                                            Text = "[" + returnText + "] 운송장 번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 또는 모바일 고객센터(m.hanjin.co.kr)에서 개인택배로 예약접수가 가능합니다.",
                                             Buttons = cardButtons,
                                         };
 
@@ -1051,11 +1079,14 @@ namespace HanjinChatBot
                                         WebClient webClient = new WebClient();
                                         //Stream stream = webClient.OpenRead(DeliveryList+ "?tel_num=01097444750");
                                         Stream stream = webClient.OpenRead(DeliveryList);
-                                        String DeliveryListJsonData = new StreamReader(stream,Encoding.Default).ReadToEnd();
+                                        //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryListJsonData);
-                                        
+
                                         int i = 1;
+                                        List<CardList> text = new List<CardList>();
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
                                         foreach (JObject jobj in obj)
                                         {
@@ -1065,31 +1096,31 @@ namespace HanjinChatBot
                                             String dayText = tempDate.Substring(8, 2);
                                             String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
 
-                                            List<CardList> text = new List<CardList>();
-                                            List<CardAction> cardButtons = new List<CardAction>();
+                                            
 
                                             CardAction plButton = new CardAction();
                                             plButton = new CardAction()
                                             {
                                                 Type = "imBack",
                                                 Value = "운송장번호 " + jobj["wbl_num"].ToString() + " 반품택배예약",
-                                                Title = "반품택배예약",
+                                                //Title = "반품택배예약",
+                                                Title = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
                                             };
                                             cardButtons.Add(plButton);
                                             i++;
 
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
-                                                Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">"+ monthText + "."+ dayText + "</span><span class=\"dateWeek\">"+ jobj["dlv_dy"].ToString()+"요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">"+ jobj["god_nam"].ToString()+"</span><span class=\"prodNum\">"+ jobj["wbl_num"].ToString()+"/G마켓</span><span class=\"prodStatus\">"+ jobj["wrk_nam"].ToString()+"</span></div></div>",
-                                                Tap = plButton,
-                                            };
+                                       
 
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            
                                         }
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                            //Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
+                                            Buttons = cardButtons,
+                                        };
+
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
                                         SetActivity(apiMakerReply);
 
                                     }
@@ -1182,7 +1213,7 @@ namespace HanjinChatBot
                                     {
                                         WebClient webClient = new WebClient();
                                         Stream stream = webClient.OpenRead(DeliveryCollection);
-                                        String DeliveryCollectionJsonData = new StreamReader(stream,Encoding.Default).ReadToEnd();
+                                        String DeliveryCollectionJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
                                         JArray obj = JArray.Parse(DeliveryCollectionJsonData);
                                         int checkInt = obj.Count;
@@ -1204,13 +1235,13 @@ namespace HanjinChatBot
                                             {
                                                 String tempDate = jobj["wrk_ymd"].ToString();
                                                 String yearText = tempDate.Substring(0, 4);
-                                                String monthText = tempDate.Substring(4,2);
+                                                String monthText = tempDate.Substring(4, 2);
                                                 String dayText = tempDate.Substring(6, 2);
                                                 String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_yd"].ToString() + "요일)";
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "고객님!<br>상품 \"" + jobj["god_nam"].ToString() + "(예약번호: "+ jobj["rsv_num"].ToString() + ")\"는 " + dateText + " " + jobj["wrk_nam"].ToString() +" 상태입니다.",
+                                                    Text = "고객님!<br>상품 \"" + jobj["god_nam"].ToString() + "(예약번호: " + jobj["rsv_num"].ToString() + ")\"는 " + dateText + " " + jobj["wrk_nam"].ToString() + " 상태입니다.",
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
@@ -1327,7 +1358,7 @@ namespace HanjinChatBot
 
 
                                 }
-                                else if (apiActiveText.Contains("예약내용확인")||containNum==true)//리스트버튼 클릭이거나 직접 입력일 경우
+                                else if (apiActiveText.Contains("예약내용확인") || containNum == true)//리스트버튼 클릭이거나 직접 입력일 경우
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     WebClient webClient = new WebClient();
@@ -1348,10 +1379,12 @@ namespace HanjinChatBot
                                         if (jobj["ret_cod"].ToString().Equals("1000"))
                                         {
                                             bookCheckText = "번호 " + bookNumber + "는 " + dateText + " 정상 예약접수된 건입니다.";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9001"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9001"))
                                         {
                                             bookCheckText = "번호 " + bookNumber + "는 " + dateText + " 예약미등록 건입니다.";
-                                        }else if (jobj["ret_cod"].ToString().Equals("9999"))
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9999"))
                                         {
                                             bookCheckText = "번호 " + bookNumber + "는 " + dateText + " 에러발생 건입니다.";
                                         }
@@ -1362,7 +1395,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = bookCheckText + "<br>방문일정 또는 예약변경 사항, 문의사항은 "+ jobj["org_nam"].ToString()+" 집배점 전화번호 "+ jobj["tel_num"].ToString()+" 으로 문의 부탁드립니다.",
+                                            Text = bookCheckText + "<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 전화번호 " + jobj["tel_num"].ToString() + " 으로 문의 부탁드립니다.",
                                         };
 
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1553,7 +1586,7 @@ namespace HanjinChatBot
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("예약취소확인") ||checkNum==true)
+                                else if (apiActiveText.Contains("예약취소확인") || checkNum == true)
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     WebClient webClient = new WebClient();
@@ -1737,7 +1770,7 @@ namespace HanjinChatBot
                             {
                                 //if (apiIntent.Equals("F_예약취소"))
                             }
-                            
+
                             /*****************************************************************
                              * apiIntent 택배예약방문지연
                              * 
@@ -1924,7 +1957,7 @@ namespace HanjinChatBot
                                             if (jobj["wrk_cod"].ToString().Equals("10"))
                                             {
                                                 wrkCod = "상품접수";
-                                                statusText = "고객님께서 문의하신 운송장 번호 ("+ invoiceNumber + ")는 현재 상품 발송을 위해 운송장이 접수된 상태입니다.<br>터미널 입고 시점부터 배송 일정 조회가 가능하며 당일 출고한 상품은 발송일 오후나 다음날 다시 한번 배송조회 확인해 주시기 바랍니다.<br>1~2일이 경과하여도 상품 이동 내역이 없는 경우에는 주문업체(쇼핑몰) 또는 보내는 분께 상품 발송 일자와 한진택배로 발송된 상품인지 문의해 주시기 바랍니다.";
+                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 현재 상품 발송을 위해 운송장이 접수된 상태입니다.<br>터미널 입고 시점부터 배송 일정 조회가 가능하며 당일 출고한 상품은 발송일 오후나 다음날 다시 한번 배송조회 확인해 주시기 바랍니다.<br>1~2일이 경과하여도 상품 이동 내역이 없는 경우에는 주문업체(쇼핑몰) 또는 보내는 분께 상품 발송 일자와 한진택배로 발송된 상품인지 문의해 주시기 바랍니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("20"))
                                             {
@@ -1998,7 +2031,7 @@ namespace HanjinChatBot
                                                 wrkCod = "오류";
                                                 statusText = "오류";
                                             }
-                                            
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
@@ -2297,7 +2330,7 @@ namespace HanjinChatBot
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: "+ jobj["emp_tel"].ToString() + "<br>집배점: "+ jobj["org_nam"].ToString()+" "+ jobj["tel_num"].ToString() + "<br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
+                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " " + jobj["tel_num"].ToString() + "<br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
@@ -2344,7 +2377,7 @@ namespace HanjinChatBot
                                         apiMakerReply.Attachments.Add(plAttachment);
                                         SetActivity(apiMakerReply);
                                     }
-                                    
+
                                 }
                             }
                             else
