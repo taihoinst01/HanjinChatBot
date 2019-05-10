@@ -1096,8 +1096,6 @@ namespace HanjinChatBot
                                             String dayText = tempDate.Substring(8, 2);
                                             String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
 
-                                            
-
                                             CardAction plButton = new CardAction();
                                             plButton = new CardAction()
                                             {
@@ -1108,8 +1106,6 @@ namespace HanjinChatBot
                                             };
                                             cardButtons.Add(plButton);
                                             i++;
-
-                                       
 
                                         }
                                         UserHeroCard plCard = new UserHeroCard()
