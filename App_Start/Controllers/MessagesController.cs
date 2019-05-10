@@ -1108,11 +1108,14 @@ namespace HanjinChatBot
                                             i++;
 
                                         }
+
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
                                             //Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
-                                            Buttons = cardButtons,
+                                            Title = "",
+                                            Text = "",
+                                            Buttons = cardButtons
                                         };
 
                                         Attachment plAttachment = plCard.ToAttachment();
