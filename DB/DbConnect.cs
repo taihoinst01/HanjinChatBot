@@ -1297,7 +1297,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER ";
+                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, OPTION_1 ";
                 cmd.CommandText += "FROM    TBL_USERCHECK ";
                 cmd.CommandText += "WHERE  CHANNELDATA = @channeldata ";
                 cmd.CommandText += "AND      CONVERSATIONSID = @conversationsId ";
@@ -1320,7 +1320,8 @@ namespace HanjinChatBot.DB
                         userData.apiOldIntent = rdr["API_OLDINTENT"] as string;
                         userData.authCheck = rdr["AUTH_CHECK"] as string;
                         userData.authNumber = rdr["AUTH_NUMBER"] as string;
-                        
+                        userData.option_1 = rdr["OPTION_1"] as string;
+
                         userdata.Add(userData);
                     }
                 }
@@ -1374,10 +1375,10 @@ namespace HanjinChatBot.DB
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
-                else if (gubun.Equals("sso"))
+                else if (gubun.Equals("OPTION_1"))
                 {
                     cmd.CommandText += " UPDATE     TBL_USERDATA ";
-                    cmd.CommandText += " SET           SSO = @val ";
+                    cmd.CommandText += " SET           OPTION_1 = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }

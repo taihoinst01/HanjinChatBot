@@ -88,6 +88,7 @@ namespace HanjinChatBot
         static public string authCheck = "F";                 //인증 체크-리스트 추출용(T/F)
         static public string authNumber = "";                 //인증 번호
         static public string checkFindAddressCnt = "F";                 //주소로서 집배점 찾기 검토
+        static public string mobilePC = "";                 //모바일 PC 확인
 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
@@ -266,6 +267,7 @@ namespace HanjinChatBot
             {
                 String telNumber = "01012341234";
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", telNumber);
+                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "OPTION_1", "MOBILE");
             }
             //else if (activity.Type == ActivityTypes.Message)
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
@@ -961,8 +963,10 @@ namespace HanjinChatBot
 
 
                             authCheck = uData[0].authCheck;//모바일 인증 체크
-                            
+                            mobilePC = uData[0].option_1;//모바일인지 PC 인지 구분
+
                             authCheck = "T";//TEST 용 반드시 지울 것!!!!
+                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -1107,90 +1111,100 @@ namespace HanjinChatBot
                                 }
                                 else if (apiActiveText.Contains("반품택배예약"))
                                 {
-                                    
-                                    //모바일 인증 체크
-                                    if (authCheck.Equals("F"))
+                                    if (mobilePC.Equals("PC"))
                                     {
-                                        List<CardAction> cardButtons = new List<CardAction>();
-
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 핸드폰인증 하겠습니다",
-                                            Title = "예"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                            Title = "아니오"
-                                        };
-                                        cardButtons.Add(returnButton);
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
+                                        //no show
                                     }
                                     else
                                     {
-                                        WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryList);
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
-                                        //String sample = "http://211.210.94.46:7777/customer/ipcc_api.get_wbls?tel_num=01027185020";
-                                        //Stream stream = webClient.OpenRead(sample);
-                                        //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
-
-
-                                        JArray obj = JArray.Parse(DeliveryListJsonData);
-
-                                        int i = 1;
-                                        List<CardList> text = new List<CardList>();
-                                        List<CardAction> cardButtons = new List<CardAction>();
-
-                                        foreach (JObject jobj in obj)
+                                        //모바일 인증 체크
+                                        if (authCheck.Equals("F"))
                                         {
-                                            String tempDate = jobj["dlv_ymd"].ToString();
-                                            String yearText = tempDate.Substring(0, 4);
-                                            String monthText = tempDate.Substring(5, 2);
-                                            String dayText = tempDate.Substring(8, 2);
-                                            String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
+                                            List<CardAction> cardButtons = new List<CardAction>();
 
-                                            CardAction plButton = new CardAction();
-                                            plButton = new CardAction()
+                                            CardAction deliveryButton = new CardAction();
+                                            deliveryButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "운송장번호 " + jobj["wbl_num"].ToString() + " 반품택배예약",
-                                                Title = "반품택배예약",
+                                                Value = "예. 핸드폰인증 하겠습니다",
+                                                Title = "예"
                                             };
-                                            cardButtons.Add(plButton);
-                                            i++;
+                                            cardButtons.Add(deliveryButton);
+
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
-                                                Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
-                                                Tap = plButton
+                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
+                                                Buttons = cardButtons,
                                             };
-
                                             Attachment plAttachment = plCard.ToAttachment();
                                             apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+                                        else
+                                        {
+                                            WebClient webClient = new WebClient();
+                                            Stream stream = webClient.OpenRead(DeliveryList);
+                                            String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                            //String sample = "http://211.210.94.46:7777/customer/ipcc_api.get_wbls?tel_num=01027185020";
+                                            //Stream stream = webClient.OpenRead(sample);
+                                            //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+
+
+                                            JArray obj = JArray.Parse(DeliveryListJsonData);
+
+                                            int i = 1;
+                                            List<CardList> text = new List<CardList>();
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            foreach (JObject jobj in obj)
+                                            {
+                                                String tempDate = jobj["dlv_ymd"].ToString();
+                                                String yearText = tempDate.Substring(0, 4);
+                                                String monthText = tempDate.Substring(5, 2);
+                                                String dayText = tempDate.Substring(8, 2);
+                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
+
+                                                CardAction plButton = new CardAction();
+                                                plButton = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = "운송장번호 " + jobj["wbl_num"].ToString() + " 반품택배예약",
+                                                    Title = "반품택배예약",
+                                                };
+                                                cardButtons.Add(plButton);
+                                                i++;
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                    Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
+                                                    Tap = plButton
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+
+                                            }
+
+                                            SetActivity(apiMakerReply);
 
                                         }
-
-                                        SetActivity(apiMakerReply);
-
                                     }
+
+
+
+                                    
 
                                 }
                                 //예약초기화면
@@ -1243,81 +1257,89 @@ namespace HanjinChatBot
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Equals("집하예정일확인"))
                                 {
-                                    //모바일 인증 체크
-                                    if (authCheck.Equals("F"))
+                                    if (mobilePC.Equals("PC"))
                                     {
-                                        List<CardAction> cardButtons = new List<CardAction>();
 
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 핸드폰인증 하겠습니다",
-                                            Title = "예"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                            Title = "아니오"
-                                        };
-                                        cardButtons.Add(returnButton);
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
-                                        WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(DeliveryCollection);
-                                        //String DeliveryCollectionJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
-                                        String DeliveryCollectionJsonData = new StreamReader(stream).ReadToEnd();
-
-                                        JArray obj = JArray.Parse(DeliveryCollectionJsonData);
-                                        int checkInt = obj.Count;
-
-                                        if (checkInt == 0)
+                                        //모바일 인증 체크
+                                        if (authCheck.Equals("F"))
                                         {
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction deliveryButton = new CardAction();
+                                            deliveryButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "예. 핸드폰인증 하겠습니다",
+                                                Title = "예"
+                                            };
+                                            cardButtons.Add(deliveryButton);
+
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
+                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                                Buttons = cardButtons,
                                             };
-
                                             Attachment plAttachment = plCard.ToAttachment();
                                             apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
                                         }
                                         else
                                         {
-                                            foreach (JObject jobj in obj)
+                                            WebClient webClient = new WebClient();
+                                            Stream stream = webClient.OpenRead(DeliveryCollection);
+                                            //String DeliveryCollectionJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                            String DeliveryCollectionJsonData = new StreamReader(stream).ReadToEnd();
+
+                                            JArray obj = JArray.Parse(DeliveryCollectionJsonData);
+                                            int checkInt = obj.Count;
+
+                                            if (checkInt == 0)
                                             {
-                                                String tempDate = jobj["wrk_ymd"].ToString();
-                                                String yearText = tempDate.Substring(0, 4);
-                                                String monthText = tempDate.Substring(4, 2);
-                                                String dayText = tempDate.Substring(6, 2);
-                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_yd"].ToString() + "요일)";
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "고객님!<br>상품 \"" + jobj["god_nam"].ToString() + "(예약번호: " + jobj["rsv_num"].ToString() + ")\"는 " + dateText + " " + jobj["wrk_nam"].ToString() + " 상태입니다.",
+                                                    Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
                                                 apiMakerReply.Attachments.Add(plAttachment);
                                             }
+                                            else
+                                            {
+                                                foreach (JObject jobj in obj)
+                                                {
+                                                    String tempDate = jobj["wrk_ymd"].ToString();
+                                                    String yearText = tempDate.Substring(0, 4);
+                                                    String monthText = tempDate.Substring(4, 2);
+                                                    String dayText = tempDate.Substring(6, 2);
+                                                    String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_yd"].ToString() + "요일)";
+                                                    UserHeroCard plCard = new UserHeroCard()
+                                                    {
+                                                        Title = "",
+                                                        Text = "고객님!<br>상품 \"" + jobj["god_nam"].ToString() + "(예약번호: " + jobj["rsv_num"].ToString() + ")\"는 " + dateText + " " + jobj["wrk_nam"].ToString() + " 상태입니다.",
+                                                    };
+
+                                                    Attachment plAttachment = plCard.ToAttachment();
+                                                    apiMakerReply.Attachments.Add(plAttachment);
+                                                }
+                                            }
+                                            SetActivity(apiMakerReply);
                                         }
-                                        SetActivity(apiMakerReply);
                                     }
+                                        
 
 
                                 }
@@ -1733,109 +1755,117 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    //모바일 인증 체크
-                                    if (authCheck.Equals("F"))
+                                    if (mobilePC.Equals("PC"))
                                     {
-                                        List<CardAction> cardButtons = new List<CardAction>();
 
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 핸드폰인증 하겠습니다",
-                                            Title = "예"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                            Title = "아니오"
-                                        };
-                                        cardButtons.Add(returnButton);
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
-                                        WebClient webClient = new WebClient();
-                                        //Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
-                                        Stream stream = webClient.OpenRead(DeliveryList);
-                                        //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
-
-                                        JArray obj = JArray.Parse(DeliveryListJsonData);
-                                        int checkInt = obj.Count;
-
-                                        if (checkInt == 0)
+                                        //모바일 인증 체크
+                                        if (authCheck.Equals("F"))
                                         {
                                             List<CardAction> cardButtons = new List<CardAction>();
 
-                                            CardAction bookButton = new CardAction();
-                                            bookButton = new CardAction()
+                                            CardAction deliveryButton = new CardAction();
+                                            deliveryButton = new CardAction()
                                             {
-                                                Type = "openUrl",
-                                                Value = "http://www.hanjin.co.kr/Delivery_html/reserve/login1.jsp?rsr_gbn=",
-                                                Title = "신규택배 예약하기"
+                                                Type = "imBack",
+                                                Value = "예. 핸드폰인증 하겠습니다",
+                                                Title = "예"
                                             };
-                                            cardButtons.Add(bookButton);
+                                            cardButtons.Add(deliveryButton);
+
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "예약된 정보가 없습니다.",
+                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
-
                                             Attachment plAttachment = plCard.ToAttachment();
                                             apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
                                         }
                                         else
                                         {
-                                            foreach (JObject jobj in obj)
-                                            {
-                                                List<CardList> text = new List<CardList>();
-                                                List<CardAction> cardButtons = new List<CardAction>();
+                                            WebClient webClient = new WebClient();
+                                            //Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
+                                            Stream stream = webClient.OpenRead(DeliveryList);
+                                            //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                            String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
 
-                                                String tempDate = jobj["dlv_ymd"].ToString();
-                                                String yearText = tempDate.Substring(0, 4);
-                                                String monthText = tempDate.Substring(5, 2);
-                                                String dayText = tempDate.Substring(8, 2);
-                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
+                                            JArray obj = JArray.Parse(DeliveryListJsonData);
+                                            int checkInt = obj.Count;
+
+                                            if (checkInt == 0)
+                                            {
+                                                List<CardAction> cardButtons = new List<CardAction>();
 
                                                 CardAction bookButton = new CardAction();
                                                 bookButton = new CardAction()
                                                 {
-                                                    Type = "imBack",
-                                                    Value = jobj["wbl_num"].ToString() + " 예약취소확인",
-                                                    Title = "예약 내용 확인"
+                                                    Type = "openUrl",
+                                                    Value = "http://www.hanjin.co.kr/Delivery_html/reserve/login1.jsp?rsr_gbn=",
+                                                    Title = "신규택배 예약하기"
                                                 };
                                                 cardButtons.Add(bookButton);
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
-                                                    Title = "" + jobj["wbl_num"].ToString(),
-                                                    Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                    Title = "",
+                                                    Text = "예약된 정보가 없습니다.",
                                                     Buttons = cardButtons,
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
                                                 apiMakerReply.Attachments.Add(plAttachment);
                                             }
-                                        }
+                                            else
+                                            {
+                                                foreach (JObject jobj in obj)
+                                                {
+                                                    List<CardList> text = new List<CardList>();
+                                                    List<CardAction> cardButtons = new List<CardAction>();
 
-                                        SetActivity(apiMakerReply);
+                                                    String tempDate = jobj["dlv_ymd"].ToString();
+                                                    String yearText = tempDate.Substring(0, 4);
+                                                    String monthText = tempDate.Substring(5, 2);
+                                                    String dayText = tempDate.Substring(8, 2);
+                                                    String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
+
+                                                    CardAction bookButton = new CardAction();
+                                                    bookButton = new CardAction()
+                                                    {
+                                                        Type = "imBack",
+                                                        Value = jobj["wbl_num"].ToString() + " 예약취소확인",
+                                                        Title = "예약 내용 확인"
+                                                    };
+                                                    cardButtons.Add(bookButton);
+
+                                                    UserHeroCard plCard = new UserHeroCard()
+                                                    {
+                                                        Title = "" + jobj["wbl_num"].ToString(),
+                                                        Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                        Buttons = cardButtons,
+                                                    };
+
+                                                    Attachment plAttachment = plCard.ToAttachment();
+                                                    apiMakerReply.Attachments.Add(plAttachment);
+                                                }
+                                            }
+
+                                            SetActivity(apiMakerReply);
+                                        }
                                     }
+                                        
                                 }
                             }
                             else
@@ -1906,94 +1936,102 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    //모바일 인증 체크
-                                    if (authCheck.Equals("F"))
+                                    if (mobilePC.Equals("PC"))
                                     {
-                                        List<CardAction> cardButtons = new List<CardAction>();
 
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 핸드폰인증 하겠습니다",
-                                            Title = "예"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                            Title = "아니오"
-                                        };
-                                        cardButtons.Add(returnButton);
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
-                                        WebClient webClient = new WebClient();
-                                        Stream stream = webClient.OpenRead(API4Url);
-                                        //String API4JsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
-                                        String API4JsonData = new StreamReader(stream).ReadToEnd();
-
-                                        JObject obj = JObject.Parse(API4JsonData);
-                                        JArray sample = (JArray)obj["예약상세내용확인"];
-                                        int checkInt = sample.Count;
-
-                                        if (checkInt == 0)
+                                        //모바일 인증 체크
+                                        if (authCheck.Equals("F"))
                                         {
                                             List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction deliveryButton = new CardAction();
+                                            deliveryButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "예. 핸드폰인증 하겠습니다",
+                                                Title = "예"
+                                            };
+                                            cardButtons.Add(deliveryButton);
+
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
+                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                                Buttons = cardButtons,
                                             };
-
                                             Attachment plAttachment = plCard.ToAttachment();
                                             apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
                                         }
                                         else
                                         {
-                                            APIDelayListData = API4JsonData;
-                                            foreach (JObject jobj in sample)
-                                            {
-                                                List<CardList> text = new List<CardList>();
-                                                List<CardAction> cardButtons = new List<CardAction>();
+                                            WebClient webClient = new WebClient();
+                                            Stream stream = webClient.OpenRead(API4Url);
+                                            //String API4JsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                            String API4JsonData = new StreamReader(stream).ReadToEnd();
 
-                                                CardAction bookButton = new CardAction();
-                                                bookButton = new CardAction()
-                                                {
-                                                    Type = "imBack",
-                                                    Value = "예약번호 " + jobj["예약번호"].ToString() + " 방문지연확인",
-                                                    Title = "방문지연여부확인"
-                                                };
-                                                cardButtons.Add(bookButton);
+                                            JObject obj = JObject.Parse(API4JsonData);
+                                            JArray sample = (JArray)obj["예약상세내용확인"];
+                                            int checkInt = sample.Count;
+
+                                            if (checkInt == 0)
+                                            {
+                                                List<CardAction> cardButtons = new List<CardAction>();
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "고객님! 예약번호 " + jobj["예약번호"].ToString() + " 로 " + jobj["예약일자"].ToString() + " 에 " + jobj["예약종류"].ToString() + " 있습니다.<br>집배점 전화번호는 " + jobj["집배점전화번호"].ToString() + " 입니다.",
-                                                    Buttons = cardButtons,
+                                                    Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
                                                 apiMakerReply.Attachments.Add(plAttachment);
                                             }
-                                        }
+                                            else
+                                            {
+                                                APIDelayListData = API4JsonData;
+                                                foreach (JObject jobj in sample)
+                                                {
+                                                    List<CardList> text = new List<CardList>();
+                                                    List<CardAction> cardButtons = new List<CardAction>();
 
-                                        SetActivity(apiMakerReply);
+                                                    CardAction bookButton = new CardAction();
+                                                    bookButton = new CardAction()
+                                                    {
+                                                        Type = "imBack",
+                                                        Value = "예약번호 " + jobj["예약번호"].ToString() + " 방문지연확인",
+                                                        Title = "방문지연여부확인"
+                                                    };
+                                                    cardButtons.Add(bookButton);
+
+                                                    UserHeroCard plCard = new UserHeroCard()
+                                                    {
+                                                        Title = "",
+                                                        Text = "고객님! 예약번호 " + jobj["예약번호"].ToString() + " 로 " + jobj["예약일자"].ToString() + " 에 " + jobj["예약종류"].ToString() + " 있습니다.<br>집배점 전화번호는 " + jobj["집배점전화번호"].ToString() + " 입니다.",
+                                                        Buttons = cardButtons,
+                                                    };
+
+                                                    Attachment plAttachment = plCard.ToAttachment();
+                                                    apiMakerReply.Attachments.Add(plAttachment);
+                                                }
+                                            }
+
+                                            SetActivity(apiMakerReply);
+                                        }
                                     }
+                                        
                                 }
                             }
                             else
@@ -2132,97 +2170,105 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    //모바일 인증 체크
-                                    if (authCheck.Equals("F"))
+                                    if (mobilePC.Equals("PC"))
                                     {
-                                        List<CardAction> cardButtons = new List<CardAction>();
 
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 핸드폰인증 하겠습니다",
-                                            Title = "예"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                            Title = "아니오"
-                                        };
-                                        cardButtons.Add(returnButton);
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
-                                        WebClient webClient = new WebClient();
-                                        //Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
-                                        Stream stream = webClient.OpenRead(DeliveryList);
-                                        //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
-                                        String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
-
-                                        JArray obj = JArray.Parse(DeliveryListJsonData);
-                                        int checkInt = obj.Count;
-
-                                        if (checkInt == 0)
+                                        //모바일 인증 체크
+                                        if (authCheck.Equals("F"))
                                         {
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction deliveryButton = new CardAction();
+                                            deliveryButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "예. 핸드폰인증 하겠습니다",
+                                                Title = "예"
+                                            };
+                                            cardButtons.Add(deliveryButton);
+
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
+                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                                Buttons = cardButtons,
                                             };
-
                                             Attachment plAttachment = plCard.ToAttachment();
                                             apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
                                         }
                                         else
                                         {
-                                            foreach (JObject jobj in obj)
+                                            WebClient webClient = new WebClient();
+                                            //Stream stream = webClient.OpenRead(DeliveryList + "?tel_num=01097444750");
+                                            Stream stream = webClient.OpenRead(DeliveryList);
+                                            //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                            String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+
+                                            JArray obj = JArray.Parse(DeliveryListJsonData);
+                                            int checkInt = obj.Count;
+
+                                            if (checkInt == 0)
                                             {
-                                                List<CardList> text = new List<CardList>();
-                                                List<CardAction> cardButtons = new List<CardAction>();
-
-                                                String tempDate = jobj["dlv_ymd"].ToString();
-                                                String yearText = tempDate.Substring(0, 4);
-                                                String monthText = tempDate.Substring(5, 2);
-                                                String dayText = tempDate.Substring(8, 2);
-                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
-
-                                                CardAction bookButton = new CardAction();
-                                                bookButton = new CardAction()
-                                                {
-                                                    Type = "imBack",
-                                                    Value = "운송장 번호 " + jobj["wbl_num"].ToString() + "에 대한 배송일정조회",
-                                                    Title = "배송일정 확인"
-                                                };
-                                                cardButtons.Add(bookButton);
-
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
-                                                    Title = "" + jobj["wbl_num"].ToString(),
-                                                    Text = "<strong>상품명: </strong>" + jobj["god_nam"].ToString(),
-                                                    Buttons = cardButtons,
+                                                    Title = "",
+                                                    Text = "고객님! 현재 문의하신 정보에 해당하는 예약 건을 찾을 수 없습니다."
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
                                                 apiMakerReply.Attachments.Add(plAttachment);
                                             }
-                                        }
+                                            else
+                                            {
+                                                foreach (JObject jobj in obj)
+                                                {
+                                                    List<CardList> text = new List<CardList>();
+                                                    List<CardAction> cardButtons = new List<CardAction>();
 
-                                        SetActivity(apiMakerReply);
+                                                    String tempDate = jobj["dlv_ymd"].ToString();
+                                                    String yearText = tempDate.Substring(0, 4);
+                                                    String monthText = tempDate.Substring(5, 2);
+                                                    String dayText = tempDate.Substring(8, 2);
+                                                    String dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)";
+
+                                                    CardAction bookButton = new CardAction();
+                                                    bookButton = new CardAction()
+                                                    {
+                                                        Type = "imBack",
+                                                        Value = "운송장 번호 " + jobj["wbl_num"].ToString() + "에 대한 배송일정조회",
+                                                        Title = "배송일정 확인"
+                                                    };
+                                                    cardButtons.Add(bookButton);
+
+                                                    UserHeroCard plCard = new UserHeroCard()
+                                                    {
+                                                        Title = "" + jobj["wbl_num"].ToString(),
+                                                        Text = "<strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                        Buttons = cardButtons,
+                                                    };
+
+                                                    Attachment plAttachment = plCard.ToAttachment();
+                                                    apiMakerReply.Attachments.Add(plAttachment);
+                                                }
+                                            }
+
+                                            SetActivity(apiMakerReply);
+                                        }
                                     }
+                                        
                                 }
                             }
                             else
