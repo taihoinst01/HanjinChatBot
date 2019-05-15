@@ -3,6 +3,7 @@ using Microsoft.Bot.Connector;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -424,6 +425,38 @@ namespace HanjinChatBot.DB
         public string StripHtml(string Txt)
         {
             return Regex.Replace(Txt, "<(.|\\n)*?>", string.Empty);
+        }
+
+        //전화번호 각 문자를 배열에 넣기
+        public string[] arrayStr(string word)
+        {
+            string[] words = new string[word.Length];
+            for(int i=0; i<word.Length; i++)
+            {
+                words[i] = word.Substring(i, 1);
+            }
+            return words;
+        }
+
+        //hashtable 이용하여 영문자를 숫자로 변환하기(전화번호체크용)
+        public string getTelNumber(string word)
+        {
+            String telNum = "";
+            Hashtable telTempTable = new Hashtable();
+            telTempTable.Add("A", "0");
+            telTempTable.Add("B", "1");
+            telTempTable.Add("C", "2");
+            telTempTable.Add("D", "3");
+            telTempTable.Add("E", "4");
+            telTempTable.Add("F", "5");
+            telTempTable.Add("G", "6");
+            telTempTable.Add("H", "7");
+            telTempTable.Add("I", "8");
+            telTempTable.Add("J", "9");
+
+            telNum = (String)telTempTable[word];
+            
+            return telNum;
         }
     }
 }

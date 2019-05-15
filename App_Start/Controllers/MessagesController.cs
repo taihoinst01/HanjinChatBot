@@ -265,8 +265,22 @@ namespace HanjinChatBot
             }
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) //전화번호 받아오는 부분 처리
             {
-                String telNumber = "01012341234";
-                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", telNumber);
+                /*
+                 * 전화번호 처리
+                 * */
+                String realTelNumber = "";
+                DButil.HistoryLog("start tel : ");
+                String telMessage = activity.Text;
+                DButil.HistoryLog("telMessage : " + telMessage);
+                String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
+                String[] telNumbers = dbutil.arrayStr(telNumber);
+                for(int i=0; i< telNumbers.Length; i++)
+                {
+                    realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
+                }
+                DButil.HistoryLog("realTelNumber : " + realTelNumber);
+
+                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "OPTION_1", "MOBILE");
             }
             //else if (activity.Type == ActivityTypes.Message)
