@@ -1167,11 +1167,11 @@ namespace HanjinChatBot
                                         else
                                         {
                                             WebClient webClient = new WebClient();
-                                            Stream stream = webClient.OpenRead(DeliveryList);
-                                            String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
-                                            //String sample = "http://211.210.94.46:7777/customer/ipcc_api.get_wbls?tel_num=01027185020";
-                                            //Stream stream = webClient.OpenRead(sample);
-                                            //String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
+                                            //Stream stream = webClient.OpenRead(DeliveryList);
+                                            //String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
+                                            String sample = "http://211.210.94.46:7777/customer/ipcc_api.get_wbls?tel_num=01027185020";
+                                            Stream stream = webClient.OpenRead(sample);
+                                            String DeliveryListJsonData = new StreamReader(stream, Encoding.Default).ReadToEnd();
 
 
                                             JArray obj = JArray.Parse(DeliveryListJsonData);
@@ -1201,9 +1201,10 @@ namespace HanjinChatBot
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    //Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
-                                                    Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
-                                                    Tap = plButton
+                                                    Text = "<strong>배송완료일자: </strong>" + dateText + " <br><strong>배송상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString(),
+                                                    //Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
+                                                    Buttons = cardButtons,
+                                                    //Tap = plButton
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
