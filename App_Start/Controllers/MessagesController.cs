@@ -1185,13 +1185,12 @@ namespace HanjinChatBot
                                             apiMakerReply.Attachments.Add(plAttachment);
 
                                             WebClient webClient = new WebClient();
-                                            //Stream stream = webClient.OpenRead(DeliveryList);
-                                            //String DeliveryListJsonData = new StreamReader(stream).ReadToEnd();
                                             String sample = DeliveryList +"?tel_num="+requestPhone;
                                             Stream stream = webClient.OpenRead(sample);
                                             String DeliveryListJsonData = new StreamReader(stream, Encoding.GetEncoding("ks_c_5601-1987"), true).ReadToEnd();
 
                                             JArray obj = JArray.Parse(DeliveryListJsonData);
+                                            
                                             foreach (JObject jobj in obj)
                                             {
                                                 List<CardList> text = new List<CardList>();
@@ -1241,8 +1240,8 @@ namespace HanjinChatBot
                                                     Title = "",
                                                     Text = "<strong>배송완료일자: </strong>" + tempDate + " <br><strong>배송상태: </strong>" + deliveryStatusText + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString()+ " <br><strong>운송장번호: </strong>" + jobj["wbl_num"].ToString()+ " <br><strong>송하인명: </strong>" + jobj["snd_nam"].ToString(),
                                                     //Text = "<div class=\"takeBack\"><div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div><div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
-                                                    Buttons = cardButtons,
-                                                    //Tap = plButton
+                                                    //Buttons = cardButtons,
+                                                    Tap = plButton
                                                 };
                                                 //Attachment plAttachment = plCard.ToAttachment();
                                                 plAttachment = plCard.ToAttachment();
