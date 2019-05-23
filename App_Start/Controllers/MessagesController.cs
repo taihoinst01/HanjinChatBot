@@ -91,7 +91,7 @@ namespace HanjinChatBot
         static public string requestPhone = "";                 //리스트용 전화번호
         static public int deliveryListPageNum = 1;
         static public int collectionListPageNum = 1;
-        static public int pageCnt = 2;
+        static public int pageCnt = 10;
         
 
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
@@ -856,7 +856,14 @@ namespace HanjinChatBot
                             apiMakerReply.Recipient = activity.From;
                             apiMakerReply.Type = "message";
                             apiMakerReply.Attachments = new List<Attachment>();
-                            apiMakerReply.AttachmentLayout = "list";
+                            //apiMakerReply.AttachmentLayout = AttachmentLayoutTypes.Carousel
+
+                            Activity apiMakerReply1 = activity.CreateReply();
+
+                            apiMakerReply1.Recipient = activity.From;
+                            apiMakerReply1.Type = "message";
+                            apiMakerReply1.Attachments = new List<Attachment>();
+                            apiMakerReply1.AttachmentLayout = AttachmentLayoutTypes.Carousel;
 
                             Regex r = new Regex("[0-9]");
                             bool checkNum = Regex.IsMatch(activity.Text, @"^\d+$"); //입력값이 숫자인지 파악.
@@ -1265,7 +1272,8 @@ namespace HanjinChatBot
                                                 };
                                                 //Attachment plAttachment = plCard.ToAttachment();
                                                 plAttachment = plCard.ToAttachment();
-                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                apiMakerReply1.Attachments.Add(plAttachment);
+                                                apiMakerReply1.AttachmentLayout = AttachmentLayoutTypes.Carousel;
 
                                             }
                                             if (totalPage == 1)
@@ -1321,6 +1329,7 @@ namespace HanjinChatBot
                                             
 
                                             SetActivity(apiMakerReply);
+                                            SetActivity(apiMakerReply1);
 
                                         }
                                     }
