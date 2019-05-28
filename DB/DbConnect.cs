@@ -1297,7 +1297,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, OPTION_1 ";
+                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK ";
                 cmd.CommandText += "FROM    TBL_USERCHECK ";
                 cmd.CommandText += "WHERE  CHANNELDATA = @channeldata ";
                 cmd.CommandText += "AND      CONVERSATIONSID = @conversationsId ";
@@ -1320,7 +1320,10 @@ namespace HanjinChatBot.DB
                         userData.apiOldIntent = rdr["API_OLDINTENT"] as string;
                         userData.authCheck = rdr["AUTH_CHECK"] as string;
                         userData.authNumber = rdr["AUTH_NUMBER"] as string;
-                        userData.option_1 = rdr["OPTION_1"] as string;
+                        userData.mobilePc = rdr["MOBILEPC"] as string;
+                        userData.userName = rdr["USER_NAME"] as string;
+                        userData.nameCheck = rdr["NAMECHECK"] as string;
+                        userData.addressCheck = rdr["ADDRESSCHECK"] as string;
 
                         userdata.Add(userData);
                     }
@@ -1368,23 +1371,51 @@ namespace HanjinChatBot.DB
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
+                else if (gubun.Equals("AUTH_NUMBER"))
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           AUTH_NUMBER = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
                 else if (gubun.Equals("USER_PHONE"))
                 {
-                    cmd.CommandText += " UPDATE     TBL_USERDATA ";
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
                     cmd.CommandText += " SET           USER_PHONE = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
-                else if (gubun.Equals("OPTION_1"))
+                else if (gubun.Equals("MOBILEPC"))//mobile, pc 여부
                 {
-                    cmd.CommandText += " UPDATE     TBL_USERDATA ";
-                    cmd.CommandText += " SET           OPTION_1 = @val ";
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           MOBILEPC = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
+                else if (gubun.Equals("USER_NAME"))//인증이름
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           USER_NAME = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
+                else if (gubun.Equals("NAMECHECK"))//인증이름
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           NAMECHECK = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
+                else if (gubun.Equals("ADDRESSCHECK"))//인증이름
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           ADDRESSCHECK = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
                 else
                 {
-                    cmd.CommandText += " UPDATE     TBL_USERDATA ";
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
                     cmd.CommandText += " SET           USER_ID = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
