@@ -14,8 +14,9 @@ namespace HanjinChatBot.Models
         public string apiOldIntent;
         public string authCheck;
         public string authNumber;
-        public string option_1;
-        public string option_2;
-        public string option_3;
+        public string mobilePc;
+        public string userName;
+        public string nameCheck;
+        public string addressCheck;
     }
 }
