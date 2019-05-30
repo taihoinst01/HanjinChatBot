@@ -1473,7 +1473,7 @@ namespace HanjinChatBot
                                     * POST METHOD
                                     * */
                                     postParams = new StringBuilder();
-                                    postParams.Append("wbl_rsv=" + requestPhone);
+                                    postParams.Append("wbl_rsv=" + bookNumber);
 
                                     Encoding encoding = Encoding.UTF8;
                                     byte[] result = encoding.GetBytes(postParams.ToString());
@@ -1513,15 +1513,15 @@ namespace HanjinChatBot
                                             String dayText = tempDate.Substring(6, 2);
                                             String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
 
-                                            bookCheckText = "번호 " + bookNumber + "는 " + dateText + " 정상 예약접수된 건입니다.<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 전화번호 " + jobj["tel_num"].ToString() + " 으로 문의 부탁드립니다.";
+                                            bookCheckText = "예약번호 " + bookNumber + "는 " + dateText + " 정상 예약접수된 건입니다.<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 전화번호 " + jobj["tel_num"].ToString() + " 으로 문의 부탁드립니다.";
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9001"))
                                         {
-                                            bookCheckText = "번호 " + bookNumber + "는 예약미등록 건입니다.";
+                                            bookCheckText = "예약번호 " + bookNumber + "는 예약미등록 건입니다.";
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9999"))
                                         {
-                                            bookCheckText = "번호 " + bookNumber + "는 에러발생 건입니다.";
+                                            bookCheckText = "예약번호 " + bookNumber + "는 에러발생 건입니다.";
                                         }
                                         else
                                         {
