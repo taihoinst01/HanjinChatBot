@@ -392,7 +392,7 @@ namespace HanjinChatBot
                             luisIntent = "None";
                         }
 
-                        if (checkAuthNameCnt.Equals("T"))
+                        if (checkAuthNameCnt.Equals("T")|| checkFindAddressCnt.Equals("T"))
                         {
                             luisIntent = "None";
                         }
@@ -426,7 +426,7 @@ namespace HanjinChatBot
                             {
                                 luisIntent = "None";
                             }
-                            else if (checkAuthNameCnt.Equals("T"))
+                            else if (checkAuthNameCnt.Equals("T")|| checkFindAddressCnt.Equals("T"))
                             {
                                 luisIntent = "None";
                             }
@@ -489,7 +489,7 @@ namespace HanjinChatBot
                             {
                                 luisIntent = "None";
                             }
-                            else if (checkAuthNameCnt.Equals("T"))
+                            else if (checkAuthNameCnt.Equals("T")|| checkFindAddressCnt.Equals("T"))
                             {
                                 luisIntent = "None";
                             }
@@ -499,7 +499,12 @@ namespace HanjinChatBot
                             }
                         }
 
-                        DButil.HistoryLog("luisId : " + luisId);
+                        if (activity.Text.Contains("[") && activity.Text.Contains("]"))
+                        {
+                            luisIntent = "None";
+                        }
+
+                            DButil.HistoryLog("luisId : " + luisId);
                         DButil.HistoryLog("luisIntent : " + luisIntent);
                         DButil.HistoryLog("luisEntities : " + luisEntities);
 
@@ -762,64 +767,7 @@ namespace HanjinChatBot
                         {
 
                         }
-
-                        /*
-                         * relationList 가 null 이고 apiIntent 가 null 이면 sorry message
-                         * add JunHyoung Park
-                         * */
-                        /*
-                        if (string.IsNullOrEmpty(uData[0].apiIntent))
-                        {
-                            apiIntent = "None";
-                        }
-                        else
-                        {
-                            apiIntent = uData[0].apiIntent;
-                        }
-
-                        if (string.IsNullOrEmpty(uData[0].apiOldIntent))
-                        {
-                            apiOldIntent = "None";
-                        }
-                        else
-                        {
-                            apiOldIntent = uData[0].apiOldIntent;
-                        }
-
-                        if (apiIntent.Equals("None") || apiIntent.Equals(""))
-                        {
-
-                        }
-                        else
-                        {
-                            apiOldIntent = "None";
-                        }
-
-                        if (apiOldIntent.Equals("None") || apiOldIntent.Equals(""))
-                        {
-
-                        }
-                        else
-                        {
-                            apiIntent = apiOldIntent;
-                        }
-                        Debug.WriteLine("apiIntent3-------------" + apiIntent);
-
-                        if (luisIntent.Equals("None"))
-                        {
-
-                        }
-                        else
-                        {
-                            if (apiTFdata.Equals("F"))
-                            {
-                                apiIntent = "None";
-                            }
-                        }
-
-                        Debug.WriteLine("apiIntent CHECK-------------" + apiIntent);
-                        Debug.WriteLine("relationList-------------" + relationList);
-                        */
+                        
                         /*
                              * [APIINTENT]::글자 - 대화셋에서 버튼을 클릭 했을 시에는 이것으로 진행한다.
                              */
@@ -829,6 +777,7 @@ namespace HanjinChatBot
                             int apiIntentE = activity.Text.IndexOf("]");
                             apiIntent = activity.Text.Substring(apiIntentS + 1, (apiIntentE - 1) - apiIntentS);
                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
+                            
                             Debug.WriteLine("apiIntent[]-------------" + apiIntent);
                             Debug.WriteLine("대화셋에서 버튼 클릭-------------" + apiIntent);
                         }
@@ -868,6 +817,10 @@ namespace HanjinChatBot
                             if (checkAuthNameCnt.Equals("T"))
                             {
                                 apiIntent = "F_모바일인증";
+                            }
+                            else if (checkFindAddressCnt.Equals("T"))
+                            {
+                                apiIntent = "F_집배점/기사연락처";
                             }
                             else
                             {
@@ -922,7 +875,7 @@ namespace HanjinChatBot
                                     {
                                         //Title = text[i].cardTitle,
                                         Text = text[i].cardText,
-                                        Buttons = cardButtons
+                                        //Buttons = cardButtons
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -1030,6 +983,15 @@ namespace HanjinChatBot
                                 }
                             }
 
+                            //luis intent 가 있을 때는 api 없기.
+                            if(luisIntent.Equals("None"))
+                            {
+
+                            }
+                            else
+                            {
+                                apiIntent = "None";
+                            }
 
                             authCheck = uData[0].authCheck;//모바일 인증 체크
                             mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
@@ -1208,7 +1170,7 @@ namespace HanjinChatBot
 
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("반품택배예약"))
+                                else if (apiActiveText.Contains("반품택배예약")|| apiActiveText.Contains("택배배송목록"))
                                 {
                                     if (mobilePC.Equals("PC"))
                                     {
@@ -2977,7 +2939,8 @@ namespace HanjinChatBot
                                         postParams.Append("address=" + apiActiveText);
 
                                         Encoding encoding = Encoding.UTF8;
-                                        byte[] result = encoding.GetBytes(postParams.ToString());
+                                        //byte[] result = encoding.GetBytes(postParams.ToString());
+                                        byte[] result = Encoding.GetEncoding("ks_c_5601-1987").GetBytes(postParams.ToString());
 
                                         wReq = (HttpWebRequest)WebRequest.Create(findOrgInfo);
                                         wReq.Method = "POST";
@@ -3150,7 +3113,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 휴대폰 번호로 인증에 동의하시면 고객님의 택배목옥을 확인하실 수 있습니다<br>본 인증 절차는 고객님의 택배목록을 조회/제공하기 위한 목적으로만 활용되며, 별도 보관하지 않습니다<br><br>인증 절차에 동의하시겠습니까?",
+                                        Text = "고객님의 휴대폰 번호로 인증에 동의하시면 고객님의 택배목록을 확인하실 수 있습니다<br>본 인증 절차는 고객님의 택배목록을 조회/제공하기 위한 목적으로만 활용되며, 별도 보관하지 않습니다<br><br>인증 절차에 동의하시겠습니까?",
                                         Buttons = cardButtons,
                                     };
 
@@ -3194,7 +3157,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 휴대폰 본호를 기준으로 배송정보를 조회하기 위해 인증절차가 필요합니다.",
+                                        Text = "고객님의 휴대폰 번호를 기준으로 배송정보를 조회하기 위해 인증절차가 필요합니다.",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -3234,11 +3197,63 @@ namespace HanjinChatBot
                                         {
                                             authCheck = "T";//인증성공
                                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_CHECK", authCheck); //AUTH_CHECK UPDATE
+                                            checkAuthNameCnt = "F";
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
                                             apiOldIntent = "";
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction list1Button = new CardAction();
+                                            list1Button = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "[F_예약]::택배배송목록",
+                                                Title = "택배배송목록"
+                                            };
+                                            cardButtons.Add(list1Button);
+
+                                            CardAction list2Button = new CardAction();
+                                            list2Button = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "[F_예약확인]::택배집하목록",
+                                                Title = "택배집하목록"
+                                            };
+                                            cardButtons.Add(list2Button);
+
+                                            CardAction list3Button = new CardAction();
+                                            list3Button = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "[F_예약취소]::나의예약취소",
+                                                Title = "나의예약취소"
+                                            };
+                                            cardButtons.Add(list3Button);
+
+                                            CardAction list4Button = new CardAction();
+                                            list4Button = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "[F_예약확인]::나의예약확인",
+                                                Title = "나의예약확인"
+                                            };
+                                            cardButtons.Add(list4Button);
+
+                                            CardAction list5Button = new CardAction();
+                                            list5Button = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "[F_택배배송일정조회]::나의배송목록",
+                                                Title = "나의배송목록"
+                                            };
+                                            cardButtons.Add(list5Button);
+
+
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "인증되었습니다. 감사합니다.",
+                                                Text = "인증되었습니다. 감사합니다.<br>원하시는 목록을 선택하세요.",
+                                                Buttons = cardButtons,
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3249,6 +3264,8 @@ namespace HanjinChatBot
                                         {
                                             authCheck = "F";//인증실패
                                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_CHECK", authCheck); //AUTH_CHECK UPDATE
+                                            checkAuthNameCnt = "F";
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
                                             String rejectText = "";
                                             if (jobj["ret_cod"].ToString().Equals("9033"))
                                             {
@@ -3337,6 +3354,8 @@ namespace HanjinChatBot
                                             }
                                             else
                                             {
+                                                checkAuthNameCnt = "F";
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
