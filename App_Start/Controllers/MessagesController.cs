@@ -97,6 +97,8 @@ namespace HanjinChatBot
         static public int collectionListPageNum = 1;
         static public int pageCnt = 10;
 
+        static public string authUrl = "";                 //모바일 인증시 적용할 redirect 항목
+
         HttpWebRequest wReq;
         Stream postDataStream;
         Stream respPostStream;
@@ -674,7 +676,23 @@ namespace HanjinChatBot
                             }
 
                         }
+                        //relationList count 를 체크하여 null 처리
+                        if (relationList == null)
+                        {
 
+                        }
+                        else
+                        {
+                            if (relationList.Count == 0)
+                            {
+                                relationList = null;
+                            }
+                        }
+
+
+
+                        
+                        
                         if (relationList != null)
                         {
                             dlgId = "";
@@ -1181,6 +1199,7 @@ namespace HanjinChatBot
                                         //모바일 인증 체크
                                         if (authCheck.Equals("F"))
                                         {
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약]::택배배송목록");
                                             List<CardAction> cardButtons = new List<CardAction>();
 
                                             CardAction deliveryButton = new CardAction();
@@ -1550,6 +1569,7 @@ namespace HanjinChatBot
                                         //모바일 인증 체크
                                         if (authCheck.Equals("F"))
                                         {
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약확인]::나의예약확인");
                                             List<CardAction> cardButtons = new List<CardAction>();
 
                                             CardAction deliveryButton = new CardAction();
@@ -2074,6 +2094,7 @@ namespace HanjinChatBot
                                         //모바일 인증 체크
                                         if (authCheck.Equals("F"))
                                         {
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약취소]::나의예약취소");
                                             List<CardAction> cardButtons = new List<CardAction>();
 
                                             CardAction deliveryButton = new CardAction();
@@ -2580,6 +2601,7 @@ namespace HanjinChatBot
                                         //모바일 인증 체크
                                         if (authCheck.Equals("F"))
                                         {
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_택배배송일정조회]::나의배송목록");
                                             List<CardAction> cardButtons = new List<CardAction>();
 
                                             CardAction deliveryButton = new CardAction();
@@ -3200,8 +3222,9 @@ namespace HanjinChatBot
                                             checkAuthNameCnt = "F";
                                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
                                             apiOldIntent = "";
+                                            authUrl = uData[0].authUrl;
                                             List<CardAction> cardButtons = new List<CardAction>();
-
+                                            /*
                                             CardAction list1Button = new CardAction();
                                             list1Button = new CardAction()
                                             {
@@ -3245,14 +3268,21 @@ namespace HanjinChatBot
                                                 Value = "[F_택배배송일정조회]::나의배송목록",
                                                 Title = "나의배송목록"
                                             };
-                                            cardButtons.Add(list5Button);
-
-
+                                            
+                                            */
+                                            CardAction list1Button = new CardAction();
+                                            list1Button = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = authUrl,
+                                                Title = "택배배송목록"
+                                            };
+                                            cardButtons.Add(list1Button);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "인증되었습니다. 감사합니다.<br>원하시는 목록을 선택하세요.",
+                                                Text = "인증되었습니다. 감사합니다.<br>버튼을 클릭하시면 해당 목록으로 이동합니다.",
                                                 Buttons = cardButtons,
                                             };
 

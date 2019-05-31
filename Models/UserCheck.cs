@@ -18,5 +18,6 @@ namespace HanjinChatBot.Models
         public string userName;
         public string nameCheck;
         public string addressCheck;
+        public string authUrl;
     }
 }

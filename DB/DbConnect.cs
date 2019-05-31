@@ -1297,7 +1297,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK ";
+                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK, AUTH_URL ";
                 cmd.CommandText += "FROM    TBL_USERCHECK ";
                 cmd.CommandText += "WHERE  CHANNELDATA = @channeldata ";
                 cmd.CommandText += "AND      CONVERSATIONSID = @conversationsId ";
@@ -1324,6 +1324,7 @@ namespace HanjinChatBot.DB
                         userData.userName = rdr["USER_NAME"] as string;
                         userData.nameCheck = rdr["NAMECHECK"] as string;
                         userData.addressCheck = rdr["ADDRESSCHECK"] as string;
+                        userData.authUrl = rdr["AUTH_URL"] as string;
 
                         userdata.Add(userData);
                     }
@@ -1410,6 +1411,13 @@ namespace HanjinChatBot.DB
                 {
                     cmd.CommandText += " UPDATE     TBL_USERCHECK ";
                     cmd.CommandText += " SET           ADDRESSCHECK = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
+                else if (gubun.Equals("AUTH_URL"))//인증이름
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           AUTH_URL = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
