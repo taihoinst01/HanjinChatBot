@@ -294,16 +294,28 @@ namespace HanjinChatBot
                 DButil.HistoryLog("start tel : ");
                 String telMessage = activity.Text;
                 DButil.HistoryLog("telMessage : " + telMessage);
-                String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
-                String[] telNumbers = dbutil.arrayStr(telNumber);
-                for (int i = 0; i < telNumbers.Length; i++)
+                String mobilePc = "";
+                if (telMessage.Contains("tel:"))
                 {
-                    realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
+                    String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
+                    String[] telNumbers = dbutil.arrayStr(telNumber);
+                    for (int i = 0; i < telNumbers.Length; i++)
+                    {
+                        realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
+                    }
+                    mobilePc = "MOBILE";
+                    DButil.HistoryLog("realTelNumber : " + realTelNumber);
+                    DButil.HistoryLog("CHATBOT TYPE IS MOBILE");
                 }
-                DButil.HistoryLog("realTelNumber : " + realTelNumber);
+                else
+                {
+                    mobilePc = "PC";
+                    DButil.HistoryLog("CHATBOT TYPE IS PC");
+                }
+                
 
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
-                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", "MOBILE");
+                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePc);
             }
             //else if (activity.Type == ActivityTypes.Message)
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
@@ -410,116 +422,11 @@ namespace HanjinChatBot
                             luisId = "";
                             cacheList.luisIntent = "None";//하단의 로직을 수행하지 않기 위해서
                         }
-                        //luis 호출
-                        else if (cacheList.luisIntent == null || cacheList.luisEntities == null)
-                        {
-                            DButil.HistoryLog("cache none : " + orgMent);
-                            Debug.WriteLine("cache none : " + orgMent);
-                            Regex r = new Regex("[0-9]");
-                            bool containNum = r.IsMatch(activity.Text); //숫자여부 확인
-                            String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
-                            int checkNumberLength = onlyNumber.Length;
-
-                            if (containNum == true && checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
-                            {
-                                luisIntent = "None";
-                            }
-                            else if (checkText.Contains("동의") && chectTextLength < 9)
-                            {
-                                luisIntent = "None";
-                            }
-                            else if (checkAuthNameCnt.Equals("T")|| checkFindAddressCnt.Equals("T"))
-                            {
-                                luisIntent = "None";
-                            }
-                            else
-                            {
-                                List<string[]> textList = new List<string[]>(2);
-
-                                for (int i = 0; i < 2; i++)
-                                {
-                                    textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
-                                    Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
-                                }
-                                DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
-                                Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
-
-                                JObject Luis_before = new JObject();
-                                float luisScoreCompare = 0.0f;
-                                JObject Luis = new JObject();
-
-                                //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
-                                //루이스 처리
-                                Task<JObject> APIt1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(textList, luisQuery));
-
-                                //결과값 받기
-                                await Task.Delay(1000);
-                                APIt1.Wait();
-                                Luis = APIt1.Result;
-
-                                //Debug.WriteLine("Luis : " + Luis); 
-                                //entities 갯수가 0일겨우 intent를 None으로 처리
-
-                                //if (Luis != null || Luis.Count > 0)
-                                if (Luis.Count != 0)
-                                {
-                                    //if ((int)Luis["entities"].Count() != 0)
-                                    if (1 != 0)
-                                    {
-                                        float luisScore = (float)Luis["intents"][0]["score"];
-                                        int luisEntityCount = (int)Luis["entities"].Count();
-
-                                        luisIntent = Luis["topScoringIntent"]["intent"].ToString();//add
-                                        luisScore = luisScoreCompare;
-                                        Debug.WriteLine("GetMultiLUIS() LUIS luisIntent : " + luisIntent);
-                                    }
-                                }
-                                else
-                                {
-                                    luisIntent = "None";
-                                }
-                            }
-                        }
                         else
                         {
-                            luisId = cacheList.luisId;
-                            luisIntent = cacheList.luisIntent;
-                            luisEntities = cacheList.luisEntities;
-                            luisIntentScore = cacheList.luisScore;
-
-                            if (checkText.Contains("동의") && chectTextLength < 9)
-                            {
-                                luisIntent = "None";
-                            }
-                            else if (checkAuthNameCnt.Equals("T")|| checkFindAddressCnt.Equals("T"))
-                            {
-                                luisIntent = "None";
-                            }
-                            else
-                            {
-
-                            }
-                        }
-
-                        if (activity.Text.Contains("[") && activity.Text.Contains("]"))
-                        {
-                            luisIntent = "None";
-                        }
-
-                            DButil.HistoryLog("luisId : " + luisId);
-                        DButil.HistoryLog("luisIntent : " + luisIntent);
-                        DButil.HistoryLog("luisEntities : " + luisEntities);
-
-                        /*
-                         *  RELATION TABLE 검색. API TF 검색
-                         *  있으면 그대로 사용
-                         *  없으면 LUIS 검색
-                         * */
-                        String apiTFdata = "F";
-                        Debug.WriteLine("luisIntentluisIntent : " + luisIntent);
-                        if (luisIntent == "" || luisIntent.Equals("None"))
-                        {
-                            //API 용 루이스 INTENT
+                            /*
+                             * API LUIS 호출
+                             * */
                             List<string[]> apiTextList = new List<string[]>(2);
 
                             for (int i = 0; i < 2; i++)
@@ -570,71 +477,213 @@ namespace HanjinChatBot
                             }
                             apiIntent = APILuisIntent;
                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
+                            Debug.WriteLine("API INTENT 첫번째 호출(루이스를 통해서)===" + apiIntent);
                         }
-                        else
+
+                        Regex r = new Regex("[0-9]");
+                        bool checkNum = Regex.IsMatch(activity.Text, @"^\d+$"); //입력값이 숫자인지 파악.
+                        bool containNum = r.IsMatch(activity.Text); //숫자포함 확인
+                        String apiActiveText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
+                        String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
+                        /*****************************************************************
+                            * 문장별로 apiintent 체크하기
+                            * 
+                            ************************************************************** */
+                        if (containNum == true)
                         {
-                            apiTFdata = db.getAPITFData(luisIntent);
-                            if (apiTFdata.Equals("T"))
+                            if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("반품택배예약"))
                             {
-                                //API 용 루이스 INTENT
-                                List<string[]> apiTextList = new List<string[]>(2);
-
-                                for (int i = 0; i < 2; i++)
-                                {
-                                    apiTextList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APPAPI_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
-                                    Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
-                                }
-                                DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
-                                Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
-
-                                //JObject Luis_before = new JObject();
-                                float APIluisScoreCompare = 0.0f;
-                                JObject APILuis = new JObject();
-
-                                //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
-                                //루이스 처리
-                                Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery));
-
-                                //결과값 받기
-                                await Task.Delay(1000);
-                                t1.Wait();
-                                APILuis = t1.Result;
-                                //결과값 받기
-                                await Task.Delay(1000);
-                                t1.Wait();
-                                APILuis = t1.Result;
-
-                                //Debug.WriteLine("Luis : " + Luis); 
-                                //entities 갯수가 0일겨우 intent를 None으로 처리
-
-                                //if (Luis != null || Luis.Count > 0)
-                                if (APILuis.Count != 0)
-                                {
-                                    //if ((int)Luis["entities"].Count() != 0)
-                                    if (1 != 0)
-                                    {
-                                        float luisScore = (float)APILuis["intents"][0]["score"];
-                                        int luisEntityCount = (int)APILuis["entities"].Count();
-
-                                        APILuisIntent = APILuis["topScoringIntent"]["intent"].ToString();//add
-                                        luisScore = APIluisScoreCompare;
-                                        Debug.WriteLine("GetMultiLUIS() LUIS APILuisIntent : " + APILuisIntent);
-                                    }
-                                }
-                                else
-                                {
-                                    APILuisIntent = "None";
-                                }
-                                apiIntent = APILuisIntent;
+                                apiIntent = "F_예약";
+                            }
+                            else if (apiActiveText.Contains("예약내용확인"))
+                            {
+                                apiIntent = "F_예약확인";
+                            }
+                            else if (apiActiveText.Contains("예약취소확인"))
+                            {
+                                apiIntent = "F_예약취소";
+                            }
+                            else if (apiActiveText.Contains("예약번호") && apiActiveText.Contains("예약취소선택"))
+                            {
+                                apiIntent = "F_예약취소";
+                            }
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("발송취소"))
+                            {
+                                apiIntent = "F_예약취소";
+                            }
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("기집하"))
+                            {
+                                apiIntent = "F_예약취소";
+                            }
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("이중예약"))
+                            {
+                                apiIntent = "F_예약취소";
+                            }
+                            else if (apiActiveText.Contains("아니오") && apiActiveText.Contains("예약취소하지않습니다"))
+                            {
+                                apiIntent = "F_예약취소";
+                            }
+                            else if (apiActiveText.Contains("에대한배송일정조회") && apiActiveText.Contains("운송장번호"))
+                            {
+                                apiIntent = "F_택배배송일정조회";
                             }
                             else
                             {
-                                apiIntent = "None";
-                            }
-                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
-                        }
-                        Debug.WriteLine("apiIntentapiIntent : " + apiIntent);
 
+                            }
+                        }
+                        else
+                        {
+                            if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인"))
+                            {
+                                apiIntent = "F_예약확인";
+                            }
+                            else if (apiActiveText.Equals("주소로 집배점/기사 연락처 찾기") || apiActiveText.Equals("운송장번호로 집배점/기사 연락처 찾기"))
+                            {
+                                apiIntent = "F_집배점/기사연락처";
+                            }
+                            else if (apiActiveText.Equals("주소다시입력"))
+                            {
+                                apiIntent = "F_집배점/기사연락처";
+                            }
+                            else if (apiActiveText.Equals("반송장번호확인"))
+                            {
+                                apiIntent = "F_운송장번호확인";
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        Debug.WriteLine("API INTENT 두번째 호출(문장를 통해서)===" + apiIntent);
+                        /*
+                         * apiintent 값이 없다면 luis 호출을 한다.
+                         * */
+                        String apiTFdata = "F";
+                        if (apiIntent.Equals("None"))
+                        {
+                            Debug.WriteLine("API INTENT 값이 없으므로 대화셋 검토");
+                            /*
+                             * 1. CASH DATA 검토
+                             * 2. LUIS 검토
+                             * */
+                            if (cacheList.luisIntent == null || cacheList.luisEntities == null)
+                            {
+                                DButil.HistoryLog("cache none : " + orgMent);
+                                Debug.WriteLine("cache none : " + orgMent);
+                                //Regex r = new Regex("[0-9]");
+                                //bool containNum = r.IsMatch(activity.Text); //숫자여부 확인
+                                //String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
+                                int checkNumberLength = onlyNumber.Length;
+
+                                if (containNum == true && checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
+                                {
+                                    luisIntent = "None";
+                                }
+                                else if (checkText.Contains("동의") && chectTextLength < 9)
+                                {
+                                    luisIntent = "None";
+                                }
+                                else if (checkAuthNameCnt.Equals("T") || checkFindAddressCnt.Equals("T"))
+                                {
+                                    luisIntent = "None";
+                                }
+                                else
+                                {
+                                    List<string[]> textList = new List<string[]>(2);
+
+                                    for (int i = 0; i < 2; i++)
+                                    {
+                                        textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
+                                        Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
+                                    }
+                                    DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
+                                    Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
+
+                                    JObject Luis_before = new JObject();
+                                    float luisScoreCompare = 0.0f;
+                                    JObject Luis = new JObject();
+
+                                    //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
+                                    //루이스 처리
+                                    Task<JObject> APIt1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(textList, luisQuery));
+
+                                    //결과값 받기
+                                    await Task.Delay(1000);
+                                    APIt1.Wait();
+                                    Luis = APIt1.Result;
+
+                                    //Debug.WriteLine("Luis : " + Luis); 
+                                    //entities 갯수가 0일겨우 intent를 None으로 처리
+
+                                    //if (Luis != null || Luis.Count > 0)
+                                    if (Luis.Count != 0)
+                                    {
+                                        //if ((int)Luis["entities"].Count() != 0)
+                                        if (1 != 0)
+                                        {
+                                            float luisScore = (float)Luis["intents"][0]["score"];
+                                            int luisEntityCount = (int)Luis["entities"].Count();
+
+                                            luisIntent = Luis["topScoringIntent"]["intent"].ToString();//add
+                                            luisScore = luisScoreCompare;
+                                            Debug.WriteLine("GetMultiLUIS() LUIS luisIntent : " + luisIntent);
+                                        }
+                                        apiTFdata = db.getAPITFData(luisIntent);
+                                        if (apiTFdata.Equals("F"))
+                                        {
+                                            apiIntent = "None";
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiIntent);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        luisIntent = "None";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                luisId = cacheList.luisId;
+                                luisIntent = cacheList.luisIntent;
+                                luisEntities = cacheList.luisEntities;
+                                luisIntentScore = cacheList.luisScore;
+
+                                if (checkText.Contains("동의") && chectTextLength < 9)
+                                {
+                                    luisIntent = "None";
+                                }
+                                else if (checkAuthNameCnt.Equals("T") || checkFindAddressCnt.Equals("T"))
+                                {
+                                    luisIntent = "None";
+                                }
+                                else
+                                {
+
+                                }
+                                apiTFdata = db.getAPITFData(luisIntent);
+                                if (apiTFdata.Equals("F"))
+                                {
+                                    apiIntent = "None";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiIntent);
+                                }
+                            }
+                            
+
+                        }
+                        else
+                        {
+
+                        }
+                        
+
+                        if (activity.Text.Contains("[") && activity.Text.Contains("]"))
+                        {
+                            luisIntent = "None";
+                        }
+
+                        DButil.HistoryLog("luisIntent : " + luisIntent);
+                        
                         //////////////////////////////////////////////
 
                         string smallTalkConfirm = "";
@@ -689,9 +738,6 @@ namespace HanjinChatBot
                             }
                         }
 
-
-
-                        
                         
                         if (relationList != null)
                         {
@@ -800,12 +846,14 @@ namespace HanjinChatBot
                             Debug.WriteLine("대화셋에서 버튼 클릭-------------" + apiIntent);
                         }
 
-                        
+
                         /*
                          * API 처리부분 INTENT 처리
                          * */
-                        String apiintent = uData[0].apiIntent;
-                        String apiOldIntent = uData[0].apiOldIntent;
+                        List<UserCheck> apiIntentData = new List<UserCheck>();
+                        apiIntentData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                        String apiintent = apiIntentData[0].apiIntent;
+                        String apiOldIntent = apiIntentData[0].apiOldIntent;
                         if (apiIntent.Equals("None") || apiIntent.Equals(""))
                         {
 
@@ -823,7 +871,6 @@ namespace HanjinChatBot
                         {
                             apiIntent = apiOldIntent;
                         }
-                        Debug.WriteLine("apiIntent3-------------" + apiIntent);
 
                         if (luisIntent.Equals("None"))
                         {
@@ -842,15 +889,13 @@ namespace HanjinChatBot
                             }
                             else
                             {
-                                if (apiTFdata.Equals("F"))
-                                {
-                                    apiIntent = "None";
-                                }
+                                //apiIntent = "None";
                             }
 
                         }
+                        
 
-                        Debug.WriteLine("apiIntent4-------------" + apiIntent);
+                        Debug.WriteLine("API INTENT 세번째 호출===" + apiIntent);
                         if (relationList == null && apiIntent.Equals("None"))
                         //if (relationList.Count == 0 && apiIntent.Equals("None"))
                         {
@@ -891,7 +936,7 @@ namespace HanjinChatBot
 
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
-                                        //Title = text[i].cardTitle,
+                                        Title = text[i].cardTitle,
                                         Text = text[i].cardText,
                                         //Buttons = cardButtons
                                     };
@@ -912,7 +957,7 @@ namespace HanjinChatBot
                     * API 연동부분은 다 이곳에서 처리
                     * 대화셋 APP 는 그대로 진행. API APP도 따로 진행
                     */
-                            Debug.WriteLine("apiIntent1-------------" + apiIntent);
+                            Debug.WriteLine("API INTENT 마지막 호출===" + apiIntent);
                             Debug.WriteLine("luisIntent1-------------" + luisIntent);
                             Debug.WriteLine("apiOldIntent-------------" + apiOldIntent);
 
@@ -923,94 +968,7 @@ namespace HanjinChatBot
                             apiMakerReply.Attachments = new List<Attachment>();
                             //apiMakerReply.AttachmentLayout = AttachmentLayoutTypes.Carousel
 
-                            Regex r = new Regex("[0-9]");
-                            bool checkNum = Regex.IsMatch(activity.Text, @"^\d+$"); //입력값이 숫자인지 파악.
-                            bool containNum = r.IsMatch(activity.Text); //숫자포함 확인
-                            String apiActiveText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
-                            String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
-
-
-                            /*****************************************************************
-                            * 문장별로 apiintent 체크하기
-                            * 
-                            ************************************************************** */
-                            if (containNum == true)
-                            {
-                                if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("반품택배예약"))
-                                {
-                                    apiIntent = "F_예약";
-                                }
-                                else if (apiActiveText.Contains("예약내용확인"))
-                                {
-                                    apiIntent = "F_예약확인";
-                                }
-                                else if (apiActiveText.Contains("예약취소확인"))
-                                {
-                                    apiIntent = "F_예약취소";
-                                }
-                                else if (apiActiveText.Contains("예약번호") && apiActiveText.Contains("예약취소선택"))
-                                {
-                                    apiIntent = "F_예약취소";
-                                }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("발송취소"))
-                                {
-                                    apiIntent = "F_예약취소";
-                                }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("기집하"))
-                                {
-                                    apiIntent = "F_예약취소";
-                                }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("이중예약"))
-                                {
-                                    apiIntent = "F_예약취소";
-                                }
-                                else if (apiActiveText.Contains("아니오") && apiActiveText.Contains("예약취소하지않습니다"))
-                                {
-                                    apiIntent = "F_예약취소";
-                                }
-                                else if (apiActiveText.Contains("에대한배송일정조회") && apiActiveText.Contains("운송장번호"))
-                                {
-                                    apiIntent = "F_택배배송일정조회";
-                                }
-                                else
-                                {
-
-                                }
-                            }
-                            else
-                            {
-                                if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인"))
-                                {
-                                    apiIntent = "F_예약확인";
-                                }
-                                else if (apiActiveText.Equals("주소로 집배점/기사 연락처 찾기") || apiActiveText.Equals("운송장번호로 집배점/기사 연락처 찾기"))
-                                {
-                                    apiIntent = "F_집배점/기사연락처";
-                                }
-                                else if (apiActiveText.Equals("주소다시입력"))
-                                {
-                                    apiIntent = "F_집배점/기사연락처";
-                                }
-                                else if (apiActiveText.Equals("반송장번호확인"))
-                                {
-                                    apiIntent = "F_운송장번호확인";
-                                }
-                                else
-                                {
-
-                                }
-                            }
-
-                            //luis intent 가 있을 때는 api 없기.
-                            if(luisIntent.Equals("None"))
-                            {
-
-                            }
-                            else
-                            {
-                                apiIntent = "None";
-                            }
-
+                            
                             authCheck = uData[0].authCheck;//모바일 인증 체크
                             mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
                             requestPhone = uData[0].userPhone; //전화번호
@@ -3474,9 +3432,9 @@ namespace HanjinChatBot
 
                         UserHeroCard plCard = new UserHeroCard()
                         {
-                            //Title = text[i].cardTitle,
+                            Title = text[i].cardTitle,
                             Text = text[i].cardText,
-                            Buttons = cardButtons
+                            //Buttons = cardButtons
                         };
 
                         Attachment plAttachment = plCard.ToAttachment();
