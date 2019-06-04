@@ -51,6 +51,7 @@ namespace HanjinChatBot
         static public string MicrosoftAppId = "";               //app id
         static public string MicrosoftAppPassword = "";         //app password
         static public string LUIS_SCORE_LIMIT = "";             //루이스 점수 체크
+        static public string LUIS_APISCORE_LIMIT = "";             //루이스 API 점수 체크
 
         public static int chatBotID = 0;
         public static DateTime startTime;
@@ -224,6 +225,9 @@ namespace HanjinChatBot
                         case "LUIS_SCORE_LIMIT":
                             LUIS_SCORE_LIMIT = confList[i].cnfValue;
                             break;
+                        case "LUIS_APISCORE_LIMIT":
+                            LUIS_APISCORE_LIMIT = confList[i].cnfValue;
+                            break;
                         case "LUIS_TIME_LIMIT":
                             LUIS_TIME_LIMIT = Convert.ToInt32(confList[i].cnfValue);
                             break;
@@ -312,7 +316,7 @@ namespace HanjinChatBot
                     mobilePc = "PC";
                     DButil.HistoryLog("CHATBOT TYPE IS PC");
                 }
-                
+
 
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePc);
@@ -406,7 +410,7 @@ namespace HanjinChatBot
                             luisIntent = "None";
                         }
 
-                        if (checkAuthNameCnt.Equals("T")|| checkFindAddressCnt.Equals("T"))
+                        if (checkAuthNameCnt.Equals("T") || checkFindAddressCnt.Equals("T"))
                         {
                             luisIntent = "None";
                         }
@@ -443,7 +447,7 @@ namespace HanjinChatBot
 
                             //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
                             //루이스 처리
-                            Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery));
+                            Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery, "API"));
 
                             //결과값 받기
                             await Task.Delay(1000);
@@ -538,7 +542,7 @@ namespace HanjinChatBot
                             {
                                 apiIntent = "F_예약확인";
                             }
-                            else if (apiActiveText.Equals("주소로 집배점/기사 연락처 찾기") || apiActiveText.Equals("운송장번호로 집배점/기사 연락처 찾기"))
+                            else if (apiActiveText.Equals("주소로 연락처 찾기") || apiActiveText.Equals("운송장번호로 연락처 찾기"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                             }
@@ -549,6 +553,10 @@ namespace HanjinChatBot
                             else if (apiActiveText.Equals("반송장번호확인"))
                             {
                                 apiIntent = "F_운송장번호확인";
+                            }
+                            else if (apiActiveText.Contains("예핸드폰인증")|| apiActiveText.Contains("아니오핸드폰인증"))
+                            {
+                                apiIntent = "F_모바일인증";
                             }
                             else
                             {
@@ -606,7 +614,7 @@ namespace HanjinChatBot
 
                                     //Task<JObject> t1 = Task<JObject>.Run(() => GetIntentFromBotLUIS2(textList, orgMent));
                                     //루이스 처리
-                                    Task<JObject> APIt1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(textList, luisQuery));
+                                    Task<JObject> APIt1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(textList, luisQuery, "LUIS"));
 
                                     //결과값 받기
                                     await Task.Delay(1000);
@@ -668,14 +676,15 @@ namespace HanjinChatBot
                                     db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiIntent);
                                 }
                             }
-                            
+
 
                         }
                         else
                         {
-
+                            //api intent 가 있다면
+                            luisIntent = "None";
                         }
-                        
+
 
                         if (activity.Text.Contains("[") && activity.Text.Contains("]"))
                         {
@@ -683,7 +692,7 @@ namespace HanjinChatBot
                         }
 
                         DButil.HistoryLog("luisIntent : " + luisIntent);
-                        
+
                         //////////////////////////////////////////////
 
                         string smallTalkConfirm = "";
@@ -738,7 +747,7 @@ namespace HanjinChatBot
                             }
                         }
 
-                        
+
                         if (relationList != null)
                         {
                             dlgId = "";
@@ -831,7 +840,7 @@ namespace HanjinChatBot
                         {
 
                         }
-                        
+
                         /*
                              * [APIINTENT]::글자 - 대화셋에서 버튼을 클릭 했을 시에는 이것으로 진행한다.
                              */
@@ -841,7 +850,7 @@ namespace HanjinChatBot
                             int apiIntentE = activity.Text.IndexOf("]");
                             apiIntent = activity.Text.Substring(apiIntentS + 1, (apiIntentE - 1) - apiIntentS);
                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
-                            
+
                             Debug.WriteLine("apiIntent[]-------------" + apiIntent);
                             Debug.WriteLine("대화셋에서 버튼 클릭-------------" + apiIntent);
                         }
@@ -850,50 +859,62 @@ namespace HanjinChatBot
                         /*
                          * API 처리부분 INTENT 처리
                          * */
-                        List<UserCheck> apiIntentData = new List<UserCheck>();
-                        apiIntentData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
-                        String apiintent = apiIntentData[0].apiIntent;
-                        String apiOldIntent = apiIntentData[0].apiOldIntent;
-                        if (apiIntent.Equals("None") || apiIntent.Equals(""))
-                        {
-
-                        }
-                        else
-                        {
-                            apiOldIntent = "None";
-                        }
-
-                        if (apiOldIntent.Equals("None") || apiOldIntent.Equals(""))
-                        {
-
-                        }
-                        else
-                        {
-                            apiIntent = apiOldIntent;
-                        }
-
                         if (luisIntent.Equals("None"))
                         {
+                            List<UserCheck> apiIntentData = new List<UserCheck>();
+                            apiIntentData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                            String apiintent = apiIntentData[0].apiIntent;
+                            String apiOldIntent = apiIntentData[0].apiOldIntent;
+                            if (apiIntent.Equals("None") || apiIntent.Equals(""))
+                            {
 
-                        }
-                        else
-                        {
-                            
-                            if (checkAuthNameCnt.Equals("T"))
-                            {
-                                apiIntent = "F_모바일인증";
-                            }
-                            else if (checkFindAddressCnt.Equals("T"))
-                            {
-                                apiIntent = "F_집배점/기사연락처";
                             }
                             else
                             {
-                                //apiIntent = "None";
+                                apiOldIntent = "None";
                             }
 
+                            if (apiOldIntent.Equals("None") || apiOldIntent.Equals(""))
+                            {
+
+                            }
+                            else
+                            {
+                                apiIntent = apiOldIntent;
+                            }
+
+                            if (luisIntent.Equals("None"))
+                            {
+
+                            }
+                            else
+                            {
+
+                                if (checkAuthNameCnt.Equals("T"))
+                                {
+                                    apiIntent = "F_모바일인증";
+                                }
+                                else if (checkFindAddressCnt.Equals("T"))
+                                {
+                                    apiIntent = "F_집배점/기사연락처";
+                                }
+                                else
+                                {
+                                    //apiIntent = "None";
+                                }
+
+                            }
                         }
+                        else
+                        {
+                            apiIntent = "None";
+                            
+                        }
+
+
+
                         
+
 
                         Debug.WriteLine("API INTENT 세번째 호출===" + apiIntent);
                         if (relationList == null && apiIntent.Equals("None"))
@@ -968,7 +989,7 @@ namespace HanjinChatBot
                             apiMakerReply.Attachments = new List<Attachment>();
                             //apiMakerReply.AttachmentLayout = AttachmentLayoutTypes.Carousel
 
-                            
+
                             authCheck = uData[0].authCheck;//모바일 인증 체크
                             mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
                             requestPhone = uData[0].userPhone; //전화번호
@@ -1146,7 +1167,7 @@ namespace HanjinChatBot
 
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("반품택배예약")|| apiActiveText.Contains("택배배송목록"))
+                                else if (apiActiveText.Contains("반품택배예약") || apiActiveText.Contains("택배배송목록"))
                                 {
                                     if (mobilePC.Equals("PC"))
                                     {
@@ -3024,8 +3045,8 @@ namespace HanjinChatBot
                                         find1Button = new CardAction()
                                         {
                                             Type = "imBack",
-                                            Value = "운송장번호로 집배점/기사 연락처 찾기",
-                                            Title = "운송장번호로 집배점/기사 연락처 찾기"
+                                            Value = "운송장번호로 연락처 찾기",
+                                            Title = "운송장번호로 연락처 찾기"
                                         };
                                         cardButtons.Add(find1Button);
 
@@ -3033,8 +3054,8 @@ namespace HanjinChatBot
                                         find2Button = new CardAction()
                                         {
                                             Type = "imBack",
-                                            Value = "주소로 집배점/기사 연락처 찾기",
-                                            Title = "주소로 집배점/기사 연락처 찾기"
+                                            Value = "주소로 연락처 찾기",
+                                            Title = "주소로 연락처 찾기"
                                         };
                                         cardButtons.Add(find2Button);
 
@@ -3182,52 +3203,7 @@ namespace HanjinChatBot
                                             apiOldIntent = "";
                                             authUrl = uData[0].authUrl;
                                             List<CardAction> cardButtons = new List<CardAction>();
-                                            /*
-                                            CardAction list1Button = new CardAction();
-                                            list1Button = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "[F_예약]::택배배송목록",
-                                                Title = "택배배송목록"
-                                            };
-                                            cardButtons.Add(list1Button);
 
-                                            CardAction list2Button = new CardAction();
-                                            list2Button = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "[F_예약확인]::택배집하목록",
-                                                Title = "택배집하목록"
-                                            };
-                                            cardButtons.Add(list2Button);
-
-                                            CardAction list3Button = new CardAction();
-                                            list3Button = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "[F_예약취소]::나의예약취소",
-                                                Title = "나의예약취소"
-                                            };
-                                            cardButtons.Add(list3Button);
-
-                                            CardAction list4Button = new CardAction();
-                                            list4Button = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "[F_예약확인]::나의예약확인",
-                                                Title = "나의예약확인"
-                                            };
-                                            cardButtons.Add(list4Button);
-
-                                            CardAction list5Button = new CardAction();
-                                            list5Button = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "[F_택배배송일정조회]::나의배송목록",
-                                                Title = "나의배송목록"
-                                            };
-                                            
-                                            */
                                             CardAction list1Button = new CardAction();
                                             list1Button = new CardAction()
                                             {
@@ -3499,7 +3475,7 @@ namespace HanjinChatBot
             return null;
         }
 
-        public static async Task<JObject> GetIntentFromBotLUIS(List<string[]> textList, string query)
+        public static async Task<JObject> GetIntentFromBotLUIS(List<string[]> textList, string query, string luisType)
         {
 
             JObject[] Luis_before = new JObject[2];
@@ -3619,33 +3595,50 @@ namespace HanjinChatBot
                     }
                 }
             }
+            
             for (int i = 0; i < 2; i++)
             {
                 //entities 0일 경우 PASS
-                //if ((int)Luis_before[i]["entities"].Count() > 0)
                 if (1 != 0)
                 {
                     //intent None일 경우 PASS
                     if (Luis_before[i]["intents"][0]["intent"].ToString() != "None")
                     {
-                        //제한점수 체크
-                        if ((float)Luis_before[i]["intents"][0]["score"] > Convert.ToDouble(MessagesController.LUIS_SCORE_LIMIT))
+                        if (luisType.Equals("API"))
                         {
-                            if ((float)Luis_before[i]["intents"][0]["score"] > luisScoreCompare)
+                            //제한점수 체크(API)
+                            if ((float)Luis_before[i]["intents"][0]["score"] > Convert.ToDouble(MessagesController.LUIS_APISCORE_LIMIT))
                             {
-                                //LuisName = returnLuisName[i];
-                                Luis = Luis_before[i];
-                                luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
-                                //Debug.WriteLine("GetMultiLUIS() LuisName1 : " + LuisName);
-                            }
-                            else
-                            {
-                                //LuisName = returnLuisName[i];
-                                //Luis = Luis_before[i];
-                                //Debug.WriteLine("GetMultiLUIS() LuisName2 : " + LuisName);
-                            }
+                                if ((float)Luis_before[i]["intents"][0]["score"] > luisScoreCompare)
+                                {
+                                    Luis = Luis_before[i];
+                                    luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
+                                }
+                                else
+                                {
 
+                                }
+
+                            }
                         }
+                        else
+                        {
+                            //제한점수 체크(LUIS)
+                            if ((float)Luis_before[i]["intents"][0]["score"] > Convert.ToDouble(MessagesController.LUIS_SCORE_LIMIT))
+                            {
+                                if ((float)Luis_before[i]["intents"][0]["score"] > luisScoreCompare)
+                                {
+                                    Luis = Luis_before[i];
+                                    luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
+                                }
+                                else
+                                {
+
+                                }
+
+                            }
+                        }
+                       
                     }
                 }
             }
