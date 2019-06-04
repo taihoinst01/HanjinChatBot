@@ -568,6 +568,25 @@ namespace HanjinChatBot
                          * apiintent 값이 없다면 luis 호출을 한다.
                          * */
                         String apiTFdata = "F";
+
+                        /*
+                         * smalltalk 처리
+                         * smalltalk 에 잡히면..무조건으로...
+                         * */
+                        String checkSmallIntent1 = db.getIntentFromSmallTalk(orgMent);
+                        
+                        if (checkSmallIntent1.Equals("")|| checkSmallIntent1==null)
+                        {
+
+                        }
+                        else
+                        {
+                            luisIntent = checkSmallIntent1;
+                            cacheList.luisIntent = checkSmallIntent1;
+                            cacheList.luisEntities = checkSmallIntent1;
+                        }
+                        
+
                         if (apiIntent.Equals("None"))
                         {
                             Debug.WriteLine("API INTENT 값이 없으므로 대화셋 검토");
@@ -575,6 +594,7 @@ namespace HanjinChatBot
                              * 1. CASH DATA 검토
                              * 2. LUIS 검토
                              * */
+                            
                             if (cacheList.luisIntent == null || cacheList.luisEntities == null)
                             {
                                 DButil.HistoryLog("cache none : " + orgMent);
@@ -686,6 +706,10 @@ namespace HanjinChatBot
                         }
 
 
+
+
+
+
                         if (activity.Text.Contains("[") && activity.Text.Contains("]"))
                         {
                             luisIntent = "None";
@@ -697,19 +721,8 @@ namespace HanjinChatBot
 
                         string smallTalkConfirm = "";
 
-                        if (!string.IsNullOrEmpty(luisIntent))
+                        if (luisIntent.Equals("smalltalk") || luisIntent.Equals("SMALLTALK"))
                         {
-                            relationList = db.DefineTypeChkSpare(luisIntent, luisEntities);
-
-                            if (relationList.Count == 0)
-                            {
-                                relationList = null;
-                            }
-                        }
-                        else
-                        {
-                            relationList = null;
-                            //smalltalk 답변가져오기
                             String checkSmallIntent = "";
                             if (orgMent.Length < 11)
                             {
@@ -717,7 +730,7 @@ namespace HanjinChatBot
                                  * smalltalk intent 가 smalltalk 가 아닐 경우 relationList에 정보를 담는다.
                                  * */
                                 checkSmallIntent = db.getIntentFromSmallTalk(orgMent);
-                                if (checkSmallIntent.Equals("smalltalk"))
+                                if (checkSmallIntent.Equals("smalltalk")|| checkSmallIntent.Equals("SMALLTALK"))
                                 {
                                     smallTalkConfirm = db.SmallTalkConfirm(orgMent);
                                 }
@@ -732,8 +745,23 @@ namespace HanjinChatBot
                             {
                                 smallTalkConfirm = "";
                             }
-
                         }
+                        else if (!string.IsNullOrEmpty(luisIntent))
+                        {
+                            relationList = db.DefineTypeChkSpare(luisIntent, luisEntities);
+
+                            if (relationList.Count == 0)
+                            {
+                                relationList = null;
+                            }
+                        }
+                        else
+                        {
+                            relationList = null;
+                        }
+
+
+                        
                         //relationList count 를 체크하여 null 처리
                         if (relationList == null)
                         {
