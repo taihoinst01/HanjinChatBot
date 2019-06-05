@@ -3153,6 +3153,8 @@ namespace HanjinChatBot
                                 else if (apiActiveText.Contains("아니오핸드폰인증"))
                                 {
                                     checkAuthNameCnt = "F";
+                                    apiIntent = "None";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiIntent);
                                     db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
