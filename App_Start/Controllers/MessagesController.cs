@@ -2843,7 +2843,8 @@ namespace HanjinChatBot
 
                                                     UserHeroCard plCard = new UserHeroCard()
                                                     {
-                                                        Title = "" + jobj["wbl_num"].ToString(),
+                                                        //Title = "" + jobj["wbl_num"].ToString(),
+                                                        Title = "",
                                                         //Text = cardShowText,
                                                         Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString()+"</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                         Tap = bookButton,
