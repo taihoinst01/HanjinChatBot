@@ -1420,7 +1420,7 @@ namespace HanjinChatBot
                                                     {
                                                         Title = "",
                                                         //Text = dateText + "<strong>배송상태: </strong>" + deliveryStatusText + " <br><strong>상품명: </strong>" + goodName + " <br><strong>운송장번호: </strong>" + jobj["wbl_num"].ToString() + " <br><strong>송하인명: </strong>" + jobj["snd_nam"].ToString(),
-                                                        Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
+                                                        Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + jobj["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/"+ jobj["snd_nam"].ToString()+"</span><span class=\"prodStatus\">" + jobj["wrk_nam"].ToString() + "</span></div></div>",
                                                         //Buttons = cardButtons,
                                                         Tap = plButton
                                                     };
@@ -3366,7 +3366,7 @@ namespace HanjinChatBot
                                                     String dateText = "";
                                                     if (tempDate == "" || tempDate.Equals(""))
                                                     {
-                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\">배송중</span><span class=\"dateWeek\">&nbsp;</span></div>";
+                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\"><small>배송중</small></span><span class=\"dateWeek\"></span></div>";
                                                     }
                                                     else
                                                     {
@@ -3430,7 +3430,7 @@ namespace HanjinChatBot
                                                     {
                                                         Title = "",
                                                         //Text = dateText + "<strong>배송상태: </strong>" + deliveryStatusText + " <br><strong>상품명: </strong>" + goodName + " <br><strong>운송장번호: </strong>" + jobj["wbl_num"].ToString() + " <br><strong>송하인명: </strong>" + jobj["snd_nam"].ToString(),
-                                                        Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + jobj1["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj1["wbl_num"].ToString() + "/G마켓</span><span class=\"prodStatus\">" + jobj1["wrk_nam"].ToString() + "</span></div></div>",
+                                                        Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + jobj1["god_nam"].ToString() + "</span><span class=\"prodNum\">" + jobj1["wbl_num"].ToString() + "/"+ jobj["snd_nam"].ToString() +"</span><span class=\"prodStatus\">" + jobj1["wrk_nam"].ToString() + "</span></div></div>",
                                                         //Buttons = cardButtons,
                                                         Tap = plButton
                                                     };
