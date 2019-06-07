@@ -1356,7 +1356,7 @@ namespace HanjinChatBot
                                                     String dateText = "";
                                                     if (tempDate == "" || tempDate.Equals(""))
                                                     {
-                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\">배송중</span><span class=\"dateWeek\">&nbsp;</span></div>";
+                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\"><small>배송중</small></span><span class=\"dateWeek\"></span></div>";
                                                     }
                                                     else
                                                     {
