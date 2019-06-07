@@ -1356,7 +1356,7 @@ namespace HanjinChatBot
                                                     String dateText = "";
                                                     if (tempDate == "" || tempDate.Equals(""))
                                                     {
-                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\"><small><strong>배송중</strong></small></span><span class=\"dateWeek\"></span></div>";
+                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\"><small>배송중</small></span><span class=\"dateWeek\"></span></div>";
                                                     }
                                                     else
                                                     {
@@ -1364,7 +1364,7 @@ namespace HanjinChatBot
                                                         String monthText = tempDate.Substring(4, 2);
                                                         String dayText = tempDate.Substring(6, 2);
                                                         //dateText = "<strong> 배송완료일자: </strong > " + yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)<br>";
-                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\"><strong>" + monthText + "." + dayText + "</strong></span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div>";
+                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div>";
                                                     }
                                                     //배송상태 처리
                                                     String deliveryStatus = jobj["wrk_nam"].ToString();
