@@ -283,12 +283,10 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
-                DButil.HistoryLog("* activity.Type111 : " + ActivityTypes.Message);
-                DButil.HistoryLog("* activity.Text111 : " + activity.Text);
-
             }
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) //전화번호 받아오는 부분 처리
             {
+                DButil.HistoryLog("* activity.TEL text : " + activity.Text);
                 /*
                  * 전화번호 처리
                  * */
@@ -322,6 +320,7 @@ namespace HanjinChatBot
             //else if (activity.Type == ActivityTypes.Message)
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
+                DButil.HistoryLog("* activity.TEL text : " + activity.Text);
                 /*
                  * MOBILE PC 검토..없으면 무조건 PC로 한다.
                  * */
@@ -1059,7 +1058,6 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            //authCheck = "T";//TEST 용 반드시 지울 것!!!!
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
                             requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************
