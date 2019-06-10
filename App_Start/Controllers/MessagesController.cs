@@ -161,11 +161,6 @@ namespace HanjinChatBot
             }
             DButil.HistoryLog("userCheck insert end ");
 
-            List<UserCheck> uData = new List<UserCheck>();
-            uData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
-            checkAuthNameCnt = uData[0].nameCheck;
-            checkFindAddressCnt = uData[0].addressCheck;
-
             if (activity.Type == ActivityTypes.ConversationUpdate && activity.MembersAdded.Any(m => m.Id == activity.Recipient.Id))
             {
                 startTime = DateTime.Now;
@@ -288,6 +283,9 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
+                DButil.HistoryLog("* activity.Type111 : " + ActivityTypes.Message);
+                DButil.HistoryLog("* activity.Text111 : " + activity.Text);
+
             }
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) //전화번호 받아오는 부분 처리
             {
@@ -324,6 +322,21 @@ namespace HanjinChatBot
             //else if (activity.Type == ActivityTypes.Message)
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
+                /*
+                 * MOBILE PC 검토..없으면 무조건 PC로 한다.
+                 * */
+                List<UserCheck> uDataCheck = new List<UserCheck>();
+                uDataCheck = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                if (uDataCheck[0].mobilePc == null|| uDataCheck[0].mobilePc.Equals(""))
+                {
+                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", "PC");
+                }
+
+                List<UserCheck> uData = new List<UserCheck>();
+                uData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                checkAuthNameCnt = uData[0].nameCheck;
+                checkFindAddressCnt = uData[0].addressCheck;
+
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 try
                 {
@@ -600,6 +613,15 @@ namespace HanjinChatBot
                             luisIntent = checkSmallIntent1;
                             cacheList.luisIntent = checkSmallIntent1;
                             cacheList.luisEntities = checkSmallIntent1;
+                        }
+
+                        /*
+                         *  PC 버전이라 하면 무조건 API 안타게 한다.
+                         * */
+                        mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
+                        if (mobilePC.Equals("PC"))
+                        {
+                            apiIntent = "None";
                         }
 
 
