@@ -295,9 +295,10 @@ namespace HanjinChatBot
                 String telMessage = activity.Text;
                 DButil.HistoryLog("telMessage : " + telMessage);
                 String mobilePc = "";
-                if (telMessage.Contains("tel:"))
+                String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
+                int checkTelNumber = telNumber.Length;
+                if (telMessage.Contains("tel:")&& checkTelNumber>5)
                 {
-                    String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
                     String[] telNumbers = dbutil.arrayStr(telNumber);
                     for (int i = 0; i < telNumbers.Length; i++)
                     {
@@ -321,6 +322,7 @@ namespace HanjinChatBot
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
                 DButil.HistoryLog("* activity.TEL text : " + activity.Text);
+               
                 /*
                  * MOBILE PC 검토..없으면 무조건 PC로 한다.
                  * */
