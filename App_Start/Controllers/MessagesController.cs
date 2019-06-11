@@ -3367,6 +3367,7 @@ namespace HanjinChatBot
                                             * */
                                             if (authUrl.Equals("[F_예약]::택배배송목록"))
                                             {
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_예약");
                                                 int totalPage1 = 0;
                                                 if (apiActiveText.Contains("반품택배예약다음페이지") && activity.Text.Contains(">>"))
                                                 {
@@ -3554,7 +3555,7 @@ namespace HanjinChatBot
                                             }
                                             else if (authUrl.Equals("[F_예약확인]::나의예약확인"))
                                             {
-
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_예약확인");
                                                 int totalPage = 0;
                                                 if (apiActiveText.Contains("예약목록다음페이지") && activity.Text.Contains(">>"))
                                                 {
@@ -3746,6 +3747,7 @@ namespace HanjinChatBot
                                             else if (authUrl.Equals("[F_예약취소]::나의예약취소"))
                                             {
                                                 /************************************************/
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_예약취소");
                                                 int totalPage = 0;
                                                 if (apiActiveText.Contains("예약취소목록다음페이지") && activity.Text.Contains(">>"))
                                                 {
@@ -3929,6 +3931,7 @@ namespace HanjinChatBot
                                             else if (authUrl.Equals("[F_택배배송일정조회]::나의배송목록"))
                                             {
                                                 /**************************************************/
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_택배배송일정조회");
                                                 int totalPage = 0;
                                                 if (apiActiveText.Contains("배송목록다음페이지") && activity.Text.Contains(">>"))
                                                 {
