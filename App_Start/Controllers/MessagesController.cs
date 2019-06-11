@@ -3628,8 +3628,8 @@ namespace HanjinChatBot
                                                         Title = "",
                                                         Text = "예약번호 또는 원 운송장번호로 직접조회할 수 있습니다."
                                                     };
-                                                    Attachment plAttachment2 = plCard.ToAttachment();
-                                                    apiMakerReply.Attachments.Add(plAttachment);
+                                                    Attachment plAttachment2 = plCard2.ToAttachment();
+                                                    apiMakerReply.Attachments.Add(plAttachment2);
 
                                                     foreach (JObject jobj2 in obj2)
                                                     {
