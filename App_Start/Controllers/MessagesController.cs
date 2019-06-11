@@ -1770,7 +1770,17 @@ namespace HanjinChatBot
                                                         plCard = new UserHeroCard()
                                                         {
                                                             Title = "",
-                                                            Text = "고객님의 휴대폰 번호로 조회되는 목록이 없습니다."
+                                                            Text = "인증번호 오류입니다. 다시 한번 시도해 주세요."
+                                                        };
+                                                        plAttachment = plCard.ToAttachment();
+                                                        apiMakerReply.Attachments.Add(plAttachment);
+                                                    }
+                                                    else if (jobj["ret_cod"].ToString().Equals("9052"))
+                                                    {
+                                                        plCard = new UserHeroCard()
+                                                        {
+                                                            Title = "",
+                                                            Text = "고객님의 핸드폰 번호로 조회된 결과가 없습니다."
                                                         };
                                                         plAttachment = plCard.ToAttachment();
                                                         apiMakerReply.Attachments.Add(plAttachment);
@@ -3628,7 +3638,17 @@ namespace HanjinChatBot
                                                             plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = "고객님의 휴대폰 번호로 조회되는 목록이 없습니다."
+                                                                Text = "인증번호 오류입니다. 다시 한번 시도해 주세요."
+                                                            };
+                                                            plAttachment = plCard.ToAttachment();
+                                                            apiMakerReply.Attachments.Add(plAttachment);
+                                                        }
+                                                        else if (jobj2["ret_cod"].ToString().Equals("9052"))
+                                                        {
+                                                            plCard = new UserHeroCard()
+                                                            {
+                                                                Title = "",
+                                                                Text = "고객님의 핸드폰 번호로 조회된 결과가 없습니다."
                                                             };
                                                             plAttachment = plCard.ToAttachment();
                                                             apiMakerReply.Attachments.Add(plAttachment);
