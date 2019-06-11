@@ -172,7 +172,7 @@ namespace HanjinChatBot.DB
             return dialogs;
         }
 
-        public DialogList SelectDialog(int dlgID, string mobileyn)
+        public DialogList SelectDialog(int dlgID, string mobilePC)
         {
             SqlDataReader rdr = null;
             DialogList dlg = new DialogList();
@@ -232,7 +232,7 @@ namespace HanjinChatBot.DB
                         else if (dlg.dlgType.Equals(CARDDLG))
                         {
                             cmd2.CommandText = "SELECT CARD_TITLE, CARD_SUBTITLE, CARD_TEXT, IMG_URL," +
-                                    "BTN_1_TYPE, BTN_1_TITLE, BTN_1_CONTEXT, BTN_1_CONTEXT_M, BTN_2_TYPE, BTN_2_TITLE, BTN_2_CONTEXT, BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT, BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT, " +
+                                    "BTN_1_TYPE, BTN_1_TITLE, BTN_1_CONTEXT, BTN_1_CONTEXT_M, BTN_2_TYPE, BTN_2_TITLE, BTN_2_CONTEXT, BTN_2_CONTEXT_M, BTN_3_TYPE, BTN_3_TITLE, BTN_3_CONTEXT, BTN_3_CONTEXT_M, BTN_4_TYPE, BTN_4_TITLE, BTN_4_CONTEXT, BTN_4_CONTEXT_M, " +
                                     "CARD_DIVISION, CARD_VALUE, CARD_ORDER_NO " +
                                     "FROM TBL_DLG_CARD WHERE DLG_ID = @dlgID AND USE_YN = 'Y' ORDER BY CARD_ORDER_NO";
                             cmd2.Parameters.AddWithValue("@dlgID", dlg.dlgId);
@@ -250,7 +250,7 @@ namespace HanjinChatBot.DB
                                 dlgCard.btn1Context = rdr2["BTN_1_CONTEXT"] as string;
                                 dlgCard.btn1ContextM = rdr2["BTN_1_CONTEXT_M"] as string;
                                 //모바일 URL 적용 
-                                if (mobileyn.Equals("M"))
+                                if (mobilePC.Equals("MOBILE"))
                                 {
                                     if (dlgCard.btn1Type.Equals("openUrl"))
                                     {
@@ -268,53 +268,66 @@ namespace HanjinChatBot.DB
                                 dlgCard.btn2Type = rdr2["BTN_2_TYPE"] as string;
                                 dlgCard.btn2Title = rdr2["BTN_2_TITLE"] as string;
                                 dlgCard.btn2Context = rdr2["BTN_2_CONTEXT"] as string;
+                                dlgCard.btn2ContextM = rdr2["BTN_2_CONTEXT_M"] as string;
+                                //모바일 URL 적용 
+                                if (mobilePC.Equals("MOBILE"))
+                                {
+                                    if (dlgCard.btn2Type.Equals("openUrl"))
+                                    {
+                                        if (!string.IsNullOrEmpty(dlgCard.btn2ContextM))
+                                        {
+                                            dlgCard.btn2Context = rdr2["BTN_2_CONTEXT_M"] as string;
+                                        }
+                                        else
+                                        {
+                                            dlgCard.btn2Context = "";
+                                        }
+                                    }
+                                }
                                 dlgCard.btn3Type = rdr2["BTN_3_TYPE"] as string;
                                 dlgCard.btn3Title = rdr2["BTN_3_TITLE"] as string;
                                 dlgCard.btn3Context = rdr2["BTN_3_CONTEXT"] as string;
+                                dlgCard.btn3ContextM = rdr2["BTN_3_CONTEXT_M"] as string;
+                                //모바일 URL 적용 
+                                if (mobilePC.Equals("MOBILE"))
+                                {
+                                    if (dlgCard.btn3Type.Equals("openUrl"))
+                                    {
+                                        if (!string.IsNullOrEmpty(dlgCard.btn3ContextM))
+                                        {
+                                            dlgCard.btn3Context = rdr2["BTN_3_CONTEXT_M"] as string;
+                                        }
+                                        else
+                                        {
+                                            dlgCard.btn3Context = "";
+                                        }
+                                    }
+                                }
                                 dlgCard.btn4Type = rdr2["BTN_4_TYPE"] as string;
                                 dlgCard.btn4Title = rdr2["BTN_4_TITLE"] as string;
                                 dlgCard.btn4Context = rdr2["BTN_4_CONTEXT"] as string;
+                                dlgCard.btn4ContextM = rdr2["BTN_4_CONTEXT_M"] as string;
+                                //모바일 URL 적용 
+                                if (mobilePC.Equals("MOBILE"))
+                                {
+                                    if (dlgCard.btn4Type.Equals("openUrl"))
+                                    {
+                                        if (!string.IsNullOrEmpty(dlgCard.btn4ContextM))
+                                        {
+                                            dlgCard.btn4Context = rdr2["BTN_4_CONTEXT_M"] as string;
+                                        }
+                                        else
+                                        {
+                                            dlgCard.btn4Context = "";
+                                        }
+                                    }
+                                }
                                 dlgCard.cardDivision = rdr2["CARD_DIVISION"] as string;
                                 dlgCard.cardValue = rdr2["CARD_VALUE"] as string;
                                 //dlgCard.card_order_no = rdr2["CARD_ORDER_NO"] as string;
                                 dlgCard.card_order_no = Convert.ToInt32(rdr2["CARD_ORDER_NO"]);
                                 //2018-04-25 : 제스처 추가
                                 dlgCard.gesture = dlg.gesture;
-
-                                //통근버스
-                                //if (MessagesController.luisIntent.Equals("총무통근버스_통근버스노선안내"))
-                                //{
-                                //    switch (MessagesController.luistTypeEntities)
-                                //    {
-                                //        case "분당":
-                                //            dlgCard.cardText = "=분당=" + dlgCard.cardText;
-                                //            break;
-                                //        case "일산":
-                                //            dlgCard.cardText = "=일산=" + dlgCard.cardText;
-                                //            break;
-                                //        case "공항":
-                                //            dlgCard.cardText = "=공항=" + dlgCard.cardText;
-                                //            break;
-                                //        case "수지":
-                                //            dlgCard.cardText = "=수지=" + dlgCard.cardText;
-                                //            break;
-                                //        case "인천":
-                                //            dlgCard.cardText = "=인천=" + dlgCard.cardText;
-                                //            break;
-                                //        case "수원":
-                                //            dlgCard.cardText = "=수원=" + dlgCard.cardText;
-                                //            break;
-                                //        case "부평":
-                                //            dlgCard.cardText = "=부평=" + dlgCard.cardText;
-                                //            break;
-                                //        case "안양":
-                                //            dlgCard.cardText = "=안양=" + dlgCard.cardText;
-                                //            break;
-                                //        default:
-                                //            dlgCard.cardText = "지정되지 않은 노선입니다.";
-                                //            break;
-                                //    }
-                                //}
 
                                 dialogCards.Add(dlgCard);
                             }

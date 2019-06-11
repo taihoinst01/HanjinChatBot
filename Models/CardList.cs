@@ -20,12 +20,15 @@ namespace HanjinChatBot.Models
         public string btn2Type;
         public string btn2Title;
         public String btn2Context;
+        public String btn2ContextM;
         public string btn3Type;
         public string btn3Title;
         public String btn3Context;
+        public String btn3ContextM;
         public string btn4Type;
         public string btn4Title;
         public String btn4Context;
+        public String btn4ContextM;
         public string cardDivision;
         public String cardValue;
         //public String card_order_no;

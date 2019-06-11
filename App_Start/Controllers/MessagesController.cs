@@ -615,14 +615,24 @@ namespace HanjinChatBot
                             cacheList.luisIntent = checkSmallIntent1;
                             cacheList.luisEntities = checkSmallIntent1;
                         }
-
-                        /*
-                         *  PC 버전이라 하면 무조건 API 안타게 한다.
-                         * */
-                        mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
-                        if (mobilePC.Equals("PC"))
+                        
+                        if(apiIntent.Equals("F1_반송장번호")|| apiIntent.Equals("F2_택배기사연락처"))
                         {
-                            apiIntent = "None";
+
+                        }
+                        else
+                        {
+                            /*
+                         *  PC 버전이라 하면 API 안타게 한다.
+                         * */
+                            mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
+                            /*
+                             * 나중에 꼭 주석 풀자...~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                            if (mobilePC.Equals("PC"))
+                            {
+                                apiIntent = "None";
+                            }
+                            */
                         }
 
 
@@ -818,10 +828,13 @@ namespace HanjinChatBot
                         if (relationList != null)
                         {
                             dlgId = "";
-                            //userData[0].mobileYN = P OR M NULL
+                            mobilePC = uData[0].mobilePc;
+                            /*********************************************************************************/
+                            mobilePC = "PC"; //TEST CODE 입니다....반드시 삭제할 것!!!!!!!!!!!!!!!!!!!!!!
+                             /* *******************************************************************************/
                             for (int m = 0; m < relationList.Count; m++)
                             {
-                                DialogList dlg = db.SelectDialog(relationList[m].dlgId, "P");
+                                DialogList dlg = db.SelectDialog(relationList[m].dlgId, mobilePC);
                                 dlgId += Convert.ToString(dlg.dlgId) + ",";
                                 Activity commonReply = activity.CreateReply();
                                 Attachment tempAttachment = new Attachment();
