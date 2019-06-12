@@ -298,6 +298,7 @@ namespace HanjinChatBot
                 String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
                 DButil.HistoryLog("telNumber : " + telNumber);
                 int checkTelNumber = telNumber.Length;
+                DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
                 if (telMessage.Contains("tel:")&& checkTelNumber>5)
                 {
                     String[] telNumbers = dbutil.arrayStr(telNumber);
