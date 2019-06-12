@@ -302,9 +302,11 @@ namespace HanjinChatBot
                 if (telMessage.Contains("tel:")&& checkTelNumber>5)
                 {
                     String[] telNumbers = dbutil.arrayStr(telNumber);
+                    DButil.HistoryLog("telNumbers : " + telNumbers.Length);
                     for (int i = 0; i < telNumbers.Length; i++)
                     {
                         realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
+                        DButil.HistoryLog("realTelNumber : " + realTelNumber);
                     }
                     mobilePc = "MOBILE";
                     DButil.HistoryLog("realTelNumber : " + realTelNumber);
