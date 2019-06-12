@@ -296,6 +296,7 @@ namespace HanjinChatBot
                 DButil.HistoryLog("telMessage : " + telMessage);
                 String mobilePc = "";
                 String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD
+                DButil.HistoryLog("telNumber : " + telNumber);
                 int checkTelNumber = telNumber.Length;
                 if (telMessage.Contains("tel:")&& checkTelNumber>5)
                 {
@@ -707,6 +708,12 @@ namespace HanjinChatBot
                                             Debug.WriteLine("GetMultiLUIS() LUIS luisIntent : " + luisIntent);
                                         }
                                         apiTFdata = db.getAPITFData(luisIntent);
+                                        if (apiTFdata == null)
+                                        {
+                                            apiTFdata = "F";
+                                        }
+                                        
+
                                         if (apiTFdata.Equals("F"))
                                         {
                                             apiIntent = "None";
@@ -751,7 +758,12 @@ namespace HanjinChatBot
                         else
                         {
                             //api intent 가 있다면
-                            luisIntent = "None";
+                            //smalltalk 부분 처리
+                            if (checkSmallIntent1.Equals("") || checkSmallIntent1 == null)
+                            {
+                                luisIntent = "None";
+                            }
+                                
                         }
 
 
@@ -2622,7 +2634,7 @@ namespace HanjinChatBot
                                                 telNum = jobj["tel_num"].ToString();
                                                 empTel = jobj["emp_tel"].ToString();
 
-                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송직원이 배송 중으로 " + dateText + " ○○~○○시 배송예정이며 배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1~2일 소요 될 수 있는점 양해바랍니다. 자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + "또는  배송직원 전화번호 " + empTel + "로 문의하시기 바랍니다.";
+                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송직원이 배송 중으로 " + dateText + " 배송예정이며 배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1~2일 소요 될 수 있는점 양해바랍니다. 자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + "또는  배송직원 전화번호 " + empTel + "로 문의하시기 바랍니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("60"))
                                             {
@@ -2636,7 +2648,7 @@ namespace HanjinChatBot
                                                 orgNam = jobj["org_nam"].ToString();
                                                 telNum = jobj["tel_num"].ToString();
                                                 empTel = jobj["emp_tel"].ToString();
-                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 " + dateText + " ○○:○○ 배송완료하였습니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는  배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
+                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 " + dateText + " 배송완료하였습니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는  배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("70"))
                                             {
