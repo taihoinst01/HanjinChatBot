@@ -749,6 +749,12 @@ namespace HanjinChatBot
 
                                 }
                                 apiTFdata = db.getAPITFData(luisIntent);
+                                if (apiTFdata == null)
+                                {
+                                    apiTFdata = "F";
+                                }
+
+
                                 if (apiTFdata.Equals("F"))
                                 {
                                     apiIntent = "None";
@@ -768,12 +774,7 @@ namespace HanjinChatBot
                             }
                                 
                         }
-
-
-
-
-
-
+                        
                         if (activity.Text.Contains("[") && activity.Text.Contains("]"))
                         {
                             luisIntent = "None";
@@ -788,7 +789,7 @@ namespace HanjinChatBot
                         if (luisIntent.Equals("smalltalk") || luisIntent.Equals("SMALLTALK"))
                         {
                             String checkSmallIntent = "";
-                            if (orgMent.Length < 11)
+                            if (orgMent.Length < 11) //smalltalk 10자까지만
                             {
                                 /*
                                  * smalltalk intent 가 smalltalk 가 아닐 경우 relationList에 정보를 담는다.
