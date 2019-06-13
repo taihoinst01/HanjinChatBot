@@ -1618,5 +1618,50 @@ namespace HanjinChatBot.DB
 
         }
 
+        /*
+         * LUIS MIN DATA
+         * */
+        public String getLuisMINData(string luisIMinntent)
+        {
+
+            String luis_minintent = luisIMinntent;
+            SqlDataReader rdr = null;
+            String luisMinData = "";
+            int checkCount = 0;
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText += "SELECT DLG_QUESTION ";
+                cmd.CommandText += "FROM TBL_DLG_RELATION_LUIS ";
+                cmd.CommandText += "WHERE LUIS_INTENT = @luis_minintent";
+
+                cmd.Parameters.AddWithValue("@luis_minintent", luis_minintent);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                try
+                {
+                    while (rdr.Read())
+                    {
+                        luisMinData = rdr["DLG_QUESTION"] as string;
+                        checkCount++;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                rdr.Close();
+                
+            }
+            return luisMinData;
+
+        }
+
     }
 }
