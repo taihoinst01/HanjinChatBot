@@ -1310,7 +1310,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK, AUTH_URL ";
+                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK, AUTH_URL, API_CHECK ";
                 cmd.CommandText += "FROM    TBL_USERCHECK ";
                 cmd.CommandText += "WHERE  CHANNELDATA = @channeldata ";
                 cmd.CommandText += "AND      CONVERSATIONSID = @conversationsId ";
@@ -1338,6 +1338,7 @@ namespace HanjinChatBot.DB
                         userData.nameCheck = rdr["NAMECHECK"] as string;
                         userData.addressCheck = rdr["ADDRESSCHECK"] as string;
                         userData.authUrl = rdr["AUTH_URL"] as string;
+                        userData.apiCheck = rdr["API_CHECK"] as string;
 
                         userdata.Add(userData);
                     }
@@ -1431,6 +1432,13 @@ namespace HanjinChatBot.DB
                 {
                     cmd.CommandText += " UPDATE     TBL_USERCHECK ";
                     cmd.CommandText += " SET           AUTH_URL = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
+                else if (gubun.Equals("API_CHECK"))//인증이름
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           API_CHECK = @val ";
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
