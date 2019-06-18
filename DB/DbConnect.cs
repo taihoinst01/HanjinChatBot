@@ -1671,5 +1671,46 @@ namespace HanjinChatBot.DB
 
         }
 
+        public List<APIConfList> SelectAPIConfig()
+        //public List<ConfList> SelectConfig(string config_type)
+        {
+            SqlDataReader rdr = null;
+            List<APIConfList> confApilist = new List<APIConfList>();
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                DButil.HistoryLog("db conn APIConfList !!");
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = " SELECT API_NAME, API_INTENT, API_URL, API_KORNAME" +
+                                  " FROM TBL_CHATBOT_API " +
+                                  " ORDER BY API_NAME DESC ";
+
+                Debug.WriteLine("* cmd.CommandText : " + cmd.CommandText);
+                //cmd.Parameters.AddWithValue("@config_type", config_type);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (rdr.Read())
+                {
+                    string apiName = rdr["API_NAME"] as string;
+                    string apiIntent = rdr["API_INTENT"] as string;
+                    string apiUrl = rdr["API_URL"] as string;
+                    string apiKorName = rdr["API_KORNAME"] as string;
+
+                    APIConfList list = new APIConfList();
+
+                    list.apiName = apiName;
+                    list.apiIntent = apiIntent;
+                    list.apiUrl = apiUrl;
+                    list.apiKorName = apiKorName;
+
+                    confApilist.Add(list);
+                }
+            }
+            return confApilist;
+        }
+
     }
 }

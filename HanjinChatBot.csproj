@@ -148,6 +148,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AnalysisList.cs" />
+    <Compile Include="Models\APIConfList.cs" />
     <Compile Include="Models\ConversationHistory.cs" />
     <Compile Include="Models\DeliveryTypeList.cs" />
     <Compile Include="Models\HistoryList.cs" />

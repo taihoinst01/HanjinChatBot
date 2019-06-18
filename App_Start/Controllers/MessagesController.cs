@@ -77,10 +77,6 @@ namespace HanjinChatBot
         static public string requestAuth = apiUrl + "ipcc_api.get_auth";                 //휴대폰 인증요청
         static public string responseAuth = apiUrl + "ipcc_api.cfm_auth";                 //휴대폰 인증확인
 
-        static public string API4Url = "http://www.jobible.co.kr/json3.data";                 //예약번호확인
-                                                                                              //static public string API2Url = "http://www.jobible.co.kr/json1.data";                 //반품예약취소
-                                                                                              //static public string API7Url = "http://www.jobible.co.kr/json6.data";                 //배송일정상세조회
-
         static public string apiIntent = "None";                 //api 용 intent
         static public string apiOldIntent = "None";                 //api 용 intent(old)
         static public string invoiceNumber = "";                 //운송장 번호
@@ -230,6 +226,56 @@ namespace HanjinChatBot
                             break;
                     }
                 }
+
+                //한진 API
+                /*
+                DButil.HistoryLog("db SelectapiConfig start !! ");
+                List<APIConfList> confAPIList = db.SelectAPIConfig();
+                DButil.HistoryLog("db SelectConfig end!! ");
+
+                for (int i = 0; i < confAPIList.Count; i++)
+                {
+                    switch (confAPIList[i].apiName)
+                    {
+                        case "DELIVERYLIST":
+                            DeliveryList = confAPIList[i].apiUrl;
+                            break;
+                        case "RETURNDELIVERYRESULT":
+                            ReturnDeliveryResult = confAPIList[i].apiUrl;
+                            break;
+                        case "DELIVERYCOLLECTION":
+                            DeliveryCollection = confAPIList[i].apiUrl;
+                            break;
+                        case "BOOKCHECK":
+                            bookCheck = confAPIList[i].apiUrl;
+                            break;
+                        case "BOOKCANCELYN":
+                            bookCancelYN = confAPIList[i].apiUrl;
+                            break;
+                        case "BOOKCANCELRESULT":
+                            bookCancelResult = confAPIList[i].apiUrl;
+                            break;
+                        case "GOODLOCATION":
+                            goodLocation = confAPIList[i].apiUrl;
+                            break;
+                        case "FINDORGINFO":
+                            findOrgInfo = confAPIList[i].apiUrl;
+                            break;
+                        case "FINDWAYBILLNM":
+                            findWayBillNm = confAPIList[i].apiUrl;
+                            break;
+                        case "REQUESTAUTH":
+                            requestAuth = confAPIList[i].apiUrl;
+                            break;
+                        case "RESPONSEAUTH":
+                            responseAuth = confAPIList[i].apiUrl;
+                            break;
+                        default: //미 정의 레코드
+                            DButil.HistoryLog("*APIconf type : " + confAPIList[i].apiName + "* conf apiUrl : " + confAPIList[i].apiUrl);
+                            break;
+                    }
+                }
+                */
                 LUIS_MINSCORE_LIMIT = "0.2";
 
                 Debug.WriteLine("* DB conn : " + activity.Type);
@@ -553,7 +599,7 @@ namespace HanjinChatBot
                             }
                             else
                             {
-                                
+
                             }
                         }
                         else
@@ -563,12 +609,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("주소로 연락처 찾기") || apiActiveText.Equals("운송장번호로 연락처 찾기"))
+                            else if (apiActiveText.Equals("주소로연락처찾기") || apiActiveText.Equals("운송장번호로연락처찾기"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("주소다시입력"))
+                            else if (apiActiveText.Equals("주소다시입력") || apiActiveText.Equals("집배원") || apiActiveText.Equals("기사확인"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -588,12 +634,37 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("예약목록다음페이지") || apiActiveText.Contains("예약목록이전페이지"))
+                            else if (apiActiveText.Contains("택배는어떻게보내나요") || apiActiveText.Contains("택배예약은어떻게하나"))
+                            {
+                                apiIntent = "F_예약";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Contains("반품접수부탁드려요") || apiActiveText.Contains("반품예약해주세요") || apiActiveText.Contains("반품예약어떻게하나요"))
+                            {
+                                apiIntent = "F_예약";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Contains("상품이어디있나요") || apiActiveText.Contains("배송이언제되나요"))
+                            {
+                                apiIntent = "F_택배배송일정조회";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Equals("예약목록다음페이지") || apiActiveText.Equals("예약목록이전페이지"))
+                            {
+                                apiIntent = "F_예약확인";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Contains("예약조회해주세요") || apiActiveText.Contains("예약확인해주세요"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
                             else if (apiActiveText.Equals("예약취소목록다음페이지") || apiActiveText.Contains("예약취소목록이전페이지"))
+                            {
+                                apiIntent = "F_예약취소";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Contains("접수한예약을취소하고싶어요"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -605,7 +676,7 @@ namespace HanjinChatBot
                             }
                             else
                             {
-                                
+
                             }
                         }
                         Debug.WriteLine("API INTENT 두번째 호출(문장를 통해서)===" + apiIntent);
@@ -983,26 +1054,17 @@ namespace HanjinChatBot
                                 apiIntent = apiOldIntent;
                             }
 
-                            if (luisIntent.Equals("None"))
+                            if (checkAuthNameCnt.Equals("T"))
                             {
-
+                                apiIntent = "F_모바일인증";
+                            }
+                            else if (checkFindAddressCnt.Equals("T"))
+                            {
+                                apiIntent = "F_집배점/기사연락처";
                             }
                             else
                             {
-
-                                if (checkAuthNameCnt.Equals("T"))
-                                {
-                                    apiIntent = "F_모바일인증";
-                                }
-                                else if (checkFindAddressCnt.Equals("T"))
-                                {
-                                    apiIntent = "F_집배점/기사연락처";
-                                }
-                                else
-                                {
-                                    //apiIntent = "None";
-                                }
-
+                                //apiIntent = "None";
                             }
                         }
                         else
@@ -1025,7 +1087,7 @@ namespace HanjinChatBot
                         {
                             checkApiintent = apiIntentCheckData[0].apiIntent;
                         }
-                        
+
                         //String checkApiintent = apiIntent;
                         if (checkApiintent.Equals("F_모바일인증"))
                         {
@@ -1047,7 +1109,7 @@ namespace HanjinChatBot
                                 {
                                     apiIntent = "None";
                                 }
-                                
+
                             }
                         }
                         else if (checkApiintent.Equals("F_예약"))
@@ -1215,7 +1277,7 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (apiActiveText.Equals("주소로 연락처 찾기") || apiActiveText.Equals("운송장번호로 연락처 찾기"))
+                            else if (apiActiveText.Equals("주소로연락처찾기") || apiActiveText.Equals("운송장번호로연락처찾기"))
                             {
 
                             }
@@ -1225,10 +1287,21 @@ namespace HanjinChatBot
                             }
                             else
                             {
-                                if (checkApiTF.Equals("F"))
+                                if (checkFindAddressCnt.Equals("T"))
                                 {
-                                    apiIntent = "None";
+
                                 }
+                                else
+                                {
+                                    if (checkApiTF.Equals("F"))
+                                    {
+                                        apiIntent = "None";
+                                    }
+                                }
+
+
+
+
                             }
                         }
                         else if (checkApiintent.Equals("F_택배배송일정조회"))
@@ -1362,7 +1435,7 @@ namespace HanjinChatBot
                                 UserHeroCard plCard = new UserHeroCard()
                                 {
                                     Title = "",
-                                    Text = "죄송합니다. 고객님의 의도를 잘 모르겠네요.<br>다른 말로 질문해 주시겠어요?<br><br>혹시, 다음의 질문은 어떨까요?",
+                                    Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요 ?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 좀더 명확한 질문으로 부탁드립니다.",
                                     Buttons = cardButtons
                                 };
 
@@ -3426,7 +3499,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 정확한 주소를 입력해 주세요.",
+                                        Text = "고객님의 정확한 주소를 입력해 주세요.<br>예)서울특별시 금천구 가산동 371-23",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -3440,7 +3513,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 정확한 주소를 다시 입력해 주세요.",
+                                        Text = "고객님의 정확한 주소를 입력해 주세요.<br>예)서울특별시 금천구 가산동 371-23",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
