@@ -1400,18 +1400,21 @@ namespace HanjinChatBot
                                 JArray minLuisIntentData = JArray.Parse(MINLuisIntent["intents"].ToString());
                                 int checkInt = 0;
                                 List<CardAction> cardButtons = new List<CardAction>();
+                                
                                 foreach (JObject fElement in minLuisIntentData)
                                 {
                                     var intentName = fElement["intent"];
                                     if (intentName.Equals("None") || intentName.Equals("test intent"))
                                     {
-                                        checkInt--;
+                                        //checkInt--;
                                     }
                                     else
                                     {
+                                        checkInt++;
                                         String query = db.getLuisMINData(intentName.ToString());
-                                        if (checkInt < 4)
+                                        if (checkInt < 5)
                                         {
+                                            
                                             CardAction sorryButton = new CardAction();
                                             sorryButton = new CardAction()
                                             {
@@ -1429,7 +1432,7 @@ namespace HanjinChatBot
 
 
 
-                                    checkInt++;
+                                    
                                 }
 
                                 UserHeroCard plCard = new UserHeroCard()
