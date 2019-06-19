@@ -62,8 +62,8 @@ namespace HanjinChatBot
         public static string channelID = "";
 
         //API변수선언
-        //static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
-        static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
+        static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
+        //static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
         static public string DeliveryList = apiUrl + "ipcc_api.get_wbls";                 //택배목록
         static public string ReturnDeliveryResult = apiUrl + "ipcc_api.get_rtn_info";                 //반품예약가능여부
         static public string DeliveryCollection = apiUrl + "ipcc_api.get_rsvs";                 //택배집하목록
@@ -1507,7 +1507,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
-                            requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
+                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             /*****************************************************************
                             * apiIntent F_예약
@@ -3861,6 +3861,34 @@ namespace HanjinChatBot
                                             apiMakerReply.Attachments.Add(plAttachment);
                                             SetActivity(apiMakerReply);
                                         }
+                                        else if (jobj["ret_cod"].ToString().Equals("9031"))
+                                        {
+                                            checkAuthNameCnt = "F";
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "최근 30일이내 배송/집하목록이 없어 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9032"))
+                                        {
+                                            checkAuthNameCnt = "F";
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "동일한 전화번호로 3회 초과요청되었기에 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
+                                            };
+
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
                                         else
                                         {
                                             checkAuthNameCnt = "F";
@@ -3868,7 +3896,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "인증번호 생성에 실패되었습니다.<br>불편을 드려 죄송합니다. 다시 시도해 주세요.",
+                                                Text = "인증되지 않았습니다.<br>불편을 드려 죄송합니다.",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
