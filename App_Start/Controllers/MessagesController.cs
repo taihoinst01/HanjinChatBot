@@ -3141,7 +3141,7 @@ namespace HanjinChatBot
                                             {
                                                 wrkCod = "오류";
                                                 //statusText = "오류";
-                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송관련 자동안내가 어렵습니다.<br>자세한 문의 내용은 한진택배 홈페이지 고객의 말씀 또는 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수 부탁드립니다.";
+                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송관련 자동안내가 어렵습니다.<br>다시 한번 운송장번호를 입력해 주시겠어요?<br>자세한 문의 내용은 한진택배 홈페이지 고객의 말씀 또는 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수 부탁드립니다.";
                                             }
 
                                             UserHeroCard plCard = new UserHeroCard()
