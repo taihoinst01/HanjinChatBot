@@ -557,7 +557,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약내용확인"))
+                            else if (apiActiveText.Contains("예약내용확인")|| apiActiveText.Equals("예약번호직접입력"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -604,12 +604,12 @@ namespace HanjinChatBot
                         }
                         else
                         {
-                            if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인"))
+                            if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인") || apiActiveText.Equals("나의예약확인"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("주소로연락처찾기") || apiActiveText.Equals("운송장번호로연락처찾기"))
+                            else if (apiActiveText.Equals("주소로연락처찾기") || apiActiveText.Equals("운송장번호로연락처찾기")|| apiActiveText.Equals("집배점지점조회"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -624,7 +624,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_운송장번호확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예핸드폰인증") || apiActiveText.Contains("아니오핸드폰인증"))
+                            else if (apiActiveText.Contains("예휴대폰인증") || apiActiveText.Contains("아니오휴대폰인증"))
                             {
                                 apiIntent = "F_모바일인증";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -644,7 +644,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("상품이어디있나요") || apiActiveText.Contains("배송이언제되나요"))
+                            else if (apiActiveText.Contains("상품이어디있나요") || apiActiveText.Contains("배송이언제되나요")|| apiActiveText.Equals("나의배송목록"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -664,7 +664,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("접수한예약을취소하고싶어요"))
+                            else if (apiActiveText.Contains("접수한예약을취소하고싶어요")|| apiActiveText.Equals("나의예약취소"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1091,7 +1091,7 @@ namespace HanjinChatBot
                         //String checkApiintent = apiIntent;
                         if (checkApiintent.Equals("F_모바일인증"))
                         {
-                            if (apiActiveText.Contains("예핸드폰인증") || apiActiveText.Contains("아니오핸드폰인증"))
+                            if (apiActiveText.Contains("예휴대폰인증") || apiActiveText.Contains("아니오휴대폰인증"))
                             {
 
                             }
@@ -1179,10 +1179,7 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    if (checkApiTF.Equals("F"))
-                                    {
-                                        apiIntent = "None";
-                                    }
+                                    
                                 }
                             }
                             else if (apiActiveText.Contains("예약취소목록다음페이지") && activity.Text.Contains(">>"))
@@ -1216,13 +1213,6 @@ namespace HanjinChatBot
                                 if (apiActiveText.Contains("예약내용확인"))
                                 {
 
-                                }
-                                else
-                                {
-                                    if (checkApiTF.Equals("F"))
-                                    {
-                                        apiIntent = "None";
-                                    }
                                 }
                             }
                             else if (apiActiveText.Contains("예약목록다음페이지") && activity.Text.Contains(">>"))
@@ -1318,10 +1308,7 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    if (checkApiTF.Equals("F"))
-                                    {
-                                        apiIntent = "None";
-                                    }
+                                    
                                 }
                             }
                             else if (apiActiveText.Contains("배송목록다음페이지") && activity.Text.Contains(">>"))
@@ -1521,6 +1508,7 @@ namespace HanjinChatBot
 
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
                             requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
+                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -1552,6 +1540,18 @@ namespace HanjinChatBot
                                     };
 
                                     invoiceNumber = onlyNumber;
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Contains("운송장번호직접입력"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "정확한 운송장 번호를 입력해 주세요.",
+                                    };
+
                                     Attachment plAttachment = plCard.ToAttachment();
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
@@ -1674,7 +1674,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "운송장 번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 또는 모바일 고객센터(m.hanjin.co.kr)에서 개인택배로 예약접수가 가능합니다.",
+                                            Text = "운송장 번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 또는 모바일 고객센터(m.hanex.hanjin.co.kr)에서 개인택배로 예약접수가 가능합니다.",
                                             Buttons = cardButtons,
                                         };
 
@@ -1704,24 +1704,25 @@ namespace HanjinChatBot
                                             deliveryButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "예. 핸드폰인증 하겠습니다",
-                                                Title = "예"
+                                                Value = "예. 휴대폰인증 하겠습니다",
+                                                Title = "휴대폰 인증"
                                             };
                                             cardButtons.Add(deliveryButton);
 
                                             CardAction returnButton = new CardAction();
                                             returnButton = new CardAction()
                                             {
-                                                Type = "imBack",
-                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
-                                                Title = "아니오"
+                                                Type = "postBack",
+                                                //Value = "아니오. 휴대폰인증 취소하겠습니다",
+                                                Value = "[F_예약]::운송장번호직접입력",
+                                                Title = "운송장 번호 직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2002,6 +2003,18 @@ namespace HanjinChatBot
                                 {
 
                                 }
+                                else if (apiActiveText.Contains("예약번호직접입력"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "정확한 예약 번호를 입력해 주세요.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
                                 else if (apiActiveText.Contains("예약내용확인") || (containNum == true && onlyNumber.Length > 7))//리스트버튼 클릭이거나 직접 입력일 경우
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
@@ -2087,24 +2100,34 @@ namespace HanjinChatBot
                                             deliveryButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "예. 핸드폰인증 하겠습니다",
-                                                Title = "예"
+                                                Value = "예. 휴대폰인증 하겠습니다",
+                                                Title = "휴대폰 인증"
                                             };
                                             cardButtons.Add(deliveryButton);
-
+                                            /*
                                             CardAction returnButton = new CardAction();
                                             returnButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Value = "아니오. 휴대폰인증 취소하겠습니다",
                                                 Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
+                                            */
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "postBack",
+                                                //Value = "아니오. 휴대폰인증 취소하겠습니다",
+                                                Value = "[F_예약확인]::예약번호직접입력",
+                                                Title = "예약 번호 직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 직접 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2194,7 +2217,7 @@ namespace HanjinChatBot
                                                         plCard = new UserHeroCard()
                                                         {
                                                             Title = "",
-                                                            Text = "고객님의 핸드폰 번호로 조회된 결과가 없습니다."
+                                                            Text = "고객님의 휴대폰 번호로 조회된 결과가 없습니다."
                                                         };
                                                         plAttachment = plCard.ToAttachment();
                                                         apiMakerReply.Attachments.Add(plAttachment);
@@ -2437,7 +2460,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.",
+                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수바랍니다.",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2449,7 +2472,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.",
+                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수바랍니다.",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2477,6 +2500,18 @@ namespace HanjinChatBot
                                     {
                                         Title = "",
                                         Text = "예약번호 " + bookNumber + " 예약취소작업이 종료되었습니다.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Contains("예약번호직접입력"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "정확한 예약 번호를 입력해 주세요.",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -2542,7 +2577,7 @@ namespace HanjinChatBot
                                         else if (jobj["ret_cod"].ToString().Equals("9012") || jobj["ret_cod"].ToString().Equals("9013") || jobj["ret_cod"].ToString().Equals("9999"))
                                         {
                                             //heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.";
-                                            heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.<hr><strong>예약번호: </strong>" + bookNumber + "<br><strong>예약일시: </strong>" + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시거나 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수바랍니다.<hr><strong>예약번호: </strong>" + bookNumber + "<br><strong>예약일시: </strong>" + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
                                         }
                                         else
                                         {
@@ -2608,24 +2643,34 @@ namespace HanjinChatBot
                                             deliveryButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "예. 핸드폰인증 하겠습니다",
-                                                Title = "예"
+                                                Value = "예. 휴대폰인증 하겠습니다",
+                                                Title = "휴대폰 인증"
                                             };
                                             cardButtons.Add(deliveryButton);
-
+                                            /*
                                             CardAction returnButton = new CardAction();
                                             returnButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Value = "아니오. 휴대폰인증 취소하겠습니다",
                                                 Title = "아니오"
+                                            };
+                                            cardButtons.Add(returnButton);
+                                            */
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "postBack",
+                                                //Value = "아니오. 휴대폰인증 취소하겠습니다",
+                                                Value = "[F_예약취소]::예약번호직접입력",
+                                                Title = "예약 번호 직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2901,7 +2946,7 @@ namespace HanjinChatBot
                                             mhomeButton = new CardAction()
                                             {
                                                 Type = "openUrl",
-                                                Value = "http://m.hanjin.co.kr",
+                                                Value = "m.hanex.hanjin.co.kr",
                                                 Title = "모바일고객센터"
                                             };
                                             cardButtons.Add(mhomeButton);
@@ -2909,8 +2954,8 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "해당 번호로 운송장번호가 조회되지 않습니다<br>한진택배 홈페이지 또는 모바일 고객센터(m.hanjin.co.kr)를 통해 문의해 주시기 바랍니다.",
-                                                Buttons = cardButtons,
+                                                Text = "해당 번호로 운송장번호가 조회되지 않습니다<br>다시 한번 운송장 번호를 확인하여 입력하여 주세요.",
+                                                //Buttons = cardButtons,
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2952,7 +2997,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "반품상품의 운송장번호를 확인합니다.<br>예약번호나 반품택배 접수 시 입력하신 원 운송장버호를 입력해 주십시오.",
+                                        Text = "반품상품의 운송장번호를 확인합니다.<br>예약번호나 반품택배 접수 시 입력하신 원 운송장번호를 입력해 주십시오.",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -3080,6 +3125,7 @@ namespace HanjinChatBot
                                                 empTel = jobj["emp_tel"].ToString();
                                                 statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송지역 사정으로 배송이 1~2일 더 소요될 수 있는 점 양해부탁드립니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는 배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
                                             }
+                                            /*
                                             else if (jobj["wrk_cod"].ToString().Equals("90"))
                                             {
                                                 wrkCod = "배송오류";
@@ -3090,10 +3136,12 @@ namespace HanjinChatBot
                                                 wrkCod = "기타에러";
                                                 statusText = "기타에러";
                                             }
+                                            */
                                             else
                                             {
                                                 wrkCod = "오류";
-                                                statusText = "오류";
+                                                //statusText = "오류";
+                                                statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송관련 자동안내가 어렵습니다.<br>자세한 문의 내용은 한진택배 홈페이지 고객의 말씀 또는 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수 부탁드립니다.";
                                             }
 
                                             UserHeroCard plCard = new UserHeroCard()
@@ -3120,6 +3168,18 @@ namespace HanjinChatBot
                                         SetActivity(apiMakerReply);
                                     }
                                 }
+                                else if (apiActiveText.Contains("운송장번호직접입력"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "정확한 운송장 번호를 입력해 주세요.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
                                 else
                                 {
                                     if (mobilePC.Equals("PC"))
@@ -3139,24 +3199,34 @@ namespace HanjinChatBot
                                             deliveryButton = new CardAction()
                                             {
                                                 Type = "imBack",
-                                                Value = "예. 핸드폰인증 하겠습니다",
-                                                Title = "예"
+                                                Value = "예. 휴대폰인증 하겠습니다",
+                                                Title = "휴대폰 인증"
                                             };
                                             cardButtons.Add(deliveryButton);
 
                                             CardAction returnButton = new CardAction();
                                             returnButton = new CardAction()
                                             {
+                                                Type = "postBack",
+                                                //Value = "아니오. 휴대폰인증 취소하겠습니다",
+                                                Value = "[F_택배배송일정조회]::운송장번호직접입력",
+                                                Title = "운송장 번호 직접입력"
+                                            };
+                                            cardButtons.Add(returnButton);
+                                            /*
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
                                                 Type = "imBack",
-                                                Value = "아니오. 핸드폰인증 취소하겠습니다",
+                                                Value = "아니오. 휴대폰인증 취소하겠습니다",
                                                 Title = "아니오"
                                             };
                                             cardButtons.Add(returnButton);
-
+                                            */
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 핸드폰 인증이 필요합니다. 핸드폰 인증을 하신 후에 다시 진행해 주세요<br>핸드폰 인증을 하시겠습니까?",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3418,6 +3488,8 @@ namespace HanjinChatBot
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("연락처찾기"))
                                 {
+                                    checkFindAddressCnt = "F";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "ADDRESSCHECK", checkFindAddressCnt);
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
@@ -3502,7 +3574,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 정확한 주소를 입력해 주세요.<br>예)서울특별시 금천구 가산동 371-23",
+                                        Text = "고객님의 정확한 주소를 입력해 주세요.<br><br>예)<br>서울특별시 금천구 가산동 371-23<br>서울특별시 금천구 가산디지털2로 83",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -3516,7 +3588,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "고객님의 정확한 주소를 입력해 주세요.<br>예)서울특별시 금천구 가산동 371-23",
+                                        Text = "고객님의 정확한 주소를 입력해 주세요.<br><br>예)<br>서울특별시 금천구 가산동 371-23<br>서울특별시 금천구 가산디지털2로 83",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -3681,7 +3753,7 @@ namespace HanjinChatBot
                             {
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
-                                if (apiActiveText.Contains("예핸드폰인증"))
+                                if (apiActiveText.Contains("예휴대폰인증"))
                                 {
                                     checkAuthNameCnt = "F";
                                     db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
@@ -3717,7 +3789,7 @@ namespace HanjinChatBot
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("아니오핸드폰인증"))
+                                else if (apiActiveText.Contains("아니오휴대폰인증"))
                                 {
                                     checkAuthNameCnt = "F";
                                     apiIntent = "None";
@@ -3726,7 +3798,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "핸드폰 인증 진행이 취소되었습니다.",
+                                        Text = "휴대폰 인증 진행이 취소되었습니다.",
                                     };
 
                                     Attachment plAttachment = plCard.ToAttachment();
@@ -4186,7 +4258,7 @@ namespace HanjinChatBot
                                                             plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = "고객님의 핸드폰 번호로 조회된 결과가 없습니다."
+                                                                Text = "고객님의 휴대폰 번호로 조회된 결과가 없습니다."
                                                             };
                                                             plAttachment = plCard.ToAttachment();
                                                             apiMakerReply.Attachments.Add(plAttachment);
