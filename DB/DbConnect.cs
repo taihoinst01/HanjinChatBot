@@ -1442,6 +1442,13 @@ namespace HanjinChatBot.DB
                     cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
                     cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
                 }
+                else if (gubun.Equals("SORRY_INTENT"))
+                {
+                    cmd.CommandText += " UPDATE     TBL_USERCHECK ";
+                    cmd.CommandText += " SET           SORRY_INTENT = @val ";
+                    cmd.CommandText += " WHERE      CHANNELDATA = @channeldata ";
+                    cmd.CommandText += " AND          CONVERSATIONSID = @conversationsid ";
+                }
                 else
                 {
                     cmd.CommandText += " UPDATE     TBL_USERCHECK ";
@@ -1668,6 +1675,45 @@ namespace HanjinChatBot.DB
                 
             }
             return luisMinData;
+
+        }
+
+        public String getSorryIntent(string conversationsId)
+        {
+
+            SqlDataReader rdr = null;
+            String sorryIntent = "";
+            
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText += "SELECT SORRY_INTENT ";
+                cmd.CommandText += "FROM TBL_USERCHECK ";
+                cmd.CommandText += "WHERE CONVERSATIONSID = @conversationsId ";
+
+                cmd.Parameters.AddWithValue("@conversationsId", conversationsId);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                try
+                {
+                    while (rdr.Read())
+                    {
+                        sorryIntent = rdr["SORRY_INTENT"] as string;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+                rdr.Close();
+
+            }
+            return sorryIntent;
 
         }
 

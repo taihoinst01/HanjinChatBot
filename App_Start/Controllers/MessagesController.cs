@@ -504,12 +504,8 @@ namespace HanjinChatBot
                             JObject APILuis = new JObject();
 
                             //루이스 처리
-                            Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery, "API"));
+                            Task<JObject> t1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(apiTextList, luisQuery, "API", activity.ChannelId, activity.Conversation.Id));
 
-                            //결과값 받기
-                            await Task.Delay(1000);
-                            t1.Wait();
-                            APILuis = t1.Result;
                             //결과값 받기
                             await Task.Delay(1000);
                             t1.Wait();
@@ -765,7 +761,7 @@ namespace HanjinChatBot
                                     JObject Luis = new JObject();
 
                                     //루이스 처리
-                                    Task<JObject> APIt1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(textList, luisQuery, "LUIS"));
+                                    Task<JObject> APIt1 = Task<JObject>.Run(async () => await GetIntentFromBotLUIS(textList, luisQuery, "LUIS", activity.ChannelId, activity.Conversation.Id));
 
                                     //결과값 받기
                                     await Task.Delay(1000);
@@ -1361,6 +1357,31 @@ namespace HanjinChatBot
                                 /*
                                  * luis 를 통해서 상위 4개의 답변만 나온다.
                                  * */
+                                List<CardAction> cardButtons = new List<CardAction>();
+                                String sorryIntentDB = db.getSorryIntent(activity.Conversation.Id);
+                                sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
+                                Debug.WriteLine("sorryIntentDB===" + sorryIntentDB);
+
+                                String[] sorryIntentArray;
+                                sorryIntentArray = sorryIntentDB.Split('%');
+                                for(int jj=0; jj< sorryIntentArray.Length; jj++)
+                                {
+                                    String query = db.getLuisMINData(sorryIntentArray[jj]);
+                                    CardAction sorryButton = new CardAction();
+                                    sorryButton = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = query,
+                                        Title = query
+                                    };
+                                    cardButtons.Add(sorryButton);
+                                }
+
+
+                                /*
+
+
+
                                 List<string[]> textList = new List<string[]>(2);
 
                                 for (int i = 0; i < 2; i++)
@@ -1421,7 +1442,7 @@ namespace HanjinChatBot
 
                                     
                                 }
-
+                                */
                                 UserHeroCard plCard = new UserHeroCard()
                                 {
                                     Title = "",
@@ -5081,7 +5102,7 @@ namespace HanjinChatBot
             return null;
         }
 
-        public static async Task<JObject> GetIntentFromBotLUIS(List<string[]> textList, string query, string luisType)
+        public static async Task<JObject> GetIntentFromBotLUIS(List<string[]> textList, string query, string luisType, String ChannelId, String ConversationId)
         {
 
             JObject[] Luis_before = new JObject[2];
@@ -5202,7 +5223,7 @@ namespace HanjinChatBot
                 }
             }
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 //entities 0일 경우 PASS
                 if (1 != 0)
@@ -5239,15 +5260,34 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-
+                                    
                                 }
 
+                            }
+                            else
+                            {
+                                DbConnect db = new DbConnect();
+                                //상위 4개 INTENT 디비 등록
+                                String intentName = "";
+                                for (int ii=0; ii<4; ii++)
+                                {
+                                    if (Luis_before[i]["intents"][ii]["intent"].ToString().Equals("None")|| Luis_before[i]["intents"][ii]["intent"].ToString().Equals("test intent"))
+                                    {
+                                        
+                                    }
+                                    else
+                                    {
+                                        intentName = intentName + Luis_before[i]["intents"][ii]["intent"].ToString() + "%";
+                                    }
+                                }
+                                db.UserCheckUpdate(ChannelId, ConversationId, "SORRY_INTENT", intentName);
                             }
                         }
 
                     }
                 }
             }
+
             return Luis;
         }
 
@@ -5371,7 +5411,7 @@ namespace HanjinChatBot
                     }
                 }
             }
-
+            /*
             for (int i = 0; i < 2; i++)
             {
                 //entities 0일 경우 PASS
@@ -5384,6 +5424,17 @@ namespace HanjinChatBot
                         //luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
 
                     }
+                }
+            }
+            */
+            if (1 != 0)
+            {
+                //intent None일 경우 PASS
+                if (Luis_before[0]["intents"][0]["intent"].ToString() != "None")
+                {
+                    Luis = Luis_before[0];
+                    //luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
+
                 }
             }
 
