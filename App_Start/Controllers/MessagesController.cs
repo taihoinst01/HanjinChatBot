@@ -535,15 +535,15 @@ namespace HanjinChatBot
                         }
 
                         Regex r = new Regex("[0-9]");
-                        bool checkNum = Regex.IsMatch(activity.Text, @"^\d+$"); //입력값이 숫자인지 파악.
                         bool containNum = r.IsMatch(activity.Text); //숫자포함 확인
                         String apiActiveText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
+                        bool checkNum = Regex.IsMatch(apiActiveText, @"^\d+$"); //입력값이 숫자인지 파악.
                         String onlyNumber = Regex.Replace(activity.Text, @"\D", "");
                         /*****************************************************************
                             * 문장별로 apiintent 체크하기
                             * 
                             ************************************************************** */
-                        if (containNum == true && onlyNumber.Length > 7)
+                        if (containNum == true && onlyNumber.Length > 8)
                         {
                             if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("반품택배예약"))
                             {
@@ -729,7 +729,7 @@ namespace HanjinChatBot
                                 Debug.WriteLine("cache none : " + orgMent);
                                 int checkNumberLength = onlyNumber.Length;
 
-                                if (containNum == true && checkNumberLength > 7) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 운송장, 예약번호 등이라 판단
+                                if (containNum == true && checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 운송장, 예약번호 등이라 판단
                                 {
                                     luisIntent = "None";
                                 }
@@ -1107,7 +1107,7 @@ namespace HanjinChatBot
                         }
                         else if (checkApiintent.Equals("F_예약"))
                         {
-                            if (containNum == true && onlyNumber.Length > 7)
+                            if (containNum == true && onlyNumber.Length > 8)
                             {
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("반품택배예약"))
                                 {
@@ -1144,7 +1144,7 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (containNum == true && onlyNumber.Length > 7)
+                            else if (containNum == true && onlyNumber.Length > 8)//예약번호 9자리
                             {
                                 if (apiActiveText.Contains("예약취소확인"))
                                 {
@@ -1201,7 +1201,7 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (containNum == true && onlyNumber.Length > 7)
+                            else if (containNum == true && onlyNumber.Length > 8)//예약번호 9자리
                             {
                                 if (apiActiveText.Contains("예약내용확인"))
                                 {
@@ -1230,7 +1230,7 @@ namespace HanjinChatBot
                         }
                         else if (checkApiintent.Equals("F_운송장번호확인"))
                         {
-                            if (containNum == true && onlyNumber.Length > 7)
+                            if (containNum == true && onlyNumber.Length > 8)
                             {
 
                             }
@@ -1293,7 +1293,7 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (containNum == true && onlyNumber.Length > 7)
+                            else if (containNum == true && onlyNumber.Length > 8)
                             {
                                 if (apiActiveText.Contains("에대한배송일정조회") && apiActiveText.Contains("운송장번호"))
                                 {
@@ -1991,7 +1991,7 @@ namespace HanjinChatBot
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("예약내용확인") || (containNum == true && onlyNumber.Length > 7))//리스트버튼 클릭이거나 직접 입력일 경우
+                                else if (apiActiveText.Contains("예약내용확인") || (containNum == true && onlyNumber.Length > 8))//리스트버튼 클릭이거나 직접 입력일 경우
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     /*
@@ -2431,7 +2431,7 @@ namespace HanjinChatBot
 
                                     foreach (JObject jobj in obj)
                                     {
-                                        if (jobj["ret_cod"].ToString().Equals("9012") || jobj["ret_cod"].ToString().Equals("9013"))
+                                        if (jobj["ret_cod"].ToString().Equals("9012") || jobj["ret_cod"].ToString().Equals("9013")|| jobj["ret_cod"].ToString().Equals("9014"))
                                         {
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
@@ -2532,32 +2532,47 @@ namespace HanjinChatBot
                                     {
                                         String tempDate = jobj["acp_ymd"].ToString();
                                         String dateText = tempDate;
+                                        String correctDateText = "";
                                         if (tempDate == "" || tempDate.Equals(""))
                                         {
-                                            dateText = "미할당";
+                                            dateText = "";
                                         }
                                         else
                                         {
                                             String yearText = tempDate.Substring(0, 4);
                                             String monthText = tempDate.Substring(4, 2);
                                             String dayText = tempDate.Substring(6, 2);
-                                            dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
+                                            dateText = "<br><strong> 예약일시: </strong >"+yearText + "년 " + monthText + "월 " + dayText + "일";
+                                            correctDateText = yearText + "년 " + monthText + "월 " + dayText + "일";
                                         }
 
                                         String heroCardText = "";
 
                                         if (jobj["ret_cod"].ToString().Equals("1000"))
                                         {
-                                            heroCardText = dateText + "에 예약하신 예약번호 " + bookNumber + "를 취소하시려면 하단의 버튼을 클릭해주세요";
+                                            heroCardText = correctDateText + "에 예약하신 예약번호 <strong>" + bookNumber + "</strong>를 취소하시려면 하단의 버튼을 클릭해주세요";
                                         }
+                                        else if (jobj["ret_cod"].ToString().Equals("9012"))
+                                        {
+                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<hr><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9013"))
+                                        {
+                                            heroCardText = "예약번호가 존재하지 않아서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<hr><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                        }
+                                        else if (jobj["ret_cod"].ToString().Equals("9014"))
+                                        {
+                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<hr><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                        }
+                                        /*
                                         else if (jobj["ret_cod"].ToString().Equals("9012") || jobj["ret_cod"].ToString().Equals("9013") || jobj["ret_cod"].ToString().Equals("9999"))
                                         {
-                                            //heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시거나 모바일 고객센터로 접수바랍니다.";
                                             heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시거나 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수바랍니다.<hr><strong>예약번호: </strong>" + bookNumber + "<br><strong>예약일시: </strong>" + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
                                         }
+                                        */
                                         else
                                         {
-                                            heroCardText = "예약번호가 존재하지 않습니다.";
+                                            heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시거나 모바일 고객센터(m.hanex.hanjin.co.kr)로 접수바랍니다.<hr><strong>예약번호: </strong>" + bookNumber + "<br><strong>예약일시: </strong>" + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
                                         }
 
                                         List<CardAction> cardButtons = new List<CardAction>();
@@ -3531,7 +3546,8 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네. 고객님<br>해당 운송장 번호로는 연락처를 찾을 수 없습니다. 운송장 번호를 다시 한번 확인해 주세요.",
+                                                //Text = "네. 고객님<br>해당 운송장 번호로는 연락처를 찾을 수 없습니다. 운송장 번호를 다시 한번 확인해 주세요.",
+                                                Text = "네. 고객님<br>해당 정보로는 연락처를 찾을 수 없습니다. 다시 한번 정확한 정보를 확인해 주세요",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
