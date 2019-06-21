@@ -1484,7 +1484,7 @@ namespace HanjinChatBot
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
-                            requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
+                            //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
