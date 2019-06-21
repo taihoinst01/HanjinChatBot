@@ -1356,21 +1356,45 @@ namespace HanjinChatBot
                                  * */
                                 List<CardAction> cardButtons = new List<CardAction>();
                                 String sorryIntentDB = db.getSorryIntent(activity.Conversation.Id);
-                                sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
-
-                                String[] sorryIntentArray;
-                                sorryIntentArray = sorryIntentDB.Split('%');
-                                for(int jj=0; jj< sorryIntentArray.Length; jj++)
+                                MatchCollection matches = Regex.Matches(sorryIntentDB, "%");
+                                int cnt = matches.Count;
+                                
+                                if (cnt > 0)
                                 {
-                                    String query = db.getLuisMINData(sorryIntentArray[jj]);
-                                    CardAction sorryButton = new CardAction();
-                                    sorryButton = new CardAction()
+                                    sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
+                                    if (sorryIntentDB.Contains("%"))
                                     {
-                                        Type = "imBack",
-                                        Value = query,
-                                        Title = query
-                                    };
-                                    cardButtons.Add(sorryButton);
+                                        String[] sorryIntentArray;
+                                        sorryIntentArray = sorryIntentDB.Split('%');
+                                        for (int jj = 0; jj < sorryIntentArray.Length; jj++)
+                                        {
+                                            String query = db.getLuisMINData(sorryIntentArray[jj]);
+                                            CardAction sorryButton = new CardAction();
+                                            sorryButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = query,
+                                                Title = query
+                                            };
+                                            cardButtons.Add(sorryButton);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        String query = db.getLuisMINData(sorryIntentDB);
+                                        CardAction sorryButton = new CardAction();
+                                        sorryButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = query,
+                                            Title = query
+                                        };
+                                        cardButtons.Add(sorryButton);
+                                    }
+                                }
+                                else
+                                {
+                                    
                                 }
                                 
                                 UserHeroCard plCard = new UserHeroCard()
@@ -1384,7 +1408,7 @@ namespace HanjinChatBot
                                 sorryReply.Attachments.Add(plAttachment);
                                 SetActivity(sorryReply);
                                 replyresult = "D";
-
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "SORRY_INTENT", "");
 
                                 /*
                                 Debug.WriteLine("no dialogue-------------");
@@ -1460,6 +1484,7 @@ namespace HanjinChatBot
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -4624,7 +4649,7 @@ namespace HanjinChatBot
                                                             plAttachment = plCard.ToAttachment();
                                                             apiMakerReply.Attachments.Add(plAttachment);
                                                         }
-                                                        if (jobj4["ret_cod"].ToString().Equals("9999"))
+                                                        else if (jobj4["ret_cod"].ToString().Equals("9999"))
                                                         {
                                                             totalPage = 1;
                                                             plCard = new UserHeroCard()
