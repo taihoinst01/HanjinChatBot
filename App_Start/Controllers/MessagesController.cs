@@ -400,7 +400,6 @@ namespace HanjinChatBot
                     string luisIntentScore = "";
                     string luisTypeEntities = "";
                     string dlgId = "";
-                    //결과 플레그 H : 정상 답변,  G : 건의사항, D : 답변 실패, E : 에러, S : SMALLTALK, I : SAPINIT, Q : SAP용어, Z : SAP용어 실피, B : 금칙어 및 비속어 
                     string replyresult = "";
 
 
@@ -458,8 +457,6 @@ namespace HanjinChatBot
                         orgMent = orgMent.Replace(" ", "").ToLower();
                         queryStr = orgMent;
                         cacheList = db.CacheChk(orgMent.Replace(" ", ""));                     // 캐시 체크 (TBL_QUERY_ANALYSIS_RESULT 조회..)
-                                                                                               //cacheList.luisIntent 초기화
-                                                                                               //cacheList.luisIntent = null;
 
                         String checkText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
                         int chectTextLength = checkText.Length;
@@ -732,7 +729,7 @@ namespace HanjinChatBot
                                 Debug.WriteLine("cache none : " + orgMent);
                                 int checkNumberLength = onlyNumber.Length;
 
-                                if (containNum == true && checkNumberLength > 7) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 나중에 숫자 길이까지 체크(운송장, 예약번호, 전화번호)
+                                if (containNum == true && checkNumberLength > 7) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 운송장, 예약번호 등이라 판단
                                 {
                                     luisIntent = "None";
                                 }
@@ -1360,7 +1357,6 @@ namespace HanjinChatBot
                                 List<CardAction> cardButtons = new List<CardAction>();
                                 String sorryIntentDB = db.getSorryIntent(activity.Conversation.Id);
                                 sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
-                                Debug.WriteLine("sorryIntentDB===" + sorryIntentDB);
 
                                 String[] sorryIntentArray;
                                 sorryIntentArray = sorryIntentDB.Split('%');
@@ -1376,73 +1372,7 @@ namespace HanjinChatBot
                                     };
                                     cardButtons.Add(sorryButton);
                                 }
-
-
-                                /*
-
-
-
-                                List<string[]> textList = new List<string[]>(2);
-
-                                for (int i = 0; i < 2; i++)
-                                {
-                                    textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
-                                    Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
-                                }
-                                DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
-                                Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
-
-                                JObject Luis_before = new JObject();
-                                float luisScoreCompare = 0.0f;
-                                JObject MINLuis = new JObject();
-
-                                //루이스 처리
-                                Task<JObject> MINLuist1 = Task<JObject>.Run(async () => await GetIntentFromBotLUISMIN(textList, luisQuery, "LUIS"));
-
-                                //결과값 받기
-                                await Task.Delay(1000);
-                                MINLuist1.Wait();
-                                MINLuis = MINLuist1.Result;
-                                JObject MINLuisIntent = JObject.Parse(MINLuis.ToString());
-
-                                JArray minLuisIntentData = JArray.Parse(MINLuisIntent["intents"].ToString());
-                                int checkInt = 0;
-                                List<CardAction> cardButtons = new List<CardAction>();
                                 
-                                foreach (JObject fElement in minLuisIntentData)
-                                {
-                                    var intentName = fElement["intent"];
-                                    if (intentName.Equals("None") || intentName.Equals("test intent"))
-                                    {
-                                        //checkInt--;
-                                    }
-                                    else
-                                    {
-                                        checkInt++;
-                                        String query = db.getLuisMINData(intentName.ToString());
-                                        if (checkInt < 5)
-                                        {
-                                            
-                                            CardAction sorryButton = new CardAction();
-                                            sorryButton = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = query,
-                                                Title = query
-                                            };
-                                            cardButtons.Add(sorryButton);
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-
-
-
-                                    
-                                }
-                                */
                                 UserHeroCard plCard = new UserHeroCard()
                                 {
                                     Title = "",
@@ -5269,6 +5199,7 @@ namespace HanjinChatBot
                                 DbConnect db = new DbConnect();
                                 //상위 4개 INTENT 디비 등록
                                 String intentName = "";
+                                float checkMinScore = 0.59f;
                                 for (int ii=0; ii<4; ii++)
                                 {
                                     if (Luis_before[i]["intents"][ii]["intent"].ToString().Equals("None")|| Luis_before[i]["intents"][ii]["intent"].ToString().Equals("test intent"))
@@ -5277,7 +5208,14 @@ namespace HanjinChatBot
                                     }
                                     else
                                     {
-                                        intentName = intentName + Luis_before[i]["intents"][ii]["intent"].ToString() + "%";
+                                        //점수는 50점
+                                        Debug.WriteLine("score==========================================================="+ (float)Luis_before[i]["intents"][0]["score"]);
+                                        Debug.WriteLine("intent===========================================================" + Luis_before[i]["intents"][ii]["intent"].ToString());
+                                        if ((float)Luis_before[i]["intents"][0]["score"] > checkMinScore)
+                                        {
+                                            intentName = intentName + Luis_before[i]["intents"][ii]["intent"].ToString() + "%";
+                                        }
+                                            
                                     }
                                 }
                                 db.UserCheckUpdate(ChannelId, ConversationId, "SORRY_INTENT", intentName);
