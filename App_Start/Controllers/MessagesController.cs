@@ -1383,7 +1383,7 @@ namespace HanjinChatBot
                                         {
                                             Title = "",
                                             //Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요 ?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 좀더 명확한 질문으로 부탁드립니다.",
-                                            Text = "문의하시려는 항목을 아래에서 선택해 주세요<br>원하시는 항목이 없으면 이렇게 입력해 보세요<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                            Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
                                             Buttons = cardButtons
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1405,7 +1405,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "문의하시려는 항목을 아래에서 선택해 주세요<br>원하시는 항목이 없으면 이렇게 입력해 보세요<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                            Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
                                             Buttons = cardButtons
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1418,7 +1418,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요 ?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 질문해 주시면 좋아요!<br>저는 택배와 관련된 질문에 답을 드릴 수 있어요!",
+                                        Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 질문해 주시면 좋아요!<br>저는 택배와 관련된 질문에 답을 드릴 수 있어요!",
                                     };
                                     Attachment plAttachment = plCard.ToAttachment();
                                     sorryReply.Attachments.Add(plAttachment);
