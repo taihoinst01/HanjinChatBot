@@ -417,7 +417,7 @@ namespace HanjinChatBot
                     CardList bannedMsg = db.BannedChk(orgMent);
                     Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
                     DButil.HistoryLog("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
-
+                    
                     //금칙어 처리
 
                     if (bannedMsg.cardText != null)

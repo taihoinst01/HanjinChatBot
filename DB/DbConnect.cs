@@ -1758,9 +1758,11 @@ namespace HanjinChatBot.DB
             return confApilist;
         }
 
-        public int UserReportDataInsert(string consultingData)
+        public int UserReportDataInsert(string consultingDataTemp)
         {
             DButil.HistoryLog("db conn UserReportDataInsert !!");
+            String consultingData = consultingDataTemp.Substring(11);
+            
             SqlDataReader rdr = null;
             int result = 0;
             /*
