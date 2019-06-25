@@ -369,7 +369,7 @@ namespace HanjinChatBot
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("consulting:")) //챗봇상담후기
             {
                 DButil.HistoryLog("* activity.consulting text : " + activity.Text);
-                
+                db.UserReportDataInsert(activity.Text);
             }
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {

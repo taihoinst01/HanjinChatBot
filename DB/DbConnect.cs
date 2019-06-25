@@ -1758,5 +1758,49 @@ namespace HanjinChatBot.DB
             return confApilist;
         }
 
+        public int UserReportDataInsert(string consultingData)
+        {
+
+            SqlDataReader rdr = null;
+            int result = 0;
+            /*
+             * DATA 정리
+             * */
+            String[] consultingDataDB;
+            consultingDataDB = consultingData.Split('&');
+            if (consultingDataDB[0] == null)
+            {
+                consultingDataDB[0] = "1";
+            }
+            int rCount = Int32.Parse(consultingDataDB[0]);
+            String rComment = consultingDataDB[1];
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText += "INSERT INTO TBL_CHATBOT_USERREPORT(R_COUNT, R_COMMENT, R_DATE) ";
+                cmd.CommandText += " VALUES (@rCount, @rComment,GETDATE())";
+
+                cmd.Parameters.AddWithValue("@rCount", rCount);
+                cmd.Parameters.AddWithValue("@rComment", rComment);
+
+
+                try
+                {
+                    result = cmd.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
+
+            }
+            return result;
+        }
+
     }
 }
