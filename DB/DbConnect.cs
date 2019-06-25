@@ -1782,7 +1782,7 @@ namespace HanjinChatBot.DB
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "INSERT INTO TBL_CHATBOT_USERREPORT(R_COUNT, R_COMMENT, R_DATE) ";
+                cmd.CommandText += "INSERT INTO TBL_CHATBOT_USERREPORT(R_COUNT, R_COMMENT, R_WDATE) ";
                 cmd.CommandText += " VALUES (@rCount, @rComment,GETDATE())";
 
                 cmd.Parameters.AddWithValue("@rCount", rCount);
