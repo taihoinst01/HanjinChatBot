@@ -366,6 +366,11 @@ namespace HanjinChatBot
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePc);
             }
+            else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("consulting:")) //챗봇상담후기
+            {
+                DButil.HistoryLog("* activity.consulting text : " + activity.Text);
+                
+            }
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
                 DButil.HistoryLog("* activity.TEL text : " + activity.Text);
