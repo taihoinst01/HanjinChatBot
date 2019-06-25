@@ -1760,7 +1760,7 @@ namespace HanjinChatBot.DB
 
         public int UserReportDataInsert(string consultingData)
         {
-
+            DButil.HistoryLog("db conn UserReportDataInsert !!");
             SqlDataReader rdr = null;
             int result = 0;
             /*
@@ -1775,6 +1775,9 @@ namespace HanjinChatBot.DB
             int rCount = Int32.Parse(consultingDataDB[0]);
             String rComment = consultingDataDB[1];
 
+            DButil.HistoryLog("rCount=="+rCount);
+            DButil.HistoryLog("rComment==" + rComment);
+
             using (SqlConnection conn = new SqlConnection(connStr))
             {
 
@@ -1784,6 +1787,7 @@ namespace HanjinChatBot.DB
 
                 cmd.CommandText += "INSERT INTO TBL_CHATBOT_USEREPORT(R_COUNT, R_COMMENT, R_WDATE) ";
                 cmd.CommandText += " VALUES (@rCount, @rComment,GETDATE())";
+
 
                 cmd.Parameters.AddWithValue("@rCount", rCount);
                 cmd.Parameters.AddWithValue("@rComment", rComment);
@@ -1796,6 +1800,7 @@ namespace HanjinChatBot.DB
                 catch (Exception e)
                 {
                     Debug.WriteLine(e.Message);
+                    DButil.HistoryLog(e.Message);
                 }
 
             }
