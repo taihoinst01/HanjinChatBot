@@ -5285,9 +5285,9 @@ namespace HanjinChatBot
                                     else
                                     {
                                         //점수는 50점
-                                        Debug.WriteLine("score==========================================================="+ (float)Luis_before[i]["intents"][0]["score"]);
+                                        Debug.WriteLine("score==========================================================="+ (float)Luis_before[i]["intents"][ii]["score"]);
                                         Debug.WriteLine("intent===========================================================" + Luis_before[i]["intents"][ii]["intent"].ToString());
-                                        if ((float)Luis_before[i]["intents"][0]["score"] > checkMinScore)
+                                        if ((float)Luis_before[i]["intents"][ii]["score"] > checkMinScore)
                                         {
                                             intentName = intentName + Luis_before[i]["intents"][ii]["intent"].ToString() + "%";
                                         }
