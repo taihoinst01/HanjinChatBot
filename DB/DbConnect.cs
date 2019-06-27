@@ -444,7 +444,7 @@ namespace HanjinChatBot.DB
             return dialogText;
         }
 
-        public List<CardList> SelectSorryDialogText(string dlgGroup)
+        public List<CardList> SelectSorryDialogCard(string dlgGroup)
         {
             SqlDataReader rdr = null;
             List<CardList> dialogCard = new List<CardList>();
@@ -474,6 +474,40 @@ namespace HanjinChatBot.DB
                     dlgCard.btn1Type = cardBtn1type;
                     dlgCard.btn1Title = cardBtn1title;
                     dlgCard.btn1Context = cardBtn1context;
+
+
+                    dialogCard.Add(dlgCard);
+                }
+            }
+            return dialogCard;
+        }
+
+        public List<TextList> SelectSorryDialogText(string dlgGroup)
+        {
+            SqlDataReader rdr = null;
+            List<TextList> dialogCard = new List<TextList>();
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "SELECT TEXT_DLG_ID, DLG_ID, CARD_TITLE, CARD_TEXT FROM TBL_DLG_TEXT WHERE DLG_ID = (SELECT DLG_ID FROM TBL_DLG WHERE DLG_GROUP = @dlgGroup) AND USE_YN = 'Y'";
+
+                cmd.Parameters.AddWithValue("@dlgGroup", dlgGroup);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (rdr.Read())
+                {
+                    //string textDlgId = rdr["TEXT_DLG_ID"] as string;
+                    //string dlgId = rdr["DLG_ID"] as string;
+                    string cardTitle = rdr["CARD_TITLE"] as string;
+                    string cardText = rdr["CARD_TEXT"] as string;
+
+
+                    TextList dlgCard = new TextList();
+                    dlgCard.cardTitle = cardTitle;
+                    dlgCard.cardText = cardText;
 
 
                     dialogCard.Add(dlgCard);

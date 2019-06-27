@@ -62,8 +62,8 @@ namespace HanjinChatBot
         public static string channelID = "";
 
         //API변수선언
-        static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
-        //static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
+        //static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
+        static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
         static public string DeliveryList = apiUrl + "ipcc_api.get_wbls";                 //택배목록
         static public string ReturnDeliveryResult = apiUrl + "ipcc_api.get_rtn_info";                 //반품예약가능여부
         static public string ReturnDeliveryRequest = apiUrl + "ipcc_api.req_rsv_rtn";                 //반품예약요청
@@ -421,7 +421,7 @@ namespace HanjinChatBot
                     CardList bannedMsg = db.BannedChk(orgMent);
                     Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
                     DButil.HistoryLog("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
-                    
+
                     //금칙어 처리
 
                     if (bannedMsg.cardText != null)
@@ -564,7 +564,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약내용확인")|| apiActiveText.Equals("예약번호직접입력"))
+                            else if (apiActiveText.Contains("예약내용확인") || apiActiveText.Equals("예약번호직접입력"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -616,7 +616,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("주소로연락처찾기") || apiActiveText.Equals("운송장번호로연락처찾기")|| apiActiveText.Equals("집배점지점조회"))
+                            else if (apiActiveText.Equals("주소로연락처찾기") || apiActiveText.Equals("운송장번호로연락처찾기") || apiActiveText.Equals("집배점지점조회"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -651,7 +651,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("상품이어디있나요") || apiActiveText.Contains("배송이언제되나요")|| apiActiveText.Equals("나의배송목록"))
+                            else if (apiActiveText.Contains("상품이어디있나요") || apiActiveText.Contains("배송이언제되나요") || apiActiveText.Equals("나의배송목록"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -671,7 +671,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("접수한예약을취소하고싶어요")|| apiActiveText.Equals("나의예약취소"))
+                            else if (apiActiveText.Contains("접수한예약을취소하고싶어요") || apiActiveText.Equals("나의예약취소"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1186,7 +1186,7 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    
+
                                 }
                             }
                             else if (apiActiveText.Contains("예약취소목록다음페이지") && activity.Text.Contains(">>"))
@@ -1315,7 +1315,7 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    
+
                                 }
                             }
                             else if (apiActiveText.Contains("배송목록다음페이지") && activity.Text.Contains(">>"))
@@ -1369,12 +1369,19 @@ namespace HanjinChatBot
                                  * luis 를 통해서 상위 4개의 답변만 나온다.
                                  * */
                                 List<CardAction> cardButtons = new List<CardAction>();
+                                List<TextList> textList = new List<TextList>();
                                 String sorryIntentDB = db.getSorryIntent(activity.Conversation.Id);
                                 MatchCollection matches = Regex.Matches(sorryIntentDB, "%");
                                 int cnt = matches.Count;
-                                
+
                                 if (cnt > 0)
                                 {
+                                    textList = db.SelectSorryDialogText("6");
+                                    String textListCardText = "";
+                                    for (int i = 0; i < textList.Count; i++)
+                                    {
+                                        textListCardText = textList[i].cardText;
+                                    }
                                     sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
                                     if (sorryIntentDB.Contains("%"))
                                     {
@@ -1396,8 +1403,8 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            //Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요 ?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 좀더 명확한 질문으로 부탁드립니다.",
-                                            Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                            //Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                            Text = textListCardText,
                                             Buttons = cardButtons
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1419,7 +1426,8 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                            //Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                            Text = textListCardText,
                                             Buttons = cardButtons
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -1429,16 +1437,23 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
+                                    textList = db.SelectSorryDialogText("5");
+                                    String textListCardText = "";
+                                    for (int i = 0; i < textList.Count; i++)
+                                    {
+                                        textListCardText = textList[i].cardText;
+                                    }
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 질문해 주시면 좋아요!<br>저는 택배와 관련된 질문에 답을 드릴 수 있어요!",
+                                        //Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 질문해 주시면 좋아요!<br>저는 택배와 관련된 질문에 답을 드릴 수 있어요!",
+                                        Text = textListCardText,
                                     };
                                     Attachment plAttachment = plCard.ToAttachment();
                                     sorryReply.Attachments.Add(plAttachment);
                                     SetActivity(sorryReply);
                                 }
-                               
+
                                 replyresult = "D";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "SORRY_INTENT", "");
 
@@ -1514,7 +1529,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
-                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
+                            requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
@@ -1593,20 +1608,20 @@ namespace HanjinChatBot
 
                                         JArray obj = JArray.Parse(ReturnDeliveryRequestJsonData);
                                         String requestText = "";
-                                        
+
                                         foreach (JObject jobj in obj)
                                         {
                                             if (jobj["ret_cod"].ToString().Equals("9006"))
                                             {
-                                                requestText = "고객님께서 입력 하신 운송장번호 "+onlyNumber+"의 반품 택배 예약번호는 "+ jobj["rsv_num"].ToString() + "이며, "+ jobj["org_nam"].ToString() + " 집배점 전화번호 "+ jobj["tel_num"].ToString() + " (으)로 문의 부탁 드립니다. 이용해 주셔서 감사합니다.";
+                                                requestText = "고객님께서 입력 하신 운송장번호 " + onlyNumber + "의 반품 택배 예약번호는 " + jobj["rsv_num"].ToString() + "이며, " + jobj["org_nam"].ToString() + " 집배점 전화번호 " + jobj["tel_num"].ToString() + " (으)로 문의 부탁 드립니다. 이용해 주셔서 감사합니다.";
                                             }
                                             else if (jobj["ret_cod"].ToString().Equals("1000"))
                                             {
-                                                requestText = "반품 예약접수가 완료 되었습니다. 예약접수 번호는 "+ jobj["rsv_num"].ToString() + " 입니다.<br>방문예정일은 주말, 공휴일을 제외하여 영업일 기준으로 내일부터 순차적으로 방문예정이며, 방문일은 현장 사정에 따라 소요 될 수 있습니다.이용해 주셔서 감사합니다";
+                                                requestText = "반품 예약접수가 완료 되었습니다. 예약접수 번호는 " + jobj["rsv_num"].ToString() + " 입니다.<br>방문예정일은 주말, 공휴일을 제외하여 영업일 기준으로 내일부터 순차적으로 방문예정이며, 방문일은 현장 사정에 따라 소요 될 수 있습니다.이용해 주셔서 감사합니다";
                                             }
                                             else
                                             {
-                                                requestText = "운송장번호 "+onlyNumber+" 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 에서 개인택배로 예약접수가 가능합니다.";
+                                                requestText = "운송장번호 " + onlyNumber + " 상품은 반품 예약접수가 어렵습니다. 반품하실 업체를 통해 반품접수를 하시거나 한진택배 홈페이지 에서 개인택배로 예약접수가 가능합니다.";
                                             }
                                         }
 
@@ -1758,9 +1773,9 @@ namespace HanjinChatBot
 
                                         SetActivity(apiMakerReply);
                                     }
-    
+
                                 }
-                               
+
                                 else if (apiActiveText.Contains("반품택배예약") || apiActiveText.Contains("택배배송목록"))
                                 {
                                     if (mobilePC.Equals("PC"))
@@ -2530,7 +2545,7 @@ namespace HanjinChatBot
 
                                     foreach (JObject jobj in obj)
                                     {
-                                        if (jobj["ret_cod"].ToString().Equals("9012") || jobj["ret_cod"].ToString().Equals("9013")|| jobj["ret_cod"].ToString().Equals("9014"))
+                                        if (jobj["ret_cod"].ToString().Equals("9012") || jobj["ret_cod"].ToString().Equals("9013") || jobj["ret_cod"].ToString().Equals("9014"))
                                         {
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
@@ -2641,7 +2656,7 @@ namespace HanjinChatBot
                                             String yearText = tempDate.Substring(0, 4);
                                             String monthText = tempDate.Substring(4, 2);
                                             String dayText = tempDate.Substring(6, 2);
-                                            dateText = "<br><strong> 예약일시: </strong >"+yearText + "년 " + monthText + "월 " + dayText + "일";
+                                            dateText = "<br><strong> 예약일시: </strong >" + yearText + "년 " + monthText + "월 " + dayText + "일";
                                             correctDateText = yearText + "년 " + monthText + "월 " + dayText + "일";
                                         }
 
@@ -3941,7 +3956,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "최근 30일이내 배송/집하목록이 없어 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
+                                                Text = "최근 30일 이내 고객님의 휴대폰 번호로 조회되는 배송/집하목록이 없어 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -5070,21 +5085,12 @@ namespace HanjinChatBot
                     sorryReply.Attachments = new List<Attachment>();
                     //sorryReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
 
-                    List<CardList> text = new List<CardList>();
+                    List<TextList> text = new List<TextList>();
                     List<CardAction> cardButtons = new List<CardAction>();
 
                     text = db.SelectSorryDialogText("5");
                     for (int i = 0; i < text.Count; i++)
                     {
-                        CardAction plButton = new CardAction();
-                        plButton = new CardAction()
-                        {
-                            Type = text[i].btn1Type,
-                            Value = text[i].btn1Context,
-                            Title = text[i].btn1Title
-                        };
-                        cardButtons.Add(plButton);
-
                         UserHeroCard plCard = new UserHeroCard()
                         {
                             Title = text[i].cardTitle,
@@ -5312,7 +5318,7 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    
+
                                 }
 
                             }
@@ -5322,22 +5328,22 @@ namespace HanjinChatBot
                                 //상위 4개 INTENT 디비 등록
                                 String intentName = "";
                                 float checkMinScore = 0.59f;
-                                for (int ii=0; ii<4; ii++)
+                                for (int ii = 0; ii < 4; ii++)
                                 {
-                                    if (Luis_before[i]["intents"][ii]["intent"].ToString().Equals("None")|| Luis_before[i]["intents"][ii]["intent"].ToString().Equals("test intent"))
+                                    if (Luis_before[i]["intents"][ii]["intent"].ToString().Equals("None") || Luis_before[i]["intents"][ii]["intent"].ToString().Equals("test intent"))
                                     {
-                                        
+
                                     }
                                     else
                                     {
                                         //점수는 50점
-                                        Debug.WriteLine("score==========================================================="+ (float)Luis_before[i]["intents"][ii]["score"]);
+                                        Debug.WriteLine("score===========================================================" + (float)Luis_before[i]["intents"][ii]["score"]);
                                         Debug.WriteLine("intent===========================================================" + Luis_before[i]["intents"][ii]["intent"].ToString());
                                         if ((float)Luis_before[i]["intents"][ii]["score"] > checkMinScore)
                                         {
                                             intentName = intentName + Luis_before[i]["intents"][ii]["intent"].ToString() + "%";
                                         }
-                                            
+
                                     }
                                 }
                                 db.UserCheckUpdate(ChannelId, ConversationId, "SORRY_INTENT", intentName);
