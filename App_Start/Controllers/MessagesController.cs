@@ -151,8 +151,8 @@ namespace HanjinChatBot
              * USER DATA CHECK
              * */
             List<UserCheck> userCheck = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
-            Debug.WriteLine("*activity.ChannelId : " + activity.ChannelId + "* activity.Conversation.Id : " + activity.Conversation.Id);
-            Debug.WriteLine("*userCheck.Count() : " + userCheck.Count());
+            //Debug.WriteLine("*activity.ChannelId : " + activity.ChannelId + "* activity.Conversation.Id : " + activity.Conversation.Id);
+            //Debug.WriteLine("*userCheck.Count() : " + userCheck.Count());
             if (userCheck.Count() == 0)
             {
                 int userDataResult = db.UserCheckDataInsert(activity.ChannelId, activity.Conversation.Id);
@@ -222,7 +222,7 @@ namespace HanjinChatBot
                             LUIS_TIME_LIMIT = Convert.ToInt32(confList[i].cnfValue);
                             break;
                         default: //미 정의 레코드
-                            Debug.WriteLine("*conf type : " + confList[i].cnfType + "* conf value : " + confList[i].cnfValue);
+                            //Debug.WriteLine("*conf type : " + confList[i].cnfType + "* conf value : " + confList[i].cnfValue);
                             DButil.HistoryLog("*conf type : " + confList[i].cnfType + "* conf value : " + confList[i].cnfValue);
                             break;
                     }
@@ -282,7 +282,7 @@ namespace HanjinChatBot
                 */
                 LUIS_MINSCORE_LIMIT = "0.2";
 
-                Debug.WriteLine("* DB conn : " + activity.Type);
+                //Debug.WriteLine("* DB conn : " + activity.Type);
                 DButil.HistoryLog("* DB conn : " + activity.Type);
 
                 //초기 다이얼로그 호출
@@ -322,10 +322,10 @@ namespace HanjinChatBot
                 }
 
                 DateTime endTime = DateTime.Now;
-                Debug.WriteLine("프로그램 수행시간 : {0}/ms", ((endTime - startTime).Milliseconds));
-                Debug.WriteLine("* activity.Type : " + activity.Type);
-                Debug.WriteLine("* activity.Recipient.Id : " + activity.Recipient.Id);
-                Debug.WriteLine("* activity.ServiceUrl : " + activity.ServiceUrl);
+                //Debug.WriteLine("프로그램 수행시간 : {0}/ms", ((endTime - startTime).Milliseconds));
+                //Debug.WriteLine("* activity.Type : " + activity.Type);
+                //Debug.WriteLine("* activity.Recipient.Id : " + activity.Recipient.Id);
+                //Debug.WriteLine("* activity.ServiceUrl : " + activity.ServiceUrl);
 
                 DButil.HistoryLog("* activity.Type : " + activity.ChannelData);
                 DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
@@ -397,7 +397,7 @@ namespace HanjinChatBot
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 try
                 {
-                    Debug.WriteLine("* activity.Type == ActivityTypes.Message ");
+                    //Debug.WriteLine("* activity.Type == ActivityTypes.Message ");
                     channelID = activity.ChannelId;
                     string orgMent = activity.Text;
                     DButil.HistoryLog("* activity.Text : " + activity.Text);
@@ -419,7 +419,7 @@ namespace HanjinChatBot
                     DButil.HistoryLog("orgMent : " + orgMent);
                     //금칙어 체크
                     CardList bannedMsg = db.BannedChk(orgMent);
-                    Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
+                    //Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
                     DButil.HistoryLog("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
 
                     //금칙어 처리
@@ -504,7 +504,7 @@ namespace HanjinChatBot
                                 Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
                             }
                             DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
-                            Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
+                            //Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
 
                             float APIluisScoreCompare = 0.0f;
                             JObject APILuis = new JObject();
@@ -530,7 +530,7 @@ namespace HanjinChatBot
                                     APILuisIntent = APILuis["topScoringIntent"]["intent"].ToString();//add
                                     luisScore = APIluisScoreCompare;
                                     db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
-                                    Debug.WriteLine("GetMultiLUIS() LUIS APILuisIntent : " + APILuisIntent);
+                                    //Debug.WriteLine("GetMultiLUIS() LUIS APILuisIntent : " + APILuisIntent);
                                 }
                             }
                             else
@@ -540,7 +540,7 @@ namespace HanjinChatBot
                             }
                             apiIntent = APILuisIntent;
                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
-                            Debug.WriteLine("API INTENT 첫번째 호출(루이스를 통해서)===" + apiIntent);
+                            //Debug.WriteLine("API INTENT 첫번째 호출(루이스를 통해서)===" + apiIntent);
                         }
 
                         Regex r = new Regex("[0-9]");
@@ -686,7 +686,7 @@ namespace HanjinChatBot
 
                             }
                         }
-                        Debug.WriteLine("API INTENT 두번째 호출(문장를 통해서)===" + apiIntent);
+                        //Debug.WriteLine("API INTENT 두번째 호출(문장를 통해서)===" + apiIntent);
                         /*
                          * apiintent 값이 없다면 luis 호출을 한다.
                          * */
@@ -731,7 +731,7 @@ namespace HanjinChatBot
 
                         if (apiIntent.Equals("None"))
                         {
-                            Debug.WriteLine("API INTENT 값이 없으므로 대화셋 검토");
+                            //Debug.WriteLine("API INTENT 값이 없으므로 대화셋 검토");
                             /*
                              * 1. CASH DATA 검토
                              * 2. LUIS 검토
@@ -740,7 +740,7 @@ namespace HanjinChatBot
                             if (cacheList.luisIntent == null || cacheList.luisEntities == null)
                             {
                                 DButil.HistoryLog("cache none : " + orgMent);
-                                Debug.WriteLine("cache none : " + orgMent);
+                                //Debug.WriteLine("cache none : " + orgMent);
                                 int checkNumberLength = onlyNumber.Length;
 
                                 if (containNum == true && checkNumberLength > 8) //숫자가 포함되어 있으면 대화셋의 데이터는 나오지 않는다. 운송장, 예약번호 등이라 판단
@@ -762,10 +762,10 @@ namespace HanjinChatBot
                                     for (int i = 0; i < 2; i++)
                                     {
                                         textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
-                                        Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
+                                        //Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
                                     }
                                     DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
-                                    Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
+                                    //Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
 
                                     JObject Luis_before = new JObject();
                                     float luisScoreCompare = 0.0f;
@@ -790,7 +790,7 @@ namespace HanjinChatBot
 
                                             luisIntent = Luis["topScoringIntent"]["intent"].ToString();//add
                                             luisScore = luisScoreCompare;
-                                            Debug.WriteLine("GetMultiLUIS() LUIS luisIntent : " + luisIntent);
+                                            ////Debug.WriteLine("GetMultiLUIS() LUIS luisIntent : " + luisIntent);
                                         }
                                         apiTFdata = db.getAPITFData(luisIntent);
                                         if (apiTFdata == null)
@@ -988,7 +988,7 @@ namespace HanjinChatBot
                         //SMALLTALK 확인
                         else if (!string.IsNullOrEmpty(smallTalkConfirm))
                         {
-                            Debug.WriteLine("smalltalk dialogue-------------");
+                            //Debug.WriteLine("smalltalk dialogue-------------");
 
                             Random rand = new Random();
 
@@ -1030,8 +1030,8 @@ namespace HanjinChatBot
                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_INTENT", apiIntent);
                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
 
-                            Debug.WriteLine("apiIntent[]-------------" + apiIntent);
-                            Debug.WriteLine("대화셋에서 버튼 클릭-------------" + apiIntent);
+                            //Debug.WriteLine("apiIntent[]-------------" + apiIntent);
+                            //Debug.WriteLine("대화셋에서 버튼 클릭-------------" + apiIntent);
                         }
 
                         /*
@@ -1342,7 +1342,7 @@ namespace HanjinChatBot
                             }
                         }
 
-                        Debug.WriteLine("API INTENT 세번째 호출===" + apiIntent);
+                        //Debug.WriteLine("API INTENT 세번째 호출===" + apiIntent);
                         if (relationList == null && apiIntent.Equals("None"))
                         //if (relationList.Count == 0 && apiIntent.Equals("None"))
                         {
@@ -1352,13 +1352,13 @@ namespace HanjinChatBot
                             }
                             else
                             {
-                                Debug.WriteLine("no dialogue-------------");
+                                //Debug.WriteLine("no dialogue-------------");
 
                                 Activity intentNoneReply = activity.CreateReply();
 
                                 var message = queryStr;
 
-                                Debug.WriteLine("NO DIALOGUE MESSAGE : " + message);
+                                //Debug.WriteLine("NO DIALOGUE MESSAGE : " + message);
 
                                 Activity sorryReply = activity.CreateReply();
                                 sorryReply.Recipient = activity.From;
@@ -1511,9 +1511,9 @@ namespace HanjinChatBot
                     * API 연동부분은 다 이곳에서 처리
                     * 대화셋 APP 는 그대로 진행. API APP도 따로 진행
                     */
-                            Debug.WriteLine("API INTENT 마지막 호출===" + apiIntent);
-                            Debug.WriteLine("luisIntent1-------------" + luisIntent);
-                            Debug.WriteLine("apiOldIntent-------------" + apiOldIntent);
+                            //Debug.WriteLine("API INTENT 마지막 호출===" + apiIntent);
+                            //Debug.WriteLine("luisIntent1-------------" + luisIntent);
+                            //Debug.WriteLine("apiOldIntent-------------" + apiOldIntent);
 
                             Activity apiMakerReply = activity.CreateReply();
 
@@ -1584,7 +1584,7 @@ namespace HanjinChatBot
                                 {
                                     if (apiActiveText.Contains("반품택배예약진행"))//반품택배예약 진행
                                     {
-                                        Debug.WriteLine("onlynumber===========================================" + onlyNumber);
+                                        //Debug.WriteLine("onlynumber===========================================" + onlyNumber);
                                         postParams = new StringBuilder();
                                         postParams.Append("gbn_cod=CHATBOT");
                                         postParams.Append("&wbl_num=" + onlyNumber);
@@ -1867,7 +1867,7 @@ namespace HanjinChatBot
                                             respPostStream = wResp.GetResponseStream();
                                             readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                             String DeliveryListJsonData = readerPost.ReadToEnd();
-                                            Debug.WriteLine("DeliveryListJsonData===" + DeliveryListJsonData);
+                                            //Debug.WriteLine("DeliveryListJsonData===" + DeliveryListJsonData);
                                             JArray obj = JArray.Parse(DeliveryListJsonData);
 
                                             foreach (JObject jobj in obj)
@@ -2265,7 +2265,7 @@ namespace HanjinChatBot
                                             respPostStream = wResp.GetResponseStream();
                                             readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                             String DeliveryCollectionJsonData = readerPost.ReadToEnd();
-                                            Debug.WriteLine("post data(예약확인)====" + DeliveryCollectionJsonData);
+                                            //Debug.WriteLine("post data(예약확인)====" + DeliveryCollectionJsonData);
                                             JArray obj = JArray.Parse(DeliveryCollectionJsonData);
                                             int checkInt = obj.Count;
 
@@ -2534,7 +2534,7 @@ namespace HanjinChatBot
                                     respPostStream = wResp.GetResponseStream();
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                     String bookCancelResultJsonData = readerPost.ReadToEnd();
-                                    Debug.WriteLine("post data(예약취소)====" + bookCancelResultJsonData);
+                                    //Debug.WriteLine("post data(예약취소)====" + bookCancelResultJsonData);
                                     /*
                                     WebClient webClient = new WebClient();
                                     String sample = bookCancelResult + "?gbn_cod=CHATBOT&rsv_num=" + bookNumber+"&can_gbn="+ whyCancelNm+"&tel_num="+requestPhone;
@@ -2633,7 +2633,7 @@ namespace HanjinChatBot
                                     respPostStream = wResp.GetResponseStream();
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                     String bookCancelYNJsonData = readerPost.ReadToEnd();
-                                    Debug.WriteLine("post data(예약취소확인)====" + bookCancelYNJsonData);
+                                    //Debug.WriteLine("post data(예약취소확인)====" + bookCancelYNJsonData);
                                     /************************************************/
                                     /*
                                     WebClient webClient = new WebClient();
@@ -2817,7 +2817,7 @@ namespace HanjinChatBot
                                             respPostStream = wResp.GetResponseStream();
                                             readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                             String DeliveryCollectionJsonData = readerPost.ReadToEnd();
-                                            Debug.WriteLine("post data(예약취소)====" + DeliveryCollectionJsonData);
+                                            //Debug.WriteLine("post data(예약취소)====" + DeliveryCollectionJsonData);
                                             /************************************************/
                                             /*
                                             WebClient webClient = new WebClient();
@@ -3024,7 +3024,7 @@ namespace HanjinChatBot
                                     respPostStream = wResp.GetResponseStream();
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                     String findWayBillNmJsonData = readerPost.ReadToEnd();
-                                    Debug.WriteLine("post data(운송장번호확인)====" + findWayBillNmJsonData);
+                                    //Debug.WriteLine("post data(운송장번호확인)====" + findWayBillNmJsonData);
                                     /************************************************/
                                     /*
                                     WebClient webClient = new WebClient();
@@ -3144,7 +3144,7 @@ namespace HanjinChatBot
                                         respPostStream = wResp.GetResponseStream();
                                         readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                         String goodLocationJsonData = readerPost.ReadToEnd();
-                                        Debug.WriteLine("post data(택배배송일정조회)====" + goodLocationJsonData);
+                                        //Debug.WriteLine("post data(택배배송일정조회)====" + goodLocationJsonData);
                                         /************************************************/
                                         /*
                                         WebClient webClient = new WebClient();
@@ -3362,7 +3362,7 @@ namespace HanjinChatBot
                                             respPostStream = wResp.GetResponseStream();
                                             readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                             String DeliveryListJsonData = readerPost.ReadToEnd();
-                                            Debug.WriteLine("post data(택배배송목록)====" + DeliveryListJsonData);
+                                            //Debug.WriteLine("post data(택배배송목록)====" + DeliveryListJsonData);
                                             /************************************************/
                                             /*
                                             String sample = DeliveryList + "?tel_num=" + requestPhone + "&pag_num=" + deliveryListPageNum + "&pag_cnt=" + pageCnt;
@@ -3613,7 +3613,7 @@ namespace HanjinChatBot
                                     respPostStream = wResp.GetResponseStream();
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                     String goodLocationJsonData = readerPost.ReadToEnd();
-                                    Debug.WriteLine("post data(집배점기사연락처)====" + goodLocationJsonData);
+                                    //Debug.WriteLine("post data(집배점기사연락처)====" + goodLocationJsonData);
                                     /************************************************/
                                     /*
                                     WebClient webClient = new WebClient();
@@ -3711,7 +3711,7 @@ namespace HanjinChatBot
                                         respPostStream = wResp.GetResponseStream();
                                         readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                         String findOrgInfoJsonData = readerPost.ReadToEnd();
-                                        Debug.WriteLine("post data(주소로서집배점찾기)====" + findOrgInfoJsonData);
+                                        //Debug.WriteLine("post data(주소로서집배점찾기)====" + findOrgInfoJsonData);
                                         /************************************************/
                                         /*
                                         WebClient webClient = new WebClient();
@@ -3918,7 +3918,7 @@ namespace HanjinChatBot
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
 
                                     String requestAuthJsonData = readerPost.ReadToEnd();
-                                    Debug.WriteLine("post data(인증시 전화번호로 하기)====" + requestAuthJsonData);
+                                    //Debug.WriteLine("post data(인증시 전화번호로 하기)====" + requestAuthJsonData);
 
                                     JArray obj = JArray.Parse(requestAuthJsonData);
                                     foreach (JObject jobj in obj)
@@ -4032,7 +4032,7 @@ namespace HanjinChatBot
                                     respPostStream = wResp.GetResponseStream();
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                     String responseAuthJsonData = readerPost.ReadToEnd();
-                                    Debug.WriteLine("post data(인증확인)====" + responseAuthJsonData);
+                                    //Debug.WriteLine("post data(인증확인)====" + responseAuthJsonData);
 
                                     JArray obj = JArray.Parse(responseAuthJsonData);
                                     foreach (JObject jobj in obj)
@@ -4117,7 +4117,7 @@ namespace HanjinChatBot
                                                 respPostStream = wResp.GetResponseStream();
                                                 readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                                 String DeliveryListJsonData = readerPost.ReadToEnd();
-                                                Debug.WriteLine("post data(인증확인후반품택배예약목록)====" + DeliveryListJsonData);
+                                                //Debug.WriteLine("post data(인증확인후반품택배예약목록)====" + DeliveryListJsonData);
 
                                                 JArray obj1 = JArray.Parse(DeliveryListJsonData);
 
@@ -4331,7 +4331,7 @@ namespace HanjinChatBot
                                                 respPostStream = wResp.GetResponseStream();
                                                 readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                                 String DeliveryCollectionJsonData = readerPost.ReadToEnd();
-                                                Debug.WriteLine("post data DeliveryCollection====" + DeliveryCollectionJsonData);
+                                                //Debug.WriteLine("post data DeliveryCollection====" + DeliveryCollectionJsonData);
 
                                                 JArray obj2 = JArray.Parse(DeliveryCollectionJsonData);
                                                 int checkInt = obj2.Count;
@@ -4533,7 +4533,7 @@ namespace HanjinChatBot
                                                 respPostStream = wResp.GetResponseStream();
                                                 readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                                 String DeliveryCollectionJsonData = readerPost.ReadToEnd();
-                                                Debug.WriteLine("post data(인증후예약취소목록)====" + DeliveryCollectionJsonData);
+                                                //Debug.WriteLine("post data(인증후예약취소목록)====" + DeliveryCollectionJsonData);
                                                 /************************************************/
                                                 /*
                                                 WebClient webClient = new WebClient();
@@ -4718,7 +4718,7 @@ namespace HanjinChatBot
                                                 respPostStream = wResp.GetResponseStream();
                                                 readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                                 String DeliveryListJsonData = readerPost.ReadToEnd();
-                                                Debug.WriteLine("post data(인증후택배배송목록)====" + DeliveryListJsonData);
+                                                //Debug.WriteLine("post data(인증후택배배송목록)====" + DeliveryListJsonData);
                                                 JArray obj4 = JArray.Parse(DeliveryListJsonData);
 
                                                 int checkInt = obj4.Count;
@@ -4979,7 +4979,7 @@ namespace HanjinChatBot
                                         readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
 
                                         String requestAuthJsonData = readerPost.ReadToEnd();
-                                        Debug.WriteLine("post data(인증시 이름으로하기)====" + requestAuthJsonData);
+                                        //Debug.WriteLine("post data(인증시 이름으로하기)====" + requestAuthJsonData);
 
                                         JArray obj = JArray.Parse(requestAuthJsonData);
                                         foreach (JObject jobj in obj)
@@ -5172,8 +5172,8 @@ namespace HanjinChatBot
             {
                 string url = string.Format("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", textList[k][1], textList[k][2], query);
 
-                Debug.WriteLine("-----LUIS URL 확인");
-                Debug.WriteLine("-----LUIS URL : " + url);
+                //Debug.WriteLine("-----LUIS URL 확인");
+                //Debug.WriteLine("-----LUIS URL : " + url);
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -5186,7 +5186,7 @@ namespace HanjinChatBot
 
                         int currentRetry = 0;
 
-                        Debug.WriteLine("msg.IsSuccessStatusCode1 = " + msg.IsSuccessStatusCode);
+                        //Debug.WriteLine("msg.IsSuccessStatusCode1 = " + msg.IsSuccessStatusCode);
                         //HistoryLog("msg.IsSuccessStatusCode1 = " + msg.IsSuccessStatusCode);
 
                         if (msg.IsSuccessStatusCode)
@@ -5209,7 +5209,7 @@ namespace HanjinChatBot
                                 if (msg_re.IsSuccessStatusCode)
                                 {
                                     //다시 호출
-                                    Debug.WriteLine("msg.IsSuccessStatusCode2 = " + msg_re.IsSuccessStatusCode);
+                                    //Debug.WriteLine("msg.IsSuccessStatusCode2 = " + msg_re.IsSuccessStatusCode);
                                     //HistoryLog("msg.IsSuccessStatusCode2 = " + msg.IsSuccessStatusCode);
                                     var JsonDataResponse = await msg_re.Content.ReadAsStringAsync();
                                     Luis_before[k] = JObject.Parse(JsonDataResponse);
@@ -5226,7 +5226,7 @@ namespace HanjinChatBot
                                     //    'intents':[],
                                     //    'entities':'[]'
                                     //}");
-                                    Debug.WriteLine("GetIntentFromBotLUIS else print ");
+                                    //Debug.WriteLine("GetIntentFromBotLUIS else print ");
                                     //HistoryLog("GetIntentFromBotLUIS else print ");
                                     Luis_before[k] = JObject.Parse(@"{
                                                                         'query': '',
@@ -5251,7 +5251,7 @@ namespace HanjinChatBot
                     }
                     catch (TaskCanceledException e)
                     {
-                        Debug.WriteLine("GetIntentFromBotLUIS error = " + e.Message);
+                        //Debug.WriteLine("GetIntentFromBotLUIS error = " + e.Message);
                         //HistoryLog("GetIntentFromBotLUIS error = " + e.Message);
                         //초기화
                         //jsonObj = JObject.Parse(@"{
@@ -5337,8 +5337,8 @@ namespace HanjinChatBot
                                     else
                                     {
                                         //점수는 50점
-                                        Debug.WriteLine("score===========================================================" + (float)Luis_before[i]["intents"][ii]["score"]);
-                                        Debug.WriteLine("intent===========================================================" + Luis_before[i]["intents"][ii]["intent"].ToString());
+                                        //Debug.WriteLine("score===========================================================" + (float)Luis_before[i]["intents"][ii]["score"]);
+                                        //Debug.WriteLine("intent===========================================================" + Luis_before[i]["intents"][ii]["intent"].ToString());
                                         if ((float)Luis_before[i]["intents"][ii]["score"] > checkMinScore)
                                         {
                                             intentName = intentName + Luis_before[i]["intents"][ii]["intent"].ToString() + "%";
@@ -5369,8 +5369,8 @@ namespace HanjinChatBot
             {
                 string url = string.Format("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/{0}?subscription-key={1}&timezoneOffset=0&verbose=true&q={2}", textList[k][1], textList[k][2], query);
 
-                Debug.WriteLine("-----LUIS URL 확인");
-                Debug.WriteLine("-----LUIS URL : " + url);
+                //Debug.WriteLine("-----LUIS URL 확인");
+                //Debug.WriteLine("-----LUIS URL : " + url);
 
                 using (HttpClient client = new HttpClient())
                 {
@@ -5383,7 +5383,7 @@ namespace HanjinChatBot
 
                         int currentRetry = 0;
 
-                        Debug.WriteLine("msg.IsSuccessStatusCode1 = " + msg.IsSuccessStatusCode);
+                        //Debug.WriteLine("msg.IsSuccessStatusCode1 = " + msg.IsSuccessStatusCode);
                         //HistoryLog("msg.IsSuccessStatusCode1 = " + msg.IsSuccessStatusCode);
 
                         if (msg.IsSuccessStatusCode)
@@ -5406,7 +5406,7 @@ namespace HanjinChatBot
                                 if (msg_re.IsSuccessStatusCode)
                                 {
                                     //다시 호출
-                                    Debug.WriteLine("msg.IsSuccessStatusCode2 = " + msg_re.IsSuccessStatusCode);
+                                    //Debug.WriteLine("msg.IsSuccessStatusCode2 = " + msg_re.IsSuccessStatusCode);
                                     //HistoryLog("msg.IsSuccessStatusCode2 = " + msg.IsSuccessStatusCode);
                                     var JsonDataResponse = await msg_re.Content.ReadAsStringAsync();
                                     Luis_before[k] = JObject.Parse(JsonDataResponse);
@@ -5423,7 +5423,7 @@ namespace HanjinChatBot
                                     //    'intents':[],
                                     //    'entities':'[]'
                                     //}");
-                                    Debug.WriteLine("GetIntentFromBotLUIS else print ");
+                                    //Debug.WriteLine("GetIntentFromBotLUIS else print ");
                                     //HistoryLog("GetIntentFromBotLUIS else print ");
                                     Luis_before[k] = JObject.Parse(@"{
                                                                         'query': '',
@@ -5448,7 +5448,7 @@ namespace HanjinChatBot
                     }
                     catch (TaskCanceledException e)
                     {
-                        Debug.WriteLine("GetIntentFromBotLUIS error = " + e.Message);
+                        //Debug.WriteLine("GetIntentFromBotLUIS error = " + e.Message);
                         //HistoryLog("GetIntentFromBotLUIS error = " + e.Message);
                         //초기화
                         //jsonObj = JObject.Parse(@"{
