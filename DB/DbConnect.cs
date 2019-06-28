@@ -36,7 +36,7 @@ namespace HanjinChatBot.DB
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                //Debug.WriteLine(e);
             }
             finally
             {
@@ -69,7 +69,7 @@ namespace HanjinChatBot.DB
                 cmd.CommandText += " ORDER BY DLG_ORDER_NO            ";
 
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-                DButil.HistoryLog(" db SelectInitDialog !! ");
+                //DButil.HistoryLog(" db SelectInitDialog !! ");
 
 
                 while (rdr.Read())
@@ -564,7 +564,7 @@ namespace HanjinChatBot.DB
         {
             SqlDataReader rdr = null;
             CacheList result = new CacheList();
-            Debug.WriteLine("CacheChk() parameter : " + orgMent);
+            //Debug.WriteLine("CacheChk() parameter : " + orgMent);
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
@@ -622,7 +622,7 @@ namespace HanjinChatBot.DB
                     //result.luisEntitiesValue = luisEntitiesValue;
 
 
-                    Debug.WriteLine("Yes rdr | intentId : " + intentId + " | entitiesId : " + entitiesId + " | luisScore : " + luisScore);
+                    //Debug.WriteLine("Yes rdr | intentId : " + intentId + " | entitiesId : " + entitiesId + " | luisScore : " + luisScore);
                 }
 
             }
@@ -633,9 +633,9 @@ namespace HanjinChatBot.DB
         {
             SqlDataReader rdr = null;
             List<RelationList> result = new List<RelationList>();
-            Debug.WriteLine("luisId ::: " + luisId);
-            Debug.WriteLine("intentId ::: " + intentId);
-            Debug.WriteLine("entitiesId ::: " + entitiesId);
+            //Debug.WriteLine("luisId ::: " + luisId);
+            //Debug.WriteLine("intentId ::: " + intentId);
+            //Debug.WriteLine("entitiesId ::: " + entitiesId);
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
@@ -678,7 +678,7 @@ namespace HanjinChatBot.DB
 
 
 
-                Debug.WriteLine("query : " + cmd.CommandText);
+                //Debug.WriteLine("query : " + cmd.CommandText);
 
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 while (rdr.Read())
@@ -714,9 +714,9 @@ namespace HanjinChatBot.DB
                 cmd.CommandText += " WHERE  LUIS_INTENT = @intent                                                ";
                 //cmd.CommandText += " AND  LUIS_ENTITIES = @entities                                                ";
 
-                Debug.WriteLine("query : " + cmd.CommandText);
-                Debug.WriteLine("entity : " + entity);
-                Debug.WriteLine("intent : " + intent);
+                //Debug.WriteLine("query : " + cmd.CommandText);
+                //Debug.WriteLine("entity : " + entity);
+                //Debug.WriteLine("intent : " + intent);
                 cmd.Parameters.AddWithValue("@intent", intent);
                 cmd.Parameters.AddWithValue("@entities", entity);
 
@@ -764,7 +764,7 @@ namespace HanjinChatBot.DB
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                DButil.HistoryLog("db conn SelectConfig !!");
+                //DButil.HistoryLog("db conn SelectConfig !!");
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
                 cmd.CommandText = " SELECT CNF_TYPE, CNF_NM, CNF_VALUE" +
@@ -772,7 +772,7 @@ namespace HanjinChatBot.DB
                                   //" WHERE CNF_TYPE = 'LUIS_APP_ID' " +
                                   " ORDER BY CNF_TYPE DESC, ORDER_NO ASC ";
 
-                Debug.WriteLine("* cmd.CommandText : " + cmd.CommandText);
+                //Debug.WriteLine("* cmd.CommandText : " + cmd.CommandText);
                 //cmd.Parameters.AddWithValue("@config_type", config_type);
 
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -790,8 +790,8 @@ namespace HanjinChatBot.DB
                     list.cnfValue = cnfValue;
 
 
-                    Debug.WriteLine("* cnfNm : " + cnfNm + " || cnfValue : " + cnfValue);
-                    DButil.HistoryLog("* cnfNm : " + cnfNm + " || cnfValue : " + cnfValue);
+                    //Debug.WriteLine("* cnfNm : " + cnfNm + " || cnfValue : " + cnfValue);
+                    //DButil.HistoryLog("* cnfNm : " + cnfNm + " || cnfValue : " + cnfValue);
                     conflist.Add(list);
                 }
             }
@@ -925,7 +925,7 @@ namespace HanjinChatBot.DB
                 //}
                 //else
                 //{
-                Debug.WriteLine("DDDDDD : " + Regex.Replace(queryStr, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline).Trim().ToLower());
+                //Debug.WriteLine("DDDDDD : " + Regex.Replace(queryStr, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline).Trim().ToLower());
                 cmd.Parameters.AddWithValue("@Query", Regex.Replace(queryStr, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline).Trim().ToLower());
                 cmd.Parameters.AddWithValue("@intentID", intentName.Trim());
                 cmd.Parameters.AddWithValue("@entitiesIDS", entities.Trim().ToLower());
@@ -1113,9 +1113,9 @@ namespace HanjinChatBot.DB
                 catch (Exception ex)
                 {
                     result = '1';
-                    Debug.WriteLine("ex : " + ex.Message);
+                    //Debug.WriteLine("ex : " + ex.Message);
                 }
-                //Debug.WriteLine("result : " + result);
+                ////Debug.WriteLine("result : " + result);
             }
             return result;
         }        
@@ -1155,7 +1155,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
 
@@ -1203,7 +1203,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
 
@@ -1243,7 +1243,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
 
@@ -1279,7 +1279,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
 
             }
@@ -1326,7 +1326,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
             }
             return result;
@@ -1379,7 +1379,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
             }
@@ -1501,7 +1501,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
             }
             return result;
@@ -1545,7 +1545,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
             }
@@ -1576,7 +1576,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
 
             }
@@ -1601,7 +1601,7 @@ namespace HanjinChatBot.DB
 
                 cmd.Parameters.AddWithValue("@channeldata", conversationsId);
                 cmd.Parameters.AddWithValue("@err", err);
-                DButil.HistoryLog("InsertError START");
+                //DButil.HistoryLog("InsertError START");
 
                 try
                 {
@@ -1609,10 +1609,10 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
-                    DButil.HistoryLog("InsertError ERROR");
+                    //Debug.WriteLine(e.Message);
+                    //DButil.HistoryLog("InsertError ERROR");
                 }
-                DButil.HistoryLog("InsertError END");
+                //DButil.HistoryLog("InsertError END");
             }
             return result;
         }
@@ -1653,7 +1653,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
 
@@ -1703,7 +1703,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
                 
@@ -1742,7 +1742,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
+                    //Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
 
@@ -1760,14 +1760,14 @@ namespace HanjinChatBot.DB
             using (SqlConnection conn = new SqlConnection(connStr))
             {
                 conn.Open();
-                DButil.HistoryLog("db conn APIConfList !!");
+                //DButil.HistoryLog("db conn APIConfList !!");
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
                 cmd.CommandText = " SELECT API_NAME, API_INTENT, API_URL, API_KORNAME" +
                                   " FROM TBL_CHATBOT_API " +
                                   " ORDER BY API_NAME DESC ";
 
-                Debug.WriteLine("* cmd.CommandText : " + cmd.CommandText);
+                //Debug.WriteLine("* cmd.CommandText : " + cmd.CommandText);
                 //cmd.Parameters.AddWithValue("@config_type", config_type);
 
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -1794,7 +1794,7 @@ namespace HanjinChatBot.DB
 
         public int UserReportDataInsert(string consultingDataTemp)
         {
-            DButil.HistoryLog("db conn UserReportDataInsert !!");
+            //DButil.HistoryLog("db conn UserReportDataInsert !!");
             String consultingData = consultingDataTemp.Substring(11);
             
             SqlDataReader rdr = null;
@@ -1811,8 +1811,8 @@ namespace HanjinChatBot.DB
             int rCount = Int32.Parse(consultingDataDB[0]);
             String rComment = consultingDataDB[1];
 
-            DButil.HistoryLog("rCount=="+rCount);
-            DButil.HistoryLog("rComment==" + rComment);
+            //DButil.HistoryLog("rCount=="+rCount);
+            //DButil.HistoryLog("rComment==" + rComment);
 
             using (SqlConnection conn = new SqlConnection(connStr))
             {
@@ -1835,8 +1835,8 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine(e.Message);
-                    DButil.HistoryLog(e.Message);
+                    //Debug.WriteLine(e.Message);
+                    //DButil.HistoryLog(e.Message);
                 }
 
             }
