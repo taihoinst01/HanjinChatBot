@@ -929,7 +929,7 @@ namespace HanjinChatBot.DB
                 cmd.Parameters.AddWithValue("@Query", Regex.Replace(queryStr, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline).Trim().ToLower());
                 cmd.Parameters.AddWithValue("@intentID", intentName.Trim());
                 cmd.Parameters.AddWithValue("@entitiesIDS", entities.Trim().ToLower());
-                if (result.Equals("D") || result.Equals("S") || result.Equals("G") || result.Equals("Q") || result.Equals("I") || result.Equals("E") || result.Equals("Z") || result.Equals("B"))
+                if (result.Equals("D") || result.Equals("S") || result.Equals("E") || result.Equals("B"))
                 {
                     cmd.Parameters.AddWithValue("@intentScore", "0");
                 }
@@ -1065,27 +1065,11 @@ namespace HanjinChatBot.DB
                 }
                 else if (reply_result.Equals("D"))
                 {
-                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "ERROR");
+                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "SORRY MESSAGE");
                 }
                 else if (reply_result.Equals("E"))
                 {
-                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "ERROR");
-                }
-                else if (reply_result.Equals("G"))
-                {
-                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "SUGGESTION");
-                }
-                else if (reply_result.Equals("I"))
-                {
-                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "SAPINIT");
-                }
-                else if (reply_result.Equals("Q"))
-                {
-                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "SAP");
-                }
-                else if (reply_result.Equals("Z"))
-                {
-                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "SAP");
+                    cmd.Parameters.AddWithValue("@chatbotCommentCode", "SYSTEM ERROR");
                 }
                 else if (reply_result.Equals("B"))
                 {
@@ -1742,7 +1726,7 @@ namespace HanjinChatBot.DB
                 }
                 catch (Exception e)
                 {
-                    //Debug.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
                 }
                 rdr.Close();
 

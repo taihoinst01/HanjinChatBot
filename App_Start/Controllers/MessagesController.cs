@@ -62,8 +62,8 @@ namespace HanjinChatBot
         public static string channelID = "";
 
         //API변수선언
-        static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
-        //static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
+        //static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
+        static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
         static public string DeliveryList = apiUrl + "ipcc_api.get_wbls";                 //택배목록
         static public string ReturnDeliveryResult = apiUrl + "ipcc_api.get_rtn_info";                 //반품예약가능여부
         static public string ReturnDeliveryRequest = apiUrl + "ipcc_api.req_rsv_rtn";                 //반품예약요청
@@ -501,7 +501,7 @@ namespace HanjinChatBot
                             for (int i = 0; i < 2; i++)
                             {
                                 apiTextList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APPAPI_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
-                                Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
+                                //Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
                             }
                             //DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
                             //Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
@@ -972,7 +972,7 @@ namespace HanjinChatBot
                                 if (commonReply.Attachments.Count > 0)
                                 {
                                     SetActivity(commonReply);
-
+                                    /*
                                     //NONE_DLG 예외처리
                                     if (luisIntent.Equals("NONE_DLG"))
                                     {
@@ -982,6 +982,7 @@ namespace HanjinChatBot
                                     {
                                         replyresult = "H";
                                     }
+                                    */
                                 }
                             }
                         }
@@ -1371,71 +1372,8 @@ namespace HanjinChatBot
                                 List<CardAction> cardButtons = new List<CardAction>();
                                 List<TextList> textList = new List<TextList>();
                                 String sorryIntentDB = db.getSorryIntent(activity.Conversation.Id);
-                                MatchCollection matches = Regex.Matches(sorryIntentDB, "%");
-                                int cnt = matches.Count;
-
-                                if (cnt > 0)
-                                {
-                                    textList = db.SelectSorryDialogText("6");
-                                    String textListCardText = "";
-                                    for (int i = 0; i < textList.Count; i++)
-                                    {
-                                        textListCardText = textList[i].cardText;
-                                    }
-                                    sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
-                                    if (sorryIntentDB.Contains("%"))
-                                    {
-                                        String[] sorryIntentArray;
-                                        sorryIntentArray = sorryIntentDB.Split('%');
-                                        for (int jj = 0; jj < sorryIntentArray.Length; jj++)
-                                        {
-                                            String query = db.getLuisMINData(sorryIntentArray[jj]);
-                                            CardAction sorryButton = new CardAction();
-                                            sorryButton = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = query,
-                                                Title = query
-                                            };
-                                            cardButtons.Add(sorryButton);
-                                        }
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            //Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
-                                            Text = textListCardText,
-                                            Buttons = cardButtons
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        sorryReply.Attachments.Add(plAttachment);
-                                        SetActivity(sorryReply);
-                                    }
-                                    else
-                                    {
-                                        String query = db.getLuisMINData(sorryIntentDB);
-                                        CardAction sorryButton = new CardAction();
-                                        sorryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = query,
-                                            Title = query
-                                        };
-                                        cardButtons.Add(sorryButton);
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            //Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
-                                            Text = textListCardText,
-                                            Buttons = cardButtons
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        sorryReply.Attachments.Add(plAttachment);
-                                        SetActivity(sorryReply);
-                                    }
-                                }
-                                else
+                                
+                                if(sorryIntentDB == null || sorryIntentDB.Equals(""))
                                 {
                                     textList = db.SelectSorryDialogText("5");
                                     String textListCardText = "";
@@ -1452,19 +1390,110 @@ namespace HanjinChatBot
                                     Attachment plAttachment = plCard.ToAttachment();
                                     sorryReply.Attachments.Add(plAttachment);
                                     SetActivity(sorryReply);
+
+                                    DateTime endTime1 = DateTime.Now;
+                                    db.insertHistory(null, activity.Conversation.Id, activity.ChannelId, ((endTime1 - MessagesController.startTime).Milliseconds), "", "", "", "", "D", queryStr);
+                                }
+                                else
+                                {
+                                    MatchCollection matches = Regex.Matches(sorryIntentDB, "%");
+                                    int cnt = matches.Count;
+
+                                    if (cnt > 0)
+                                    {
+                                        textList = db.SelectSorryDialogText("6");
+                                        String textListCardText = "";
+                                        for (int i = 0; i < textList.Count; i++)
+                                        {
+                                            textListCardText = textList[i].cardText;
+                                        }
+                                        sorryIntentDB = sorryIntentDB.Remove(sorryIntentDB.Length - 1);
+                                        if (sorryIntentDB.Contains("%"))
+                                        {
+                                            String[] sorryIntentArray;
+                                            sorryIntentArray = sorryIntentDB.Split('%');
+                                            for (int jj = 0; jj < sorryIntentArray.Length; jj++)
+                                            {
+                                                String query = db.getLuisMINData(sorryIntentArray[jj]);
+                                                CardAction sorryButton = new CardAction();
+                                                sorryButton = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = query,
+                                                    Title = query
+                                                };
+                                                cardButtons.Add(sorryButton);
+                                            }
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                //Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                                Text = textListCardText,
+                                                Buttons = cardButtons
+                                            };
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            sorryReply.Attachments.Add(plAttachment);
+                                            SetActivity(sorryReply);
+                                        }
+                                        else
+                                        {
+                                            String query = db.getLuisMINData(sorryIntentDB);
+                                            CardAction sorryButton = new CardAction();
+                                            sorryButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = query,
+                                                Title = query
+                                            };
+                                            cardButtons.Add(sorryButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                //Text = "문의하시려는 항목을 아래에서 선택해 주세요.<br>원하시는 항목이 없으면 이렇게 입력해 보세요.<br><br>예)택배예약은 어떻게 하나요?, 배송조회 해 주세요, 반품예약접수 도와줘",
+                                                Text = textListCardText,
+                                                Buttons = cardButtons
+                                            };
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            sorryReply.Attachments.Add(plAttachment);
+                                            SetActivity(sorryReply);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        textList = db.SelectSorryDialogText("5");
+                                        String textListCardText = "";
+                                        for (int i = 0; i < textList.Count; i++)
+                                        {
+                                            textListCardText = textList[i].cardText;
+                                        }
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            //Text = "죄송합니다.고객님의 질문을 이해하지 못했어요.<br>\"택배예약은 어떻게 하나요?, 배송조회 해주세요, 반품예약접수 도와줘\"<br>이렇게 질문해 주시면 좋아요!<br>저는 택배와 관련된 질문에 답을 드릴 수 있어요!",
+                                            Text = textListCardText,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        sorryReply.Attachments.Add(plAttachment);
+                                        SetActivity(sorryReply);
+                                    }
+
+                                    replyresult = "D";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "SORRY_INTENT", "");
                                 }
 
-                                replyresult = "D";
-                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "SORRY_INTENT", "");
+
+                                
 
                                 /*
-                                Debug.WriteLine("no dialogue-------------");
+                                //Debug.WriteLine("no dialogue-------------");
 
                                 Activity intentNoneReply = activity.CreateReply();
 
                                 var message = queryStr;
 
-                                Debug.WriteLine("NO DIALOGUE MESSAGE : " + message);
+                                //Debug.WriteLine("NO DIALOGUE MESSAGE : " + message);
 
                                 Activity sorryReply = activity.CreateReply();
                                 sorryReply.Recipient = activity.From;
@@ -1529,7 +1558,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
-                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
+                            requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
@@ -3029,7 +3058,7 @@ namespace HanjinChatBot
                                     /*
                                     WebClient webClient = new WebClient();
                                     String sample = findWayBillNm + "?wbl_rsv=" + bookNumber;
-                                    Debug.WriteLine("URL==" + sample);
+                                    //Debug.WriteLine("URL==" + sample);
                                     Stream stream = webClient.OpenRead(sample);
                                     String findWayBillNmJsonData = new StreamReader(stream, Encoding.GetEncoding("ks_c_5601-1987"), true).ReadToEnd();
                                     */
