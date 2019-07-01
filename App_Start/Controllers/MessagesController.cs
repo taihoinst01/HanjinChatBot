@@ -62,8 +62,8 @@ namespace HanjinChatBot
         public static string channelID = "";
 
         //API변수선언
-        //static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
-        static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
+        static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
+        //static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
         static public string DeliveryList = apiUrl + "ipcc_api.get_wbls";                 //택배목록
         static public string ReturnDeliveryResult = apiUrl + "ipcc_api.get_rtn_info";                 //반품예약가능여부
         static public string ReturnDeliveryRequest = apiUrl + "ipcc_api.req_rsv_rtn";                 //반품예약요청
@@ -930,7 +930,7 @@ namespace HanjinChatBot
                             dlgId = "";
                             mobilePC = uData[0].mobilePc;
                             /*********************************************************************************/
-                            mobilePC = "PC"; //TEST CODE 입니다....반드시 삭제할 것!!!!!!!!!!!!!!!!!!!!!!
+                            //mobilePC = "PC"; //TEST CODE 입니다....반드시 삭제할 것!!!!!!!!!!!!!!!!!!!!!!
                                              /* *******************************************************************************/
                             for (int m = 0; m < relationList.Count; m++)
                             {
@@ -1557,8 +1557,8 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
-                            requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
+                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
+                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
