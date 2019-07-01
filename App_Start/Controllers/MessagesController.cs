@@ -111,17 +111,17 @@ namespace HanjinChatBot
 
             DbConnect db = new DbConnect();
             DButil dbutil = new DButil();
-            //DButil.HistoryLog("db connect !! ");
+            DButil.HistoryLog("db connect !! ");
             //HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
             HttpResponseMessage response;
 
-            //DButil.HistoryLog("activity.CreateReply() !! ");
+            DButil.HistoryLog("activity.CreateReply() !! ");
             Activity reply1 = activity.CreateReply();
             Activity reply2 = activity.CreateReply();
             Activity reply3 = activity.CreateReply();
             Activity reply4 = activity.CreateReply();
 
-            //DButil.HistoryLog("SetActivity!! ");
+            DButil.HistoryLog("SetActivity!! ");
             // Activity 값 유무 확인하는 익명 메소드
             Action<Activity> SetActivity = (act) =>
             {
@@ -157,7 +157,7 @@ namespace HanjinChatBot
             {
                 int userDataResult = db.UserCheckDataInsert(activity.ChannelId, activity.Conversation.Id);
             }
-            //DButil.HistoryLog("userCheck insert end ");
+            DButil.HistoryLog("userCheck insert end ");
 
             if (activity.Type == ActivityTypes.ConversationUpdate && activity.MembersAdded.Any(m => m.Id == activity.Recipient.Id))
             {
@@ -184,9 +184,9 @@ namespace HanjinChatBot
                     Array.Clear(LUIS_APPAPI_ID, 0, LUIS_APPAPI_ID.Length);
                 }
 
-                //DButil.HistoryLog("db SelectConfig start !! ");
+                DButil.HistoryLog("db SelectConfig start !! ");
                 List<ConfList> confList = db.SelectConfig();
-                //DButil.HistoryLog("db SelectConfig end!! ");
+                DButil.HistoryLog("db SelectConfig end!! ");
 
                 for (int i = 0; i < confList.Count; i++)
                 {
@@ -223,7 +223,7 @@ namespace HanjinChatBot
                             break;
                         default: //미 정의 레코드
                             Debug.WriteLine("*conf type : " + confList[i].cnfType + "* conf value : " + confList[i].cnfValue);
-                            //DButil.HistoryLog("*conf type : " + confList[i].cnfType + "* conf value : " + confList[i].cnfValue);
+                            DButil.HistoryLog("*conf type : " + confList[i].cnfType + "* conf value : " + confList[i].cnfValue);
                             break;
                     }
                 }
@@ -283,7 +283,7 @@ namespace HanjinChatBot
                 LUIS_MINSCORE_LIMIT = "0.2";
 
                 Debug.WriteLine("* DB conn : " + activity.Type);
-                //DButil.HistoryLog("* DB conn : " + activity.Type);
+                DButil.HistoryLog("* DB conn : " + activity.Type);
 
                 //초기 다이얼로그 호출
                 List<DialogList> dlg = db.SelectInitDialog(activity.ChannelId);
@@ -327,43 +327,43 @@ namespace HanjinChatBot
                 Debug.WriteLine("* activity.Recipient.Id : " + activity.Recipient.Id);
                 Debug.WriteLine("* activity.ServiceUrl : " + activity.ServiceUrl);
 
-                //DButil.HistoryLog("* activity.Type : " + activity.ChannelData);
-                //DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
-                //DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
+                DButil.HistoryLog("* activity.Type : " + activity.ChannelData);
+                DButil.HistoryLog("* activity.Recipient.Id : " + activity.Recipient.Id);
+                DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
             }
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) //전화번호 받아오는 부분 처리
             {
-                //DButil.HistoryLog("* activity.TEL text : " + activity.Text);
+                DButil.HistoryLog("* activity.TEL text : " + activity.Text);
                 /*
                  * 전화번호 처리
                  * */
                 String realTelNumber = "";
-                //DButil.HistoryLog("start tel : ");
+                DButil.HistoryLog("start tel : ");
                 String telMessage = activity.Text;
-                //DButil.HistoryLog("telMessage : " + telMessage);
+                DButil.HistoryLog("telMessage : " + telMessage);
                 String mobilePc = "";
                 String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD  tel:ABACHBIFACA
-                //DButil.HistoryLog("telNumber : " + telNumber);
+                DButil.HistoryLog("telNumber : " + telNumber);
                 int checkTelNumber = telNumber.Length;
-                //DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
+                DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
                 if (telMessage.Contains("tel:") && checkTelNumber > 5)
                 {
                     String[] telNumbers = dbutil.arrayStr(telNumber);
-                    //DButil.HistoryLog("telNumbers : " + telNumbers.Length);
+                    DButil.HistoryLog("telNumbers : " + telNumbers.Length);
                     for (int i = 0; i < telNumbers.Length; i++)
                     {
                         realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
-                        //DButil.HistoryLog("realTelNumber : " + realTelNumber);
+                        DButil.HistoryLog("realTelNumber : " + realTelNumber);
                     }
                     mobilePc = "MOBILE";
-                    //DButil.HistoryLog("realTelNumber : " + realTelNumber);
-                    //DButil.HistoryLog("CHATBOT TYPE IS MOBILE");
+                    DButil.HistoryLog("realTelNumber : " + realTelNumber);
+                    DButil.HistoryLog("CHATBOT TYPE IS MOBILE");
                 }
                 else
                 {
                     mobilePc = "PC";
-                    //DButil.HistoryLog("CHATBOT TYPE IS PC");
+                    DButil.HistoryLog("CHATBOT TYPE IS PC");
                 }
 
 
@@ -372,12 +372,12 @@ namespace HanjinChatBot
             }
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("consulting:")) //챗봇상담후기
             {
-                //DButil.HistoryLog("* activity.consulting text : " + activity.Text);
+                DButil.HistoryLog("* activity.consulting text : " + activity.Text);
                 db.UserReportDataInsert(activity.Text);
             }
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
-                //DButil.HistoryLog("* activity.TEL text : " + activity.Text);
+                DButil.HistoryLog("* activity.TEL text : " + activity.Text);
 
                 /*
                  * MOBILE PC 검토..없으면 무조건 PC로 한다.
@@ -400,7 +400,7 @@ namespace HanjinChatBot
                     Debug.WriteLine("* activity.Type == ActivityTypes.Message ");
                     channelID = activity.ChannelId;
                     string orgMent = activity.Text;
-                    //DButil.HistoryLog("* activity.Text : " + activity.Text);
+                    DButil.HistoryLog("* activity.Text : " + activity.Text);
 
                     List<RelationList> relationList = new List<RelationList>();
                     string luisId = "";
@@ -416,11 +416,11 @@ namespace HanjinChatBot
                     startTime = DateTime.Now;
                     long unixTime = ((DateTimeOffset)startTime).ToUnixTimeSeconds();
 
-                    //DButil.HistoryLog("orgMent : " + orgMent);
+                    DButil.HistoryLog("orgMent : " + orgMent);
                     //금칙어 체크
                     CardList bannedMsg = db.BannedChk(orgMent);
                     Debug.WriteLine("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
-                    //DButil.HistoryLog("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
+                    DButil.HistoryLog("* bannedMsg : " + bannedMsg.cardText);//해당금칙어에 대한 답변
 
                     //금칙어 처리
 
@@ -481,13 +481,13 @@ namespace HanjinChatBot
                         }
 
                         //smalltalk 문자 확인  
-                        //DButil.HistoryLog("smalltalk 체크");
+                        DButil.HistoryLog("smalltalk 체크");
                         String smallTalkSentenceConfirm = db.SmallTalkSentenceConfirm(orgMent);
 
                         //smalltalk 답변이 있을경우
                         if (!string.IsNullOrEmpty(smallTalkSentenceConfirm))
                         {
-                            //DButil.HistoryLog("smalltalk 답변이 있을경우");
+                            DButil.HistoryLog("smalltalk 답변이 있을경우");
                             luisId = "";
                             cacheList.luisIntent = "None";//하단의 로직을 수행하지 않기 위해서
                         }
@@ -503,7 +503,7 @@ namespace HanjinChatBot
                                 apiTextList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APPAPI_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
                                 Debug.WriteLine("GetMultiLUIS() LUIS_APINM : " + MessagesController.LUIS_APINM[i] + " | LUIS_APPAPI_ID : " + MessagesController.LUIS_APPAPI_ID[i]);
                             }
-                            //DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
+                            DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
                             Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
 
                             float APIluisScoreCompare = 0.0f;
@@ -739,7 +739,7 @@ namespace HanjinChatBot
 
                             if (cacheList.luisIntent == null || cacheList.luisEntities == null)
                             {
-                                //DButil.HistoryLog("cache none : " + orgMent);
+                                DButil.HistoryLog("cache none : " + orgMent);
                                 Debug.WriteLine("cache none : " + orgMent);
                                 int checkNumberLength = onlyNumber.Length;
 
@@ -764,7 +764,7 @@ namespace HanjinChatBot
                                         textList.Add(new string[] { MessagesController.LUIS_NM[i], MessagesController.LUIS_APP_ID[i], MessagesController.LUIS_SUBSCRIPTION, luisQuery });
                                         Debug.WriteLine("GetMultiLUIS() LUIS_NM : " + MessagesController.LUIS_NM[i] + " | LUIS_APP_ID : " + MessagesController.LUIS_APP_ID[i]);
                                     }
-                                    //DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
+                                    DButil.HistoryLog("activity.Conversation.Id : " + activity.Conversation.Id);
                                     Debug.WriteLine("activity.Conversation.Id : " + activity.Conversation.Id);
 
                                     JObject Luis_before = new JObject();
@@ -867,7 +867,7 @@ namespace HanjinChatBot
                             luisIntent = "None";
                         }
 
-                        //DButil.HistoryLog("luisIntent : " + luisIntent);
+                        DButil.HistoryLog("luisIntent : " + luisIntent);
 
                         //////////////////////////////////////////////
 
@@ -936,7 +936,7 @@ namespace HanjinChatBot
                                 dlgId += Convert.ToString(dlg.dlgId) + ",";
                                 Activity commonReply = activity.CreateReply();
                                 Attachment tempAttachment = new Attachment();
-                                //DButil.HistoryLog("dlg.dlgType : " + dlg.dlgType);
+                                DButil.HistoryLog("dlg.dlgType : " + dlg.dlgType);
 
                                 string userSSO = "NONE";
 
@@ -960,8 +960,8 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
-                                    ////DButil.HistoryLog("* facebook dlg.dlgId : " + dlg.dlgId);
-                                    //DButil.HistoryLog("* activity.ChannelId : " + activity.ChannelId);
+                                    //DButil.HistoryLog("* facebook dlg.dlgId : " + dlg.dlgId);
+                                    DButil.HistoryLog("* activity.ChannelId : " + activity.ChannelId);
 
                                     tempAttachment = dbutil.getAttachmentFromDialog(dlg, activity);
                                     commonReply.Attachments.Add(tempAttachment);
@@ -5169,7 +5169,7 @@ namespace HanjinChatBot
                 catch (Exception e)
                 {
                     Debug.Print(e.StackTrace);
-                    //DButil.HistoryLog("ERROR===" + e.Message);
+                    DButil.HistoryLog("ERROR===" + e.Message);
 
                     Activity sorryReply = activity.CreateReply();
 
