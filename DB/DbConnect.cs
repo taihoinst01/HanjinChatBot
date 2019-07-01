@@ -238,6 +238,7 @@ namespace HanjinChatBot.DB
                             cmd2.Parameters.AddWithValue("@dlgID", dlg.dlgId);
                             rdr2 = cmd2.ExecuteReader(CommandBehavior.CloseConnection);
                             List<CardList> dialogCards = new List<CardList>();
+                            
                             while (rdr2.Read())
                             {
                                 CardList dlgCard = new CardList();
@@ -252,17 +253,25 @@ namespace HanjinChatBot.DB
                                 //모바일 URL 적용 
                                 if (mobilePC.Equals("MOBILE"))
                                 {
-                                    if (dlgCard.btn1Type.Equals("openUrl"))
+                                    if (dlgCard.btn1Type == null)
                                     {
-                                        if (!string.IsNullOrEmpty(dlgCard.btn1ContextM))
+                                        dlgCard.btn1Context = "";
+                                    }
+                                    else
+                                    {
+                                        if (dlgCard.btn1Type.Equals("openUrl"))
                                         {
-                                            dlgCard.btn1Context = rdr2["BTN_1_CONTEXT_M"] as string;
-                                        }
-                                        else
-                                        {
-                                            dlgCard.btn1Context = "";
+                                            if (!string.IsNullOrEmpty(dlgCard.btn1ContextM))
+                                            {
+                                                dlgCard.btn1Context = rdr2["BTN_1_CONTEXT_M"] as string;
+                                            }
+                                            else
+                                            {
+                                                dlgCard.btn1Context = "";
+                                            }
                                         }
                                     }
+    
                                 }
                                 
                                 dlgCard.btn2Type = rdr2["BTN_2_TYPE"] as string;
@@ -272,17 +281,28 @@ namespace HanjinChatBot.DB
                                 //모바일 URL 적용 
                                 if (mobilePC.Equals("MOBILE"))
                                 {
-                                    if (dlgCard.btn2Type.Equals("openUrl"))
+                                    if (dlgCard.btn2Type == null)
                                     {
-                                        if (!string.IsNullOrEmpty(dlgCard.btn2ContextM))
+                                        dlgCard.btn2Context = "";
+                                    }
+                                    else
+                                    {
+                                        if (dlgCard.btn2Type.Equals("openUrl"))
                                         {
-                                            dlgCard.btn2Context = rdr2["BTN_2_CONTEXT_M"] as string;
-                                        }
-                                        else
-                                        {
-                                            dlgCard.btn2Context = "";
+                                            if (!string.IsNullOrEmpty(dlgCard.btn2ContextM))
+                                            {
+                                                dlgCard.btn2Context = rdr2["BTN_2_CONTEXT_M"] as string;
+                                            }
+                                            else
+                                            {
+                                                dlgCard.btn2Context = "";
+                                            }
                                         }
                                     }
+
+
+
+                                        
                                 }
                                 dlgCard.btn3Type = rdr2["BTN_3_TYPE"] as string;
                                 dlgCard.btn3Title = rdr2["BTN_3_TITLE"] as string;
@@ -291,15 +311,22 @@ namespace HanjinChatBot.DB
                                 //모바일 URL 적용 
                                 if (mobilePC.Equals("MOBILE"))
                                 {
-                                    if (dlgCard.btn3Type.Equals("openUrl"))
+                                    if (dlgCard.btn3Type == null)
                                     {
-                                        if (!string.IsNullOrEmpty(dlgCard.btn3ContextM))
+                                        dlgCard.btn3Context = "";
+                                    }
+                                    else
+                                    {
+                                        if (dlgCard.btn3Type.Equals("openUrl"))
                                         {
-                                            dlgCard.btn3Context = rdr2["BTN_3_CONTEXT_M"] as string;
-                                        }
-                                        else
-                                        {
-                                            dlgCard.btn3Context = "";
+                                            if (!string.IsNullOrEmpty(dlgCard.btn3ContextM))
+                                            {
+                                                dlgCard.btn3Context = rdr2["BTN_3_CONTEXT_M"] as string;
+                                            }
+                                            else
+                                            {
+                                                dlgCard.btn3Context = "";
+                                            }
                                         }
                                     }
                                 }
@@ -310,15 +337,22 @@ namespace HanjinChatBot.DB
                                 //모바일 URL 적용 
                                 if (mobilePC.Equals("MOBILE"))
                                 {
-                                    if (dlgCard.btn4Type.Equals("openUrl"))
+                                    if (dlgCard.btn4Type==null)
                                     {
-                                        if (!string.IsNullOrEmpty(dlgCard.btn4ContextM))
+                                        dlgCard.btn4Context = "";
+                                    }
+                                    else
+                                    {
+                                        if (dlgCard.btn4Type.Equals("openUrl"))
                                         {
-                                            dlgCard.btn4Context = rdr2["BTN_4_CONTEXT_M"] as string;
-                                        }
-                                        else
-                                        {
-                                            dlgCard.btn4Context = "";
+                                            if (!string.IsNullOrEmpty(dlgCard.btn4ContextM))
+                                            {
+                                                dlgCard.btn4Context = rdr2["BTN_4_CONTEXT_M"] as string;
+                                            }
+                                            else
+                                            {
+                                                dlgCard.btn4Context = "";
+                                            }
                                         }
                                     }
                                 }
