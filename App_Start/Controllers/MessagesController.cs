@@ -934,10 +934,13 @@ namespace HanjinChatBot
                         {
                             dlgId = "";
                             mobilePC = uData[0].mobilePc;
-                            
+                            DButil.HistoryLog("debug7 : " + luisIntent);
                             for (int m = 0; m < relationList.Count; m++)
                             {
+                                DButil.HistoryLog("debug8 : " + relationList[m].dlgId);
+                                DButil.HistoryLog("debug9 : " + mobilePC);
                                 DialogList dlg = db.SelectDialog(relationList[m].dlgId, mobilePC);
+                                DButil.HistoryLog("debug10 : " + mobilePC);
                                 dlgId += Convert.ToString(dlg.dlgId) + ",";
                                 Activity commonReply = activity.CreateReply();
                                 Attachment tempAttachment = new Attachment();
