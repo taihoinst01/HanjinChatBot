@@ -62,8 +62,8 @@ namespace HanjinChatBot
         public static string channelID = "";
 
         //API변수선언
-        static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
-        //static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
+        //static public string apiUrl = "http://www.nhanjinexpress.hanjin.net/ipcc/";                 //API Url(real)
+        static public string apiUrl = "http://211.210.94.46:7777/customer/";                 //API Url(test)
         static public string DeliveryList = apiUrl + "ipcc_api.get_wbls";                 //택배목록
         static public string ReturnDeliveryResult = apiUrl + "ipcc_api.get_rtn_info";                 //반품예약가능여부
         static public string ReturnDeliveryRequest = apiUrl + "ipcc_api.req_rsv_rtn";                 //반품예약요청
@@ -1558,7 +1558,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!
-                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
+                            requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
@@ -1810,6 +1810,26 @@ namespace HanjinChatBot
                                     if (mobilePC.Equals("PC"))
                                     {
                                         //no show
+                                        List<CardAction> cardButtons = new List<CardAction>();
+
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "postBack",
+                                            Value = "[F_예약]::운송장번호직접입력",
+                                            Title = "운송장 번호 직접입력"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "PC 버전에서는 홈페이지에서 예약이 가능합니다.<BR>또는 직접 운송장번호를 입력해 주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
@@ -2204,7 +2224,26 @@ namespace HanjinChatBot
                                 {
                                     if (mobilePC.Equals("PC"))
                                     {
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "postBack",
+                                            Value = "[F_예약확인]::예약번호직접입력",
+                                            Title = "예약 번호 직접입력"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "PC 버전에서는 홈페이지에서 가능합니다.<BR>또는 직접 예약번호를 입력해 주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
@@ -2756,7 +2795,26 @@ namespace HanjinChatBot
                                 {
                                     if (mobilePC.Equals("PC"))
                                     {
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "postBack",
+                                            Value = "[F_예약취소]::예약번호직접입력",
+                                            Title = "예약 번호 직접입력"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "PC 버전에서는 홈페이지에서 가능합니다.<BR>또는 직접 예약번호를 입력해 주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
@@ -3300,7 +3358,26 @@ namespace HanjinChatBot
                                 {
                                     if (mobilePC.Equals("PC"))
                                     {
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
+                                        CardAction returnButton = new CardAction();
+                                        returnButton = new CardAction()
+                                        {
+                                            Type = "postBack",
+                                            Value = "[F_택배배송일정조회]::운송장번호직접입력",
+                                            Title = "운송장 번호 직접입력"
+                                        };
+                                        cardButtons.Add(returnButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "PC 버전에서는 홈페이지에서 가능합니다.<BR>또는 직접 운송장 번호를 입력해 주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
                                     }
                                     else
                                     {
@@ -3329,16 +3406,7 @@ namespace HanjinChatBot
                                                 Title = "운송장 번호 직접입력"
                                             };
                                             cardButtons.Add(returnButton);
-                                            /*
-                                            CardAction returnButton = new CardAction();
-                                            returnButton = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "아니오. 휴대폰인증 취소하겠습니다",
-                                                Title = "아니오"
-                                            };
-                                            cardButtons.Add(returnButton);
-                                            */
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
