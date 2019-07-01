@@ -875,6 +875,7 @@ namespace HanjinChatBot
 
                         if (luisIntent.Equals("smalltalk") || luisIntent.Equals("SMALLTALK"))
                         {
+                            DButil.HistoryLog("debug1 : " + luisIntent);
                             String checkSmallIntent = "";
                             if (orgMent.Length < 11) //smalltalk 10자까지만
                             {
@@ -895,11 +896,13 @@ namespace HanjinChatBot
                             }
                             else
                             {
+                                DButil.HistoryLog("debug2 : " + luisIntent);
                                 smallTalkConfirm = "";
                             }
                         }
                         else if (!string.IsNullOrEmpty(luisIntent))
                         {
+                            DButil.HistoryLog("debug3 : " + luisIntent);
                             relationList = db.DefineTypeChkSpare(luisIntent, luisEntities);
 
                             if (relationList.Count == 0)
@@ -909,16 +912,18 @@ namespace HanjinChatBot
                         }
                         else
                         {
+                            DButil.HistoryLog("debug4 : " + luisIntent);
                             relationList = null;
                         }
 
                         //relationList count 를 체크하여 null 처리
                         if (relationList == null)
                         {
-
+                            DButil.HistoryLog("debug5 : " + luisIntent);
                         }
                         else
                         {
+                            DButil.HistoryLog("debug6 : " + luisIntent);
                             if (relationList.Count == 0)
                             {
                                 relationList = null;
