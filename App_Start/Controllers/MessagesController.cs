@@ -579,7 +579,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("계속사용으로반품취소"))
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("계속사용으로반품취소또는발송취소"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1156,7 +1156,7 @@ namespace HanjinChatBot
                                 {
                                     apiIntent = "F_예약취소";
                                 }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("계속사용으로반품취소"))
+                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("계속사용으로반품취소또는발송취소"))
                                 {
                                     apiIntent = "F_예약취소";
                                 }
@@ -2506,8 +2506,8 @@ namespace HanjinChatBot
                                     {
                                         Type = "imBack",
                                         //Value = "예약취소진행(" + bookNumber + ")-발송취소",
-                                        Value = "예약취소진행(" + bookNumber + ")-계속사용으로 반품취소",
-                                        Title = "계속사용으로 반품취소"
+                                        Value = "예약취소진행(" + bookNumber + ")-계속사용으로 반품취소  또는 발송취소",
+                                        Title = "계속사용으로 반품취소 또는 발송취소"
                                     };
                                     cardButtons.Add(cancel1Button);
                                     CardAction cancel2Button = new CardAction();
@@ -2553,7 +2553,7 @@ namespace HanjinChatBot
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     String whyCancelNm = "";
-                                    if (apiActiveText.Contains("계속사용으로반품취소"))
+                                    if (apiActiveText.Contains("계속사용으로반품취소또는발송취소"))
                                     {
                                         whyCancelNm = "5";
                                     }
