@@ -579,17 +579,17 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("발송취소"))
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("계속사용으로반품취소"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("기집하"))
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("타택배또는다른경로로발송"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("이중예약"))
+                            else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("이중예약또는기타사유"))
                             {
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -715,17 +715,7 @@ namespace HanjinChatBot
                         }
                         else
                         {
-                            /*
-                         *  PC 버전이라 하면 API 안타게 한다.
-                         * */
-                            mobilePC = uData[0].mobilePc;//모바일인지 PC 인지 구분
-                            /*
-                             * 나중에 꼭 주석 풀자...~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                            if (mobilePC.Equals("PC"))
-                            {
-                                apiIntent = "None";
-                            }
-                            */
+
                         }
 
 
@@ -1166,15 +1156,15 @@ namespace HanjinChatBot
                                 {
                                     apiIntent = "F_예약취소";
                                 }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("발송취소"))
+                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("계속사용으로반품취소"))
                                 {
                                     apiIntent = "F_예약취소";
                                 }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("기집하"))
+                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("타택배또는다른경로로발송"))
                                 {
                                     apiIntent = "F_예약취소";
                                 }
-                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("이중예약"))
+                                else if (apiActiveText.Contains("예약취소진행") && apiActiveText.Contains("이중예약또는기타사유"))
                                 {
                                     apiIntent = "F_예약취소";
                                 }
@@ -2515,24 +2505,27 @@ namespace HanjinChatBot
                                     cancel1Button = new CardAction()
                                     {
                                         Type = "imBack",
-                                        Value = "예약취소진행(" + bookNumber + ")-발송취소",
-                                        Title = "발송취소"
+                                        //Value = "예약취소진행(" + bookNumber + ")-발송취소",
+                                        Value = "예약취소진행(" + bookNumber + ")-계속사용으로 반품취소",
+                                        Title = "계속사용으로 반품취소"
                                     };
                                     cardButtons.Add(cancel1Button);
                                     CardAction cancel2Button = new CardAction();
                                     cancel2Button = new CardAction()
                                     {
                                         Type = "imBack",
-                                        Value = "예약취소진행(" + bookNumber + ")-기집하",
-                                        Title = "기집하"
+                                        //Value = "예약취소진행(" + bookNumber + ")-기집하",
+                                        Value = "예약취소진행(" + bookNumber + ")-타택배 또는 다른경로로 발송",
+                                        Title = "타택배 또는 다른경로로 발송"
                                     };
                                     cardButtons.Add(cancel2Button);
                                     CardAction cancel3Button = new CardAction();
                                     cancel3Button = new CardAction()
                                     {
                                         Type = "imBack",
-                                        Value = "예약취소진행(" + bookNumber + ")-이중예약",
-                                        Title = "이중예약"
+                                        //Value = "예약취소진행(" + bookNumber + ")-이중예약",
+                                        Value = "예약취소진행(" + bookNumber + ")-이중예약 또는 기타사유",
+                                        Title = "이중예약 또는 기타사유"
                                     };
                                     cardButtons.Add(cancel3Button);
 
@@ -2560,15 +2553,15 @@ namespace HanjinChatBot
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     String whyCancelNm = "";
-                                    if (apiActiveText.Contains("발송취소"))
+                                    if (apiActiveText.Contains("계속사용으로반품취소"))
                                     {
                                         whyCancelNm = "5";
                                     }
-                                    else if (apiActiveText.Contains("기집하"))
+                                    else if (apiActiveText.Contains("타택배또는다른경로로발송"))
                                     {
                                         whyCancelNm = "6";
                                     }
-                                    else if (apiActiveText.Contains("이중예약"))
+                                    else if (apiActiveText.Contains("이중예약또는기타사유"))
                                     {
                                         whyCancelNm = "7";
                                     }
