@@ -1548,7 +1548,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
-                            //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!(에물레이터용)
+                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
@@ -2330,6 +2330,7 @@ namespace HanjinChatBot
 
                                             if (checkInt == 0)
                                             {
+                                                totalPage = 1;
                                                 UserHeroCard plCard1 = new UserHeroCard()
                                                 {
                                                     Title = "",
@@ -2353,6 +2354,7 @@ namespace HanjinChatBot
                                                 {
                                                     if (jobj["ret_cod"].ToString().Equals("9051"))
                                                     {
+                                                        totalPage = 1;
                                                         plCard = new UserHeroCard()
                                                         {
                                                             Title = "",
@@ -2363,6 +2365,7 @@ namespace HanjinChatBot
                                                     }
                                                     else if (jobj["ret_cod"].ToString().Equals("9052"))
                                                     {
+                                                        totalPage = 1;
                                                         plCard = new UserHeroCard()
                                                         {
                                                             Title = "",
@@ -2373,6 +2376,7 @@ namespace HanjinChatBot
                                                     }
                                                     else if (jobj["ret_cod"].ToString().Equals("9999"))
                                                     {
+                                                        totalPage = 1;
                                                         plCard = new UserHeroCard()
                                                         {
                                                             Title = "",
@@ -4429,6 +4433,7 @@ namespace HanjinChatBot
 
                                                 if (checkInt == 0)
                                                 {
+                                                    totalPage = 1;
                                                     UserHeroCard plCard1 = new UserHeroCard()
                                                     {
                                                         Title = "",
@@ -4452,6 +4457,7 @@ namespace HanjinChatBot
                                                     {
                                                         if (jobj2["ret_cod"].ToString().Equals("9051"))
                                                         {
+                                                            totalPage = 1;
                                                             plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
@@ -4462,6 +4468,7 @@ namespace HanjinChatBot
                                                         }
                                                         else if (jobj2["ret_cod"].ToString().Equals("9052"))
                                                         {
+                                                            totalPage = 1;
                                                             plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
@@ -4472,6 +4479,7 @@ namespace HanjinChatBot
                                                         }
                                                         else if (jobj2["ret_cod"].ToString().Equals("9999"))
                                                         {
+                                                            totalPage = 1;
                                                             plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
@@ -4637,6 +4645,7 @@ namespace HanjinChatBot
 
                                                 if (checkInt == 0)
                                                 {
+                                                    totalPage = 1;
                                                     UserHeroCard plCard3 = new UserHeroCard()
                                                     {
                                                         Title = "",
