@@ -1548,7 +1548,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
-                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!(에물레이터용)
+                            //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!(에물레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
@@ -2169,6 +2169,7 @@ namespace HanjinChatBot
                                     respPostStream = wResp.GetResponseStream();
                                     readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                     String bookCheckJsonData = readerPost.ReadToEnd();
+                                    Debug.WriteLine("bookCheckJsonData====" + bookCheckJsonData);
 
                                     JArray obj = JArray.Parse(bookCheckJsonData);
 
@@ -2729,19 +2730,19 @@ namespace HanjinChatBot
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9012"))
                                         {
-                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<hr><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9013"))
                                         {
-                                            heroCardText = "예약번호가 존재하지 않아서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<hr><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "예약번호가 존재하지 않아서 예약취소가 불가능한 상태입니다. ";
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9014"))
                                         {
-                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<hr><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
                                         }
                                         else
                                         {
-                                            heroCardText = "자동 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다.<hr><strong>예약번호: </strong>" + bookNumber + "<br><strong>예약일시: </strong>" + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "자동 예약취소가 불가능한 상태입니다. ";
                                         }
 
                                         List<CardAction> cardButtons = new List<CardAction>();
