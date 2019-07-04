@@ -1569,7 +1569,7 @@ namespace HanjinChatBot
                                     bookButton = new CardAction()
                                     {
                                         Type = "openUrl",
-                                        Value = "http://www.hanjin.co.kr/Delivery_html/reserve/login1.jsp?rsr_gbn=",
+                                        Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationMain",
                                         Title = "예약접수"
                                     };
                                     cardButtons.Add(bookButton);
@@ -1624,6 +1624,7 @@ namespace HanjinChatBot
                                         respPostStream = wResp.GetResponseStream();
                                         readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                         String ReturnDeliveryRequestJsonData = readerPost.ReadToEnd();
+                                        Debug.WriteLine("반품택배예약진행===========================================" + ReturnDeliveryRequestJsonData);
 
                                         JArray obj = JArray.Parse(ReturnDeliveryRequestJsonData);
                                         String requestText = "";
@@ -1674,6 +1675,7 @@ namespace HanjinChatBot
                                         respPostStream = wResp.GetResponseStream();
                                         readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                         String ReturnDeliveryResultJsonData = readerPost.ReadToEnd();
+                                        Debug.WriteLine("반품가능예약여부확인===========================================" + ReturnDeliveryResultJsonData);
                                         /************************************************/
                                         /*
                                         WebClient webClient = new WebClient();
@@ -1759,7 +1761,7 @@ namespace HanjinChatBot
                                             yes1Button = new CardAction()
                                             {
                                                 Type = "openUrl",
-                                                Value = "http://www.hanjin.co.kr/Delivery_html/reserve/return.jsp",
+                                                Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationReturn",
                                                 Title = "홈페이지 이동"
                                             };
                                             cardButtons.Add(yes1Button);
@@ -1906,7 +1908,7 @@ namespace HanjinChatBot
                                             respPostStream = wResp.GetResponseStream();
                                             readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
                                             String DeliveryListJsonData = readerPost.ReadToEnd();
-                                            Debug.WriteLine("DeliveryListJsonData===" + DeliveryListJsonData);
+                                            Debug.WriteLine("반품택배예약목록===========================================" + DeliveryListJsonData);
                                             JArray obj = JArray.Parse(DeliveryListJsonData);
 
                                             foreach (JObject jobj in obj)
@@ -3581,7 +3583,7 @@ namespace HanjinChatBot
                                                         plButton = new CardAction()
                                                         {
                                                             Type = "imBack",
-                                                            Value = "운송장번호 " + jobj["wbl_num"].ToString() + " 반품택배예약",
+                                                            Value = "운송장번호 " + jobj["wbl_num"].ToString() + " 에 대한 배송일정 조회",
                                                             Title = "반품택배예약",
                                                         };
                                                         cardButtons.Add(plButton);
