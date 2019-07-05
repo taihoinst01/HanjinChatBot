@@ -1633,7 +1633,7 @@ namespace HanjinChatBot
                                         {
                                             if (jobj["ret_cod"].ToString().Equals("9006"))
                                             {
-                                                requestText = "고객님께서 입력 하신 운송장번호 " + onlyNumber + "의 반품 택배 예약번호는 " + jobj["rsv_num"].ToString() + "이며, " + jobj["org_nam"].ToString() + " 집배점 전화번호 " + jobj["tel_num"].ToString() + " (으)로 문의 부탁 드립니다. 이용해 주셔서 감사합니다.";
+                                                requestText = "고객님께서 입력 하신 운송장번호 " + onlyNumber + "의 반품 택배 예약번호는 " + jobj["rsv_num"].ToString() + "이며, " + jobj["org_nam"].ToString() + " 집배점 전화번호 <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a> (으)로 문의 부탁 드립니다. 이용해 주셔서 감사합니다.";
                                             }
                                             else if (jobj["ret_cod"].ToString().Equals("1000"))
                                             {
@@ -2187,7 +2187,7 @@ namespace HanjinChatBot
                                             String dayText = tempDate.Substring(6, 2);
                                             String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
 
-                                            bookCheckText = "예약번호 " + bookNumber + "는 " + dateText + " 정상 예약접수된 건입니다.<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 전화번호 " + jobj["tel_num"].ToString() + " 으로 문의 부탁드립니다.";
+                                            bookCheckText = "예약번호 " + bookNumber + "는 " + dateText + " 정상 예약접수된 건입니다.<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 전화번호 <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a> 으로 문의 부탁드립니다.";
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9011"))
                                         {
@@ -2609,7 +2609,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시기 바랍니다.",
+                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>으로 문의하여 주시기 바랍니다.",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2621,7 +2621,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 " + jobj["tel_num"].ToString() + "으로 문의하여 주시기 바랍니다.",
+                                                Text = "자동 예약취소가 불가능한 상태입니다.<br>예약취소는 " + jobj["org_nam"].ToString() + " 집배점/ 전화번호 <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>으로 문의하여 주시기 바랍니다.",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2727,7 +2727,7 @@ namespace HanjinChatBot
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9012"))
                                         {
-                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong><a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>";
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9013"))
                                         {
@@ -2735,7 +2735,7 @@ namespace HanjinChatBot
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9014"))
                                         {
-                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong>" + jobj["tel_num"].ToString();
+                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong><a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>";
                                         }
                                         else
                                         {
@@ -3261,7 +3261,8 @@ namespace HanjinChatBot
                                                 String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
 
                                                 orgNam = jobj["org_nam"].ToString();
-                                                telNum = jobj["tel_num"].ToString();
+                                                //telNum = jobj["tel_num"].ToString();
+                                                telNum = " <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = jobj["emp_tel"].ToString();
 
                                                 statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송직원이 배송 중으로 " + dateText + " 배송예정이며 배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1~2일 소요 될 수 있는점 양해바랍니다. 자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + "또는  배송직원 전화번호 " + empTel + "로 문의하시기 바랍니다.";
@@ -3276,7 +3277,8 @@ namespace HanjinChatBot
                                                 String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
 
                                                 orgNam = jobj["org_nam"].ToString();
-                                                telNum = jobj["tel_num"].ToString();
+                                                //telNum = jobj["tel_num"].ToString();
+                                                telNum = " <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = jobj["emp_tel"].ToString();
                                                 statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 " + dateText + " 배송완료하였습니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는  배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
                                             }
@@ -3289,7 +3291,8 @@ namespace HanjinChatBot
                                             {
                                                 wrkCod = "미배송";
                                                 orgNam = jobj["org_nam"].ToString();
-                                                telNum = jobj["tel_num"].ToString();
+                                                //telNum = jobj["tel_num"].ToString();
+                                                telNum = " <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = jobj["emp_tel"].ToString();
                                                 statusText = "고객님께서 문의하신 운송장 번호 (" + invoiceNumber + ")는 배송지역 사정으로 배송이 1~2일 더 소요될 수 있는 점 양해부탁드립니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는 배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
                                             }
@@ -3857,7 +3860,7 @@ namespace HanjinChatBot
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " <a href='tel:"+ jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a><br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
+                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a><br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
