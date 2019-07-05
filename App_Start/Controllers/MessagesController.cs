@@ -2255,16 +2255,7 @@ namespace HanjinChatBot
                                                 Title = "휴대폰 인증"
                                             };
                                             cardButtons.Add(deliveryButton);
-                                            /*
-                                            CardAction returnButton = new CardAction();
-                                            returnButton = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "아니오. 휴대폰인증 취소하겠습니다",
-                                                Title = "아니오"
-                                            };
-                                            cardButtons.Add(returnButton);
-                                            */
+
                                             CardAction returnButton = new CardAction();
                                             returnButton = new CardAction()
                                             {
@@ -2833,16 +2824,7 @@ namespace HanjinChatBot
                                                 Title = "휴대폰 인증"
                                             };
                                             cardButtons.Add(deliveryButton);
-                                            /*
-                                            CardAction returnButton = new CardAction();
-                                            returnButton = new CardAction()
-                                            {
-                                                Type = "imBack",
-                                                Value = "아니오. 휴대폰인증 취소하겠습니다",
-                                                Title = "아니오"
-                                            };
-                                            cardButtons.Add(returnButton);
-                                            */
+
                                             CardAction returnButton = new CardAction();
                                             returnButton = new CardAction()
                                             {
@@ -3727,7 +3709,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " " + jobj["tel_num"].ToString() + "<br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
+                                                Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " <a href='tel:" + jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a><br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
                                             };
 
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3875,7 +3857,7 @@ namespace HanjinChatBot
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " " + jobj["tel_num"].ToString() + "<br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
+                                                    Text = "네. 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: " + jobj["emp_tel"].ToString() + "<br>집배점: " + jobj["org_nam"].ToString() + " <a href='tel:"+ jobj["tel_num"].ToString() + ">" + jobj["tel_num"].ToString() + "</a><br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
@@ -5551,14 +5533,6 @@ namespace HanjinChatBot
                     catch (TaskCanceledException e)
                     {
                         Debug.WriteLine("GetIntentFromBotLUIS error = " + e.Message);
-                        //HistoryLog("GetIntentFromBotLUIS error = " + e.Message);
-                        //초기화
-                        //jsonObj = JObject.Parse(@"{
-                        //                'query':'',
-                        //                'topScoringIntent':0,
-                        //                'intents':[],
-                        //                'entities':'[]'
-                        //            }");
 
                         Luis_before[k] = JObject.Parse(@"{
                                                             'query': '',
@@ -5579,22 +5553,7 @@ namespace HanjinChatBot
                     }
                 }
             }
-            /*
-            for (int i = 0; i < 2; i++)
-            {
-                //entities 0일 경우 PASS
-                if (1 != 0)
-                {
-                    //intent None일 경우 PASS
-                    if (Luis_before[i]["intents"][0]["intent"].ToString() != "None")
-                    {
-                        Luis = Luis_before[i];
-                        //luisScoreCompare = (float)Luis_before[i]["intents"][0]["score"];
-
-                    }
-                }
-            }
-            */
+            
             if (1 != 0)
             {
                 //intent None일 경우 PASS
