@@ -1555,9 +1555,9 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
-                            requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
                             * apiIntent F_예약
@@ -1768,8 +1768,10 @@ namespace HanjinChatBot
                                             CardAction yes1Button = new CardAction();
                                             yes1Button = new CardAction()
                                             {
-                                                Type = "openUrl",
-                                                Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationReturn",
+                                                //Type = "openUrl",
+                                                //Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationReturn",
+                                                Type = "imBack",
+                                                Value = "다른주소로 반품예약",
                                                 Title = "다른주소로 반품예약"
                                             };
                                             cardButtons.Add(yes1Button);
@@ -1777,7 +1779,6 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                //Text = "운송장 번호 " + onlyNumber + "를 반품처리하시겠습니까?",
                                                 Text = "운송장 번호 " + onlyNumber + "를 반품처리하시겠습니까?",
                                                 Buttons = cardButtons,
                                             };
@@ -1804,7 +1805,39 @@ namespace HanjinChatBot
                                     }
 
                                 }
+                                else if (apiActiveText.Equals("다른주소로반품예약"))
+                                {
+                                    //모바일 인증
+                                    if (authCheck.Equals("F"))
+                                    {
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약]::택배배송목록");
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_모바일인증");
+                                        List<CardAction> cardButtons = new List<CardAction>();
 
+                                        CardAction deliveryButton = new CardAction();
+                                        deliveryButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "예. 휴대폰인증 하겠습니다",
+                                            Title = "휴대폰 인증"
+                                        };
+                                        cardButtons.Add(deliveryButton);
+                                        
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "다른주소로 반품접수는 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 반품접수를 진행해 주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
                                 else if (apiActiveText.Contains("반품택배예약") || apiActiveText.Contains("택배배송목록"))
                                 {
                                     if (mobilePC.Equals("PC"))
