@@ -3194,6 +3194,18 @@ namespace HanjinChatBot
                                         apiMakerReply.Attachments.Add(plAttachment1);
                                         SetActivity(apiMakerReply);
                                     }
+                                    else if (apiActiveText.Contains("반송장번호직접입력"))
+                                    {
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "예약번호나 반품택배 접수 시 입력하신 원 운송장번호를 입력해 주십시오.",
+                                        };
+
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
                                     else
                                     {
                                         //모바일 인증 체크
