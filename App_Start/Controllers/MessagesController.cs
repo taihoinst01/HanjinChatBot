@@ -1965,14 +1965,16 @@ namespace HanjinChatBot
                                                     String dateText = "";
                                                     if (tempDate == "" || tempDate.Equals(""))
                                                     {
-                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\"><small>배송중</small></span><span class=\"dateWeek\"></span></div>";
+                                                        //dateText = "<div class=\"endDate\"><span class=\"dateDay\"><small>배송중</small></span><span class=\"dateWeek\"></span></div>";
+                                                        dateText = "";
                                                     }
                                                     else
                                                     {
                                                         String yearText = tempDate.Substring(0, 4);
                                                         String monthText = tempDate.Substring(4, 2);
                                                         String dayText = tempDate.Substring(6, 2);
-                                                        dateText = "<div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div>";
+                                                        dateText = "<strong> 배송완료일자: </strong > " + yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["dlv_dy"].ToString() + "요일)<br>";
+                                                        //dateText = "<div class=\"endDate\"><span class=\"dateDay\">" + monthText + "." + dayText + "</span><span class=\"dateWeek\">" + jobj["dlv_dy"].ToString() + "요일</span></div>";
                                                     }
                                                     //배송상태 처리
                                                     String deliveryStatus = jobj["wrk_nam"].ToString();
@@ -2027,7 +2029,8 @@ namespace HanjinChatBot
                                                     UserHeroCard plCard = new UserHeroCard()
                                                     {
                                                         Title = "",
-                                                        Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
+                                                        Text = dateText + "<strong>배송상태: </strong>" + deliveryStatusText + " <br><strong>상품명: </strong>" + goodName + " <br><strong>운송장번호: </strong>" + jobj["wbl_num"].ToString() + " <br><strong>송하인명: </strong>" + jobj["snd_nam"].ToString(),
+                                                        //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                         Tap = plButton
                                                     };
                                                     plAttachment = plCard.ToAttachment();
@@ -5383,7 +5386,7 @@ namespace HanjinChatBot
                                                     UserHeroCard plCard4 = new UserHeroCard()
                                                     {
                                                         Title = "",
-                                                        Text = "반품상품의 운송장번호를 확인합니다.<br>목록에서 선택해 주시거나 예약번호나 반품택배 접수 시 입력하신 원 운송장번호를 입력해 주십시오."
+                                                        Text = "반품상품의 반송장번호를 확인합니다.<br>목록에서 선택해 주시거나 예약번호나 반품택배 접수 시 입력하신 원 운송장번호를 입력해 주십시오."
                                                     };
                                                     Attachment plAttachment4 = plCard4.ToAttachment();
                                                     apiMakerReply.Attachments.Add(plAttachment4);
