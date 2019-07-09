@@ -1555,9 +1555,9 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
-                            requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
                             * apiIntent F_예약
@@ -2238,6 +2238,18 @@ namespace HanjinChatBot
                                 {
 
                                 }
+                                else if (apiActiveText.Contains("운송장예약번호직접입력"))
+                                {
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "확인을 원하시는 예약번호 또는 운송장번호를 입력해 주세요.",
+                                    };
+
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
                                 else if (apiActiveText.Contains("예약번호직접입력"))
                                 {
                                     UserHeroCard plCard = new UserHeroCard()
@@ -2439,10 +2451,21 @@ namespace HanjinChatBot
                                             }
                                             else
                                             {
+                                                List<CardAction> numberButtons = new List<CardAction>();
+                                                CardAction numberButton = new CardAction();
+                                                numberButton = new CardAction()
+                                                {
+                                                    Type = "postBack",
+                                                    Value = "[F_예약확인]::운송장예약번호직접입력",
+                                                    Title = "운송장/예약번호 직접입력"
+                                                };
+                                                numberButtons.Add(numberButton);
+
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "예약번호 또는 원 운송장번호로 직접조회할 수 있습니다."
+                                                    Text = "예약번호 또는 원 운송장번호로 직접조회할 수 있습니다.",
+                                                    Buttons = numberButtons,
                                                 };
                                                 Attachment plAttachment = plCard.ToAttachment();
                                                 apiMakerReply.Attachments.Add(plAttachment);
@@ -2495,8 +2518,8 @@ namespace HanjinChatBot
                                                         String cardShowText = "";
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
-                                                            dateText = "미할당";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj["wrk_nam"].ToString();
+                                                            dateText = "";
+                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString()+"</font>";
                                                         }
                                                         else
                                                         {
@@ -2504,7 +2527,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + "요일)";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>날짜: </strong>" + dateText;
+                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -3071,7 +3094,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "미할당";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj["wrk_nam"].ToString();
+                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString()+"</font>";
                                                         }
                                                         else
                                                         {
@@ -3079,7 +3102,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + "요일)";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj["wrk_nam"].ToString() + " <br><strong>날짜: </strong>" + dateText;
+                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -4869,10 +4892,22 @@ namespace HanjinChatBot
                                                 }
                                                 else
                                                 {
+                                                    List<CardAction> numberButtons = new List<CardAction>();
+                                                    CardAction numberButton = new CardAction();
+                                                    numberButton = new CardAction()
+                                                    {
+                                                        Type = "postBack",
+                                                        Value = "[F_예약확인]::운송장예약번호직접입력",
+                                                        Title = "운송장/예약번호 직접입력"
+                                                    };
+                                                    numberButtons.Add(numberButton);
+
+
                                                     UserHeroCard plCard2 = new UserHeroCard()
                                                     {
                                                         Title = "",
-                                                        Text = "예약번호 또는 원 운송장번호로 직접조회할 수 있습니다."
+                                                        Text = "예약번호 또는 원 운송장번호로 직접조회할 수 있습니다.",
+                                                        Buttons = numberButtons,
                                                     };
                                                     Attachment plAttachment2 = plCard2.ToAttachment();
                                                     apiMakerReply.Attachments.Add(plAttachment2);
@@ -4925,7 +4960,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj2["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj2["wrk_nam"].ToString();
+                                                                cardShowText = "<strong>예약번호: </strong>" + jobj2["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString()+"</font>";
                                                             }
                                                             else
                                                             {
@@ -4933,7 +4968,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj2["wrk_dy"].ToString() + "요일)";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj2["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj2["wrk_nam"].ToString() + " <br><strong>날짜: </strong>" + dateText;
+                                                                cardShowText = "<strong>예약번호: </strong>" + jobj2["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
@@ -5140,7 +5175,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj3["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj3["wrk_nam"].ToString();
+                                                                cardShowText = "<strong>예약번호: </strong>" + jobj3["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString()+"</font>";
                                                             }
                                                             else
                                                             {
@@ -5148,7 +5183,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj3["wrk_dy"].ToString() + "요일)";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj3["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong>" + jobj3["wrk_nam"].ToString() + " <br><strong>날짜: </strong>" + dateText;
+                                                                cardShowText = "<strong>예약번호: </strong>" + jobj3["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
