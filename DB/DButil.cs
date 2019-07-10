@@ -458,5 +458,26 @@ namespace HanjinChatBot.DB
             
             return telNum;
         }
+
+        //hashtable 이용하여 영문자를 숫자로 변환하기(전화번호체크용)
+        public string getTelEnglish(string word)
+        {
+            String telNum = "";
+            Hashtable telTempTable = new Hashtable();
+            telTempTable.Add("0", "A");
+            telTempTable.Add("1", "B");
+            telTempTable.Add("2", "C");
+            telTempTable.Add("3", "D");
+            telTempTable.Add("4", "E");
+            telTempTable.Add("5", "F");
+            telTempTable.Add("6", "G");
+            telTempTable.Add("7", "H");
+            telTempTable.Add("8", "I");
+            telTempTable.Add("9", "J");
+
+            telNum = (String)telTempTable[word];
+
+            return telNum;
+        }
     }
 }

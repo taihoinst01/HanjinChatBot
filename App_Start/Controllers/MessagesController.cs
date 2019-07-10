@@ -559,7 +559,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("반품택배예약진행")|| apiActiveText.Contains("받은주소에서반품")) 
+                            else if (apiActiveText.Contains("반품택배예약진행")|| apiActiveText.Contains("받은주소에서반품")|| apiActiveText.Contains("다른주소로변경반품")) 
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -611,7 +611,7 @@ namespace HanjinChatBot
                         }
                         else
                         {
-                            if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인") || apiActiveText.Equals("나의예약확인"))
+                            if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인") || apiActiveText.Equals("나의예약확인")|| apiActiveText.Equals("예약확인"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -656,12 +656,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("예약목록다음페이지") || apiActiveText.Equals("예약목록이전페이지"))
+                            else if (apiActiveText.Equals("예약목록다음페이지") || apiActiveText.Equals("예약목록이전페이지")|| apiActiveText.Equals("접수목록"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약조회해주세요") || apiActiveText.Contains("예약확인해주세요"))
+                            else if (apiActiveText.Contains("예약조회해주세요") || apiActiveText.Contains("예약확인해주세요")|| apiActiveText.Contains("예약목록"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1555,10 +1555,12 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
-                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
+                            //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!이채원강사
+                            //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!이채원강사
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -1605,6 +1607,65 @@ namespace HanjinChatBot
                                     Attachment plAttachment = plCard.ToAttachment();
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Contains("다른주소로변경반품"))
+                                {
+                                    //모바일 인증
+                                    if (authCheck.Equals("F"))
+                                    {
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약]::다른주소로변경반품");
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_모바일인증");
+                                        List<CardAction> cardButtons = new List<CardAction>();
+
+                                        CardAction deliveryButton = new CardAction();
+                                        deliveryButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "예. 휴대폰인증 하겠습니다",
+                                            Title = "휴대폰 인증"
+                                        };
+                                        cardButtons.Add(deliveryButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "반품하시려는 주소가 받은 주소와 다를 경우 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 반품접수를 진행해 주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                    else
+                                    {
+                                        String userPhone = userCheck[0].userPhone;
+                                        String dataUserPhone = "";
+                                        String[] telNumbers = dbutil.arrayStr(userPhone);
+                                        for (int i = 0; i < telNumbers.Length; i++)
+                                        {
+                                            dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
+                                        }
+
+                                        List<CardAction> addressButtons = new List<CardAction>();
+                                        CardAction addressButton = new CardAction();
+                                        addressButton = new CardAction()
+                                        {
+                                            Type = "openUrl",
+                                            Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=A&wbl=" + onlyNumber,
+                                            Title = "반품접수"
+                                        };
+                                        addressButtons.Add(addressButton);
+
+                                        UserHeroCard addressPlCard3 = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "모바일앱에서 반품접수를 진행해 주세요.",
+                                            Buttons = addressButtons,
+                                        };
+                                        Attachment plAttachment = addressPlCard3.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
                                 }
                                 //반품택배예약가능여부 확인
                                 else if (containNum == true) //반품택배예약 중에서 숫자만 추출한다.
@@ -1796,6 +1857,7 @@ namespace HanjinChatBot
 
                                         if (returnYN.Equals("yes"))
                                         {
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "TEMP_NUMBER", onlyNumber);
                                             CardAction yesButton = new CardAction();
                                             yesButton = new CardAction()
                                             {
@@ -1808,10 +1870,10 @@ namespace HanjinChatBot
                                             CardAction yes1Button = new CardAction();
                                             yes1Button = new CardAction()
                                             {
-                                                Type = "openUrl",
-                                                Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationReturn",
-                                                //Type = "imBack",
-                                                //Value = "다른 주소로 변경 반품",
+                                                //Type = "openUrl",
+                                                //Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationReturn",
+                                                Type = "imBack",
+                                                Value = "운송장 번호 " + onlyNumber + " 다른 주소로 변경 반품",
                                                 Title = "다른 주소로 변경 반품"
                                             };
                                             cardButtons.Add(yes1Button);
@@ -1854,58 +1916,7 @@ namespace HanjinChatBot
                                     }
 
                                 }
-                                else if (apiActiveText.Equals("다른주소로변경반품"))
-                                {
-                                    //모바일 인증
-                                    if (authCheck.Equals("F"))
-                                    {
-                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약]::다른주소로변경반품");
-                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_모바일인증");
-                                        List<CardAction> cardButtons = new List<CardAction>();
-
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 휴대폰인증 하겠습니다",
-                                            Title = "휴대폰 인증"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-                                        
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "반품하시려는 주소가 받은 주소와 다를 경우 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 반품접수를 진행해 주세요.",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else
-                                    {
-                                  
-                                        List<CardAction> addressButtons = new List<CardAction>();
-                                        CardAction addressButton = new CardAction();
-                                        addressButton = new CardAction()
-                                        {
-                                            Type = "openUrl",
-                                            Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=ABAFGEDDAEE&auth_num=" + authNumber + "&type=A&wbl=414977361374",
-                                            Title = "반품접수 진행"
-                                        };
-                                        addressButtons.Add(addressButton);
-
-                                        UserHeroCard addressPlCard3 = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "모바일앱에서 반품접수를 진행해 주세요.",
-                                            Buttons = addressButtons,
-                                        };
-                                        Attachment plAttachment = addressPlCard3.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                }
+                                
                                 else if (apiActiveText.Contains("반품택배예약") || apiActiveText.Contains("택배배송목록"))
                                 {
                                     if (mobilePC.Equals("PC"))
@@ -2559,7 +2570,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString()+"</font>";
+                                                            cardShowText = "<strong>예약번호: </strong><font color='#0101DF'>" + jobj["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString()+"</font>";
                                                         }
                                                         else
                                                         {
@@ -2567,7 +2578,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + "요일)";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
+                                                            cardShowText = "<strong>예약번호: </strong><font color='#0101DF'>" + jobj["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -2894,7 +2905,7 @@ namespace HanjinChatBot
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9012"))
                                         {
-                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong><a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
+                                            heroCardText = "이미 집하완료가 되어서 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong><font color='#0101DF'>" + bookNumber +"</font>"+ dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong><a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9013"))
                                         {
@@ -2902,7 +2913,7 @@ namespace HanjinChatBot
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9014"))
                                         {
-                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong>" + bookNumber + dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong><a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
+                                            heroCardText = "이미 예약취소가 된 예약번호이기에 예약취소가 불가능한 상태입니다. 예약취소는 집배점으로 문의하여 주시기 바랍니다<br><br><strong>예약번호: </strong><font color='#0101DF'>" + bookNumber + "</font>"+ dateText + "<br><strong>집배점: </strong>" + jobj["org_nam"].ToString() + "<br><strong>전화번호: </strong><a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                         }
                                         else
                                         {
@@ -3005,7 +3016,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3134,7 +3145,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "미할당";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString()+"</font>";
+                                                            cardShowText = "<strong>예약번호: </strong><font color='#0101DF'>" + jobj["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString()+"</font>";
                                                         }
                                                         else
                                                         {
@@ -3142,7 +3153,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + "요일)";
-                                                            cardShowText = "<strong>예약번호: </strong>" + jobj["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
+                                                            cardShowText = "<strong>예약번호: </strong><font color='#0101DF'>" + jobj["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -3395,7 +3406,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard1 = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호나 반품택배 접수 시 입력하신 원 운송장번호를 입력해 주십시오.",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호나 반품택배 접수 시 입력하신 원 운송장번호를 입력해 주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment1 = plCard1.ToAttachment();
@@ -3625,19 +3636,6 @@ namespace HanjinChatBot
                                             SetActivity(apiMakerReply);
                                         }
                                     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                                     /*
 
@@ -3878,7 +3876,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. 휴대폰 인증을 하신 후에 다시 진행해 주세요<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
+                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -5000,7 +4998,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj2["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString()+"</font>";
+                                                                cardShowText = "- <strong>예약번호: </strong><font color='#0101DF'>" + jobj2["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString()+"</font>";
                                                             }
                                                             else
                                                             {
@@ -5008,7 +5006,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj2["wrk_dy"].ToString() + "요일)";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj2["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
+                                                                cardShowText = "- <strong>예약번호: </strong><font color='#0101DF'>" + jobj2["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj2["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
@@ -5090,12 +5088,17 @@ namespace HanjinChatBot
                                             }
                                             else if (authUrl.Equals("[F_예약]::다른주소로변경반품"))
                                             {
+                                                List<UserCheck> checkUserData = new List<UserCheck>();
+                                                checkUserData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                                                String userPhone = userCheck[0].userPhone;
+                                                String invoiceNm = userCheck[0].tempNumber;
+                                                
                                                 List<CardAction> addressButtons = new List<CardAction>();
                                                 CardAction addressButton = new CardAction();
                                                 addressButton = new CardAction()
                                                 {
-                                                    Type = "openUrl",
-                                                    Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=ABAFGEDDAEE&auth_num="+ authNumber + "&type=A&wbl=414977361374",
+                                                    Type = "imBack",
+                                                    Value = "운송장 번호 " + invoiceNm + " 다른 주소로 변경 반품",
                                                     Title = "다른 주소로 변경 반품"
                                                 };
                                                 addressButtons.Add(addressButton);
@@ -5103,7 +5106,7 @@ namespace HanjinChatBot
                                                 UserHeroCard addressPlCard3 = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "",
+                                                    Text = "운송장 번호 " + invoiceNm + "를 다른 주소로 반품처리하시겠습니까?",
                                                     Buttons = addressButtons,
                                                 };
                                                 plAttachment = addressPlCard3.ToAttachment();
@@ -5215,7 +5218,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj3["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString()+"</font>";
+                                                                cardShowText = "<strong>예약번호: </strong><font color='#0101DF'>" + jobj3["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString()+"</font>";
                                                             }
                                                             else
                                                             {
@@ -5223,7 +5226,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj3["wrk_dy"].ToString() + "요일)";
-                                                                cardShowText = "<strong>예약번호: </strong>" + jobj3["rsv_num"].ToString() + " <br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
+                                                                cardShowText = "<strong>예약번호: </strong><font color='#0101DF'>" + jobj3["rsv_num"].ToString() + "</font><br><strong>상품명: </strong>" + jobj3["god_nam"].ToString() + " <br><strong>수하인명: </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>예약상태: </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>날짜: </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
