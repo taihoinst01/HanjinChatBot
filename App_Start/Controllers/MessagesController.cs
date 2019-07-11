@@ -1870,7 +1870,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "운송장 번호 " + onlyNumber + "를 반품처리하시겠습니까?",
+                                                Text = "운송장 번호 " + onlyNumber + "번의 반품택배 방문 주소지를 선택해 주세요.",
                                                 Buttons = cardButtons,
                                             };
 
