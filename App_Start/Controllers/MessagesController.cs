@@ -681,6 +681,11 @@ namespace HanjinChatBot
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
+                            else if (apiActiveText.Equals("고객의말씀"))//이건 루이스에도 없는 것. 그냥 예외사항이다.
+                            {
+                                apiIntent = "F_고객의말씀";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
                             else
                             {
 
@@ -708,16 +713,7 @@ namespace HanjinChatBot
                             cacheList.luisIntent = checkSmallIntent1;
                             cacheList.luisEntities = checkSmallIntent1;
                         }
-
-                        if (apiIntent.Equals("F1_반송장번호") || apiIntent.Equals("F2_택배기사연락처"))
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
-
+                        
 
                         if (apiIntent.Equals("None"))
                         {
@@ -1559,8 +1555,8 @@ namespace HanjinChatBot
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
                             requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
-                            //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!이채원강사
-                            //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!이채원강사
+                            //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
+                            //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************
                             * apiIntent F_예약
                             * 
@@ -3393,7 +3389,7 @@ namespace HanjinChatBot
                                             {
                                                 Title = "",
                                                 //Text = "네~ 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a><br>집배점: " + jobj["org_nam"].ToString() + " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a><br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
-                                                Text = "언제든 필요한 게 있으면 말씀해 주세요.<br><br>택배예약<br>배송조회<br>택배요금",
+                                                Text = "언제든 필요한 게 있으면 말씀해 주세요.<br><br>예) 택배예약, 배송조회, 택배요금",
                                             };
 
                                             plAttachment = defaultCard.ToAttachment();
@@ -4445,7 +4441,7 @@ namespace HanjinChatBot
                                                 {
                                                     Title = "",
                                                     //Text = "네~ 고객님<br>문의하신 지역의 담당기사 연락처입니다.<br>근무 외 시간에는 통화가 어려우니 참고 해주시기 바랍니다.<br>(*근무시간: 09시~18시)<br><br>담당기사: <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a><br>집배점: " + jobj["org_nam"].ToString() + " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a><br><br>고객님께 작은 도움이 되었기를 바랍니다. 추가적으로 궁금한 사항은 언제든지 문의해 주세요.",
-                                                    Text = "언제든 필요한 게 있으면 말씀해 주세요.<br><br>택배예약<br>배송조회<br>택배요금",
+                                                    Text = "언제든 필요한 게 있으면 말씀해 주세요.<br><br>예) 택배예약, 배송조회, 택배요금",
                                                 };
 
                                                 plAttachment = defaultCard.ToAttachment();
@@ -4500,12 +4496,83 @@ namespace HanjinChatBot
                             {
 
                             }
-
                             /*****************************************************************
-                            * apiIntent F_모바일 인증
-                            * 
-                            ************************************************************** */
-                            if (apiIntent.Equals("F_모바일인증"))
+                             * apiIntent 고객의 말씀
+                             * 
+                             ************************************************************** */
+                            if (apiIntent.Equals("F_고객의말씀"))
+                            {
+                                apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
+
+                                if (authCheck.Equals("F"))
+                                {
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_고객의말씀]::고객의말씀");
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_모바일인증");
+                                    List<CardAction> cardButtons = new List<CardAction>();
+
+                                    CardAction deliveryButton = new CardAction();
+                                    deliveryButton = new CardAction()
+                                    {
+                                        Type = "imBack",
+                                        Value = "예. 휴대폰인증 하겠습니다",
+                                        Title = "휴대폰 인증"
+                                    };
+                                    cardButtons.Add(deliveryButton);
+
+                                    UserHeroCard plCard = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "고객의 말씀은 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 진행해 주세요",
+                                        Buttons = cardButtons,
+                                    };
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else
+                                {
+                                    String userPhone = userCheck[0].userPhone;
+                                    String dataUserPhone = "";
+                                    String[] telNumbers = dbutil.arrayStr(userPhone);
+                                    for (int i = 0; i < telNumbers.Length; i++)
+                                    {
+                                        dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
+                                    }
+
+                                    List<CardAction> addressButtons = new List<CardAction>();
+                                    CardAction addressButton = new CardAction();
+                                    addressButton = new CardAction()
+                                    {
+                                        Type = "openUrl",
+                                        Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
+                                        Title = "고객의 말씀"
+                                    };
+                                    addressButtons.Add(addressButton);
+
+                                    UserHeroCard addressPlCard3 = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "모바일앱에서 고객의 말씀을 진행합니다.<br>아래버튼을 눌러주세요.",
+                                        Buttons = addressButtons,
+                                    };
+                                    Attachment plAttachment = addressPlCard3.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                            }
+                            else
+                            {
+
+                            }
+
+
+
+                                /*****************************************************************
+                                * apiIntent F_모바일 인증
+                                * 
+                                ************************************************************** */
+                                if (apiIntent.Equals("F_모바일인증"))
                             {
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
@@ -5227,9 +5294,35 @@ namespace HanjinChatBot
                                                 plAttachment = addressPlCard3.ToAttachment();
                                                 apiMakerReply.Attachments.Add(plAttachment);
                                             }
+                                            else if (authUrl.Equals("[F_고객의말씀]::고객의말씀"))
+                                            {
+                                                String userPhone = userCheck[0].userPhone;
+                                                String dataUserPhone = "";
+                                                String[] telNumbers = dbutil.arrayStr(userPhone);
+                                                for (int i = 0; i < telNumbers.Length; i++)
+                                                {
+                                                    dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
+                                                }
 
+                                                List<CardAction> addressButtons = new List<CardAction>();
+                                                CardAction addressButton = new CardAction();
+                                                addressButton = new CardAction()
+                                                {
+                                                    Type = "openUrl",
+                                                    Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
+                                                    Title = "고객의 말씀"
+                                                };
+                                                addressButtons.Add(addressButton);
 
-
+                                                UserHeroCard addressPlCard3 = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = "모바일앱에서 고객의 말씀을 진행합니다.<br>아래버튼을 눌러주세요.",
+                                                    Buttons = addressButtons,
+                                                };
+                                                plAttachment = addressPlCard3.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                            }
 
                                             else if (authUrl.Equals("[F_예약취소]::나의예약취소"))
                                             {

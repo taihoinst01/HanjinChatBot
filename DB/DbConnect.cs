@@ -270,8 +270,13 @@ namespace HanjinChatBot.DB
                                                 dlgCard.btn1Context = "";
                                             }
                                         }
+
+                                        if (dlgCard.btn1Title.Equals("고객의 말씀") || dlgCard.btn1Title.Equals("고객의말씀"))
+                                        {
+                                            dlgCard.btn1Type = "imBack";
+                                            dlgCard.btn1Context = "고객의 말씀";
+                                        }
                                     }
-    
                                 }
                                 
                                 dlgCard.btn2Type = rdr2["BTN_2_TYPE"] as string;
@@ -298,11 +303,13 @@ namespace HanjinChatBot.DB
                                                 dlgCard.btn2Context = "";
                                             }
                                         }
+
+                                        if (dlgCard.btn2Title.Equals("고객의 말씀") || dlgCard.btn2Title.Equals("고객의말씀"))
+                                        {
+                                            dlgCard.btn2Type = "imBack";
+                                            dlgCard.btn2Context = "고객의 말씀";
+                                        }
                                     }
-
-
-
-                                        
                                 }
                                 dlgCard.btn3Type = rdr2["BTN_3_TYPE"] as string;
                                 dlgCard.btn3Title = rdr2["BTN_3_TITLE"] as string;
@@ -327,6 +334,12 @@ namespace HanjinChatBot.DB
                                             {
                                                 dlgCard.btn3Context = "";
                                             }
+                                        }
+
+                                        if (dlgCard.btn3Title.Equals("고객의 말씀") || dlgCard.btn3Title.Equals("고객의말씀"))
+                                        {
+                                            dlgCard.btn3Type = "imBack";
+                                            dlgCard.btn3Context = "고객의 말씀";
                                         }
                                     }
                                 }
@@ -353,6 +366,12 @@ namespace HanjinChatBot.DB
                                             {
                                                 dlgCard.btn4Context = "";
                                             }
+                                        }
+
+                                        if (dlgCard.btn4Title.Equals("고객의 말씀") || dlgCard.btn4Title.Equals("고객의말씀"))
+                                        {
+                                            dlgCard.btn4Type = "imBack";
+                                            dlgCard.btn4Context = "고객의 말씀";
                                         }
                                     }
                                 }
