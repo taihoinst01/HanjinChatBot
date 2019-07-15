@@ -3800,22 +3800,26 @@ namespace HanjinChatBot
                                             if (jobj["wrk_cod"].ToString().Equals("10"))
                                             {
                                                 wrkCod = "상품접수";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 현재 상품 발송을 위해 운송장이 접수된 상태입니다.<br>터미널 입고 시점부터 배송 일정 조회가 가능하며 당일 출고한 상품은 발송일 오후나 다음날 다시 한번 배송조회 확인해 주시기 바랍니다.<br>1~2일이 경과하여도 상품 이동 내역이 없는 경우에는 주문업체(쇼핑몰) 또는 보내는 분께 상품 발송 일자와 한진택배로 발송된 상품인지 문의해 주시기 바랍니다.";
+                                                //statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 현재 상품 발송을 위해 운송장이 접수된 상태입니다.<br>터미널 입고 시점부터 배송 일정 조회가 가능하며 당일 출고한 상품은 발송일 오후나 다음날 다시 한번 배송조회 확인해 주시기 바랍니다.<br>1~2일이 경과하여도 상품 이동 내역이 없는 경우에는 주문업체(쇼핑몰) 또는 보내는 분께 상품 발송 일자와 한진택배로 발송된 상품인지 문의해 주시기 바랍니다.";
+                                                statusText = "[상품접수]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>접수상태</font></strong><br>현재 상품 발송을 위해 운송장이 접수된 상태입니다.<br>지역에 따라 1~2일이상 소요될 수 있습니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("20"))
                                             {
                                                 wrkCod = "상품발송대기중";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 발송 터미널에 입고되어 상품 발송 대기 중입니다. 배송조회 하시는 다음날 다시 한번 확인해 주시기 바랍니다. 지역(현장) 사정에 따라 배송은 1~2일 소요될 수 있는 점 양해바랍니다.";
+                                                //statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 발송 터미널에 입고되어 상품 발송 대기 중입니다. 배송조회 하시는 다음날 다시 한번 확인해 주시기 바랍니다. 지역(현장) 사정에 따라 배송은 1~2일 소요될 수 있는 점 양해바랍니다.";
+                                                statusText = "[상품발송대기중]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>상품발송 대기중</font></strong><br>발송 터미널에 상품이 입고되어 발송대기 중입니다.<br>지역에 따라 1~2일이상 소요될 수 있습니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("30"))
                                             {
                                                 wrkCod = "이동중";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 상품이 발송되어, 이동 중입니다. 배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으니 다시 한번 확인 해 주시기 바랍니다. 배송지역 사정에 따라 배송은 1~2일 소요될 수 있는 점 양해바랍니다.";
+                                                //statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 상품이 발송되어, 이동 중입니다. 배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으니 다시 한번 확인 해 주시기 바랍니다. 배송지역 사정에 따라 배송은 1~2일 소요될 수 있는 점 양해바랍니다.";
+                                                statusText = "[이동중]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>상품이동중</font></strong><br>상품이 발송되어 이동중입니다.<br>지역에 따라 1~2일이상 소요될 수 있습니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("40"))
                                             {
                                                 wrkCod = "배송준비";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 현재 배송지역 터미널에 도착하여, 배송 담당자에게 인계를 위해 준비중입니다.<br>배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으며 배송은 1~2일 소요 될 수 있는 점 양해바랍니다.";
+                                                //statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 현재 배송지역 터미널에 도착하여, 배송 담당자에게 인계를 위해 준비중입니다.<br>배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으며 배송은 1~2일 소요 될 수 있는 점 양해바랍니다.";
+                                                statusText = "[배송준비]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>배송준비중</font></strong><br>배송지역 터미널에 도착하여, 배송 주닙중입니다.<br>지역에 따라 1~2일이상 소요될 수 있습니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("50"))
                                             {
@@ -3832,7 +3836,8 @@ namespace HanjinChatBot
                                                 telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
 
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 배송직원이 배송 중으로 " + dateText + " 배송예정이며 배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1~2일 소요 될 수 있는점 양해바랍니다. 자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + "또는  배송직원 전화번호 " + empTel + "로 문의하시기 바랍니다.";
+                                                //statusText = "<strong>· 배송예정일자: </strong > " + dateText + "<br>" + "<strong>· 배송상태: </strong><font color='#0101DF'>배송 중</font><br><strong>· 운송장번호: </strong><font color='#0101DF'>" + invoiceNumber + "</font><br><strong>· 배송직원: </strong>☎ " + empTel + "<br><strong>· 집배점: </strong>" + orgNam + " ☎ " + telNum + "<br><br>상품 확인이 안되시거나, 자세한 문의사항은<br>담당직원 또는 집배점으로 문의해 주세요.";
+                                                statusText = "[배송중]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>배송중</font></strong><br>· 집배점 : " + orgNam + " ☎ " + telNum + "<br>· 배송직원 : ☎  " + empTel + "<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("60"))
                                             {
@@ -3846,12 +3851,14 @@ namespace HanjinChatBot
                                                 orgNam = jobj["org_nam"].ToString();
                                                 telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 " + dateText + " 배송완료하였습니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는  배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
+                                                //statusText = "<strong>· 배송완료일자: </strong > " + dateText + "<br>" + "<strong>· 배송상태: </strong><font color='#0101DF'>배송완료</font><br><strong>· 운송장번호: </strong><font color='#0101DF'>" + invoiceNumber + "</font><br><strong>· 배송직원: </strong>☎ " + empTel + "<br><strong>· 집배점: </strong>" + orgNam + " ☎ " +telNum + "<br><br>상품 확인이 안되시거나, 자세한 문의사항은<br>담당직원 또는 집배점으로 문의해 주세요.<br>※ 운전 중, 근무시간이 아닌 경우 통화가 어려울 수 있습니다";
+                                                statusText = "[배송완료]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 집배점 : " + orgNam + " ☎ " + telNum + "<br>· 배송직원 : ☎  " + empTel + "<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("70"))
                                             {
                                                 wrkCod = "오도착";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 현재 배송지역이 아닌 다른 지역에 경유 중으로 배송은 1~2일 더 소요될 수 있는 점 양해부탁드립니다.<br>배송조회 하시는 다음날 다시 한번 확인해 주시기 바랍니다. ";
+                                                //statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 현재 배송지역이 아닌 다른 지역에 경유 중으로 배송은 1~2일 더 소요될 수 있는 점 양해부탁드립니다.<br>배송조회 하시는 다음날 다시 한번 확인해 주시기 바랍니다. ";
+                                                statusText = "[오도착]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>경유중</font></strong><br>현재 배송지역이 아닌 다른 지역에 경유 중으로 배송은 1~2일이 더 소요될 수 있는 점 양해 부탁드립니다.";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("80"))
                                             {
@@ -3861,7 +3868,9 @@ namespace HanjinChatBot
                                                 telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
                                                 //empTel = jobj["emp_tel"].ToString();
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong>" + invoiceNumber + "</strong>는 배송지역 사정으로 배송이 1~2일 더 소요될 수 있는 점 양해부탁드립니다.<br>자세한 사항은 " + orgNam + "집배점 전화번호 " + telNum + " 또는 배송직원 전화번호 " + empTel + " 로 문의하시기 바랍니다.";
+
+                                                //statusText = "<strong>· 배송상태: </strong><font color='#0101DF'>미배송</font><br><strong>· 운송장번호: </strong><font color='#0101DF'>" + invoiceNumber + "</font><br><strong>· 배송직원: </strong>☎ " + empTel + "<br><strong>· 집배점: </strong>" + orgNam + " ☎ " + telNum + "<br><br>자세한 문의사항은<br>담당직원 또는 집배점으로 문의해 주세요.";
+                                                statusText = "[미배송]<br>· 운송장번호 :<strong>" + invoiceNumber + "</strong><br>· 배송상태 :<strong><font color='#0101DF'>배송중</font></strong><br>· 집배점 : " + orgNam + " ☎ " + telNum + "<br>· 배송직원 : ☎  " + empTel + "<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
                                             }
                                             else
                                             {
