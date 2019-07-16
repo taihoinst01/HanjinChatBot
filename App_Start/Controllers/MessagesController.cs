@@ -955,17 +955,7 @@ namespace HanjinChatBot
                                 if (commonReply.Attachments.Count > 0)
                                 {
                                     SetActivity(commonReply);
-                                    /*
-                                    //NONE_DLG 예외처리
-                                    if (luisIntent.Equals("NONE_DLG"))
-                                    {
-                                        replyresult = "D";
-                                    }
-                                    else
-                                    {
-                                        replyresult = "H";
-                                    }
-                                    */
+                                    replyresult = "H";
                                 }
                             }
                         }
@@ -1551,9 +1541,9 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
-                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
@@ -1563,7 +1553,7 @@ namespace HanjinChatBot
                             ************************************************************** */
                             if (apiIntent.Equals("F_예약"))
                             {
-
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 //개인택배예약
@@ -2247,6 +2237,7 @@ namespace HanjinChatBot
                                  ************************************************************** */
                             if (apiIntent.Equals("F_예약확인"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Equals("집하예정일확인"))
@@ -2668,6 +2659,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_예약취소"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("예약취소선택"))
@@ -3297,6 +3289,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_운송장번호확인"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (containNum == true)//예약번호나 원 운송장 번호라 판단함
@@ -3750,6 +3743,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_택배배송일정조회"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("에대한배송일정조회") || containNum == true)//직접이던 선택이던
@@ -4333,6 +4327,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_집배점/기사연락처"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("연락처찾기"))
@@ -4612,6 +4607,7 @@ namespace HanjinChatBot
                              ************************************************************** */
                             if (apiIntent.Equals("F_고객의말씀"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
 
@@ -4684,6 +4680,7 @@ namespace HanjinChatBot
                                 ************************************************************** */
                                 if (apiIntent.Equals("F_모바일인증"))
                             {
+                                replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
                                 if (apiActiveText.Contains("예휴대폰인증"))
@@ -6274,20 +6271,13 @@ namespace HanjinChatBot
                         {
                             luisIntent = "";
                         }
-                        if (luisIntent.Equals("NONE_DLG"))
-                        {
-                            replyresult = "H";
-                        }
+                        
                         int dbResult = db.insertUserQuery(relationList, luisId, luisIntent, luisEntities, luisIntentScore, replyresult, orgMent);
 
                         //history table insert
                         //NONE_DLG 예외처리
                         //db.insertHistory(activity.Conversation.Id, activity.ChannelId, ((endTime - MessagesController.startTime).Milliseconds), "", "", "", "", replyresult);
-                        if (luisIntent.Equals("NONE_DLG"))
-                        {
-                            replyresult = "D";
-                        }
-
+                        
                         db.insertHistory(null, activity.Conversation.Id, activity.ChannelId, ((endTime - MessagesController.startTime).Milliseconds), luisIntent, luisEntities, luisIntentScore, dlgId, replyresult, orgMent);
                         replyresult = "";
                         luisIntent = "";
