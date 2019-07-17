@@ -1551,9 +1551,9 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
-                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
@@ -2227,7 +2227,7 @@ namespace HanjinChatBot
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "네~ 고객님<br>문의하시려는 항목을 아래에서 선택해<br>주세요<br>원하시는 항목이 없으면, 이렇게 입력해<br>보세요.<br><br>택배는 어떻게 보내나요?<br>배송조회 해주세요<br>택배요금이 얼마인가요?",
+                                        Text = "네~ 고객님<br>문의하시려는 항목을 아래에서 선택해<br>주세요<br>원하시는 항목이 없으면, 이렇게 입력해<br>보세요.<br><br>예) 택배예약, 배송조회, 택배요금",
                                         Buttons = cardButtons,
                                     };
                                     Attachment plAttachment = plCard.ToAttachment();
