@@ -1551,9 +1551,9 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
-                            requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
@@ -1955,10 +1955,19 @@ namespace HanjinChatBot
                                             };
                                             cardButtons.Add(returnButton);
 
+                                            CardAction extButton = new CardAction();
+                                            extButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "반품택배예약 이용안내",
+                                                Title = "반품맞교환 택배예약 이용안내"
+                                            };
+                                            cardButtons.Add(extButton);
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>고객님께서 받으셨던 택배목록에서 반품택배예약을 하시려면 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br><br>또는 반품하시고자 하는 운송장번호를<br>직접 입력해 주세요.",
+                                                Text = "네~ 고객님<br>반품, 맞교환 택배 예약 접수는 구매하신 업체를 통해서 신청하시거나 당사를 통해서도 접수 가능합니다.<br><br>고객님께서 받으셨던 택배목록에서 반품택배예약을 하시려면 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br><br>또는 운송장번호를 입력해 주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2422,7 +2431,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 직접 입력해 주세요",
+                                                Text = "네~고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3047,7 +3056,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 바로 입력해 주세요",
+                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3485,7 +3494,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard1 = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호나 운송장번호를 입력해 주십시오.",
+                                                Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호나 운송장번호를 입력해 주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment1 = plCard1.ToAttachment();
@@ -4596,7 +4605,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "네~ 고객님. 문의하실 항목을 아래에서<br>선택해 주세요",
+                                            Text = "네~ 고객님. 문의하실 항목을 아래에서 선택해 주세요.<br>원하시는 방목이 없으면 이렇게 입력해 보세요.<br>예) 택배예약, 배송조회, 택배요금",
                                             Buttons = cardButtons,
                                         };
 
