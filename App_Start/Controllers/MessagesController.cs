@@ -686,6 +686,11 @@ namespace HanjinChatBot
                                 apiIntent = "F_고객의말씀";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
+                            else if (apiActiveText.Equals("자주하는질문"))//이건 루이스에도 없는 것. 그냥 예외사항이다.
+                            {
+                                apiIntent = "F_자주하는질문";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
                             else
                             {
 
@@ -4085,7 +4090,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 직접 입력해 주세요",
+                                                Text = "네~ 고객님<br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -4691,13 +4696,119 @@ namespace HanjinChatBot
 
                             }
 
+                            /*****************************************************************
+                             * apiIntent 자주하는질문
+                             * 
+                             ************************************************************** */
+                            if (apiIntent.Equals("F_고객의말씀"))
+                            {
+                                replyresult = "H";
+                                apiOldIntent = apiIntent;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
 
+                                List<CardAction> cardButtons = new List<CardAction>();
 
-                                /*****************************************************************
-                                * apiIntent F_모바일 인증
-                                * 
-                                ************************************************************** */
-                                if (apiIntent.Equals("F_모바일인증"))
+                                CardAction guideButton1 = new CardAction();
+                                guideButton1 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "예약",
+                                    Title = "예약"
+                                };
+                                cardButtons.Add(guideButton1);
+
+                                CardAction guideButton2 = new CardAction();
+                                guideButton2 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "반품택배예약",
+                                    Title = "반품택배예약"
+                                };
+                                cardButtons.Add(guideButton2);
+
+                                CardAction guideButton3 = new CardAction();
+                                guideButton3 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "예약확인",
+                                    Title = "예약확인"
+                                };
+                                cardButtons.Add(guideButton3);
+
+                                CardAction guideButton4 = new CardAction();
+                                guideButton4 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "예약취소",
+                                    Title = "예약취소"
+                                };
+                                cardButtons.Add(guideButton4);
+
+                                CardAction guideButton5 = new CardAction();
+                                guideButton5 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "배송문의",
+                                    Title = "배송문의"
+                                };
+                                cardButtons.Add(guideButton5);
+
+                                CardAction guideButton6 = new CardAction();
+                                guideButton6 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "견적의뢰",
+                                    Title = "견적의뢰"
+                                };
+                                cardButtons.Add(guideButton6);
+
+                                CardAction guideButton7 = new CardAction();
+                                guideButton7 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "현금영수증",
+                                    Title = "현금영수증"
+                                };
+                                cardButtons.Add(guideButton7);
+
+                                CardAction guideButton8 = new CardAction();
+                                guideButton8 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "직원,집배점연락처",
+                                    Title = "직원,집배점연락처"
+                                };
+                                cardButtons.Add(guideButton8);
+
+                                CardAction guideButton9 = new CardAction();
+                                guideButton9 = new CardAction()
+                                {
+                                    Type = "imBack",
+                                    Value = "고객의말씀",
+                                    Title = "고객의말씀"
+                                };
+                                cardButtons.Add(guideButton9);
+
+                                UserHeroCard plCard = new UserHeroCard()
+                                {
+                                    Title = "",
+                                    Text = "",
+                                    Buttons = cardButtons,
+                                };
+                                Attachment plAttachment = plCard.ToAttachment();
+                                apiMakerReply.Attachments.Add(plAttachment);
+                                SetActivity(apiMakerReply);
+                            }
+                            else
+                            {
+
+                            }
+
+                            /*****************************************************************
+                            * apiIntent F_모바일 인증
+                            * 
+                            ************************************************************** */
+                            if (apiIntent.Equals("F_모바일인증"))
                             {
                                 replyresult = "H";
                                 apiOldIntent = apiIntent;
