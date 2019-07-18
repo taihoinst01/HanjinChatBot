@@ -4700,7 +4700,7 @@ namespace HanjinChatBot
                              * apiIntent 자주하는질문
                              * 
                              ************************************************************** */
-                            if (apiIntent.Equals("F_고객의말씀"))
+                            if (apiIntent.Equals("F_자주하는질문"))
                             {
                                 replyresult = "H";
                                 apiOldIntent = apiIntent;
