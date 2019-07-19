@@ -259,6 +259,7 @@ namespace HanjinChatBot.DB
                                     }
                                     else
                                     {
+                                        String customerData1 = Regex.Replace(dlgCard.btn1Title, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
                                         if (dlgCard.btn1Type.Equals("openUrl"))
                                         {
                                             if (!string.IsNullOrEmpty(dlgCard.btn1ContextM))
@@ -271,7 +272,7 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (dlgCard.btn1Title.Equals("고객의 말씀") || dlgCard.btn1Title.Equals("고객의말씀"))
+                                        if (customerData1.Equals("고객의말씀"))
                                         {
                                             dlgCard.btn1Type = "imBack";
                                             dlgCard.btn1Context = "고객의 말씀";
@@ -292,6 +293,7 @@ namespace HanjinChatBot.DB
                                     }
                                     else
                                     {
+                                        String customerData2 = Regex.Replace(dlgCard.btn2Title, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
                                         if (dlgCard.btn2Type.Equals("openUrl"))
                                         {
                                             if (!string.IsNullOrEmpty(dlgCard.btn2ContextM))
@@ -304,7 +306,7 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (dlgCard.btn2Title.Equals("고객의 말씀") || dlgCard.btn2Title.Equals("고객의말씀"))
+                                        if (customerData2.Equals("고객의 말씀"))
                                         {
                                             dlgCard.btn2Type = "imBack";
                                             dlgCard.btn2Context = "고객의 말씀";
@@ -324,6 +326,7 @@ namespace HanjinChatBot.DB
                                     }
                                     else
                                     {
+                                        String customerData3 = Regex.Replace(dlgCard.btn3Title, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
                                         if (dlgCard.btn3Type.Equals("openUrl"))
                                         {
                                             if (!string.IsNullOrEmpty(dlgCard.btn3ContextM))
@@ -336,7 +339,7 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (dlgCard.btn3Title.Equals("고객의 말씀") || dlgCard.btn3Title.Equals("고객의말씀"))
+                                        if (customerData3.Equals("고객의 말씀"))
                                         {
                                             dlgCard.btn3Type = "imBack";
                                             dlgCard.btn3Context = "고객의 말씀";
@@ -356,6 +359,7 @@ namespace HanjinChatBot.DB
                                     }
                                     else
                                     {
+                                        String customerData4 = Regex.Replace(dlgCard.btn4Title, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
                                         if (dlgCard.btn4Type.Equals("openUrl"))
                                         {
                                             if (!string.IsNullOrEmpty(dlgCard.btn4ContextM))
@@ -368,7 +372,7 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (dlgCard.btn4Title.Equals("고객의 말씀") || dlgCard.btn4Title.Equals("고객의말씀"))
+                                        if (customerData4.Equals("고객의 말씀"))
                                         {
                                             dlgCard.btn4Type = "imBack";
                                             dlgCard.btn4Context = "고객의 말씀";
