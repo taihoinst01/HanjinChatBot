@@ -3989,9 +3989,12 @@ namespace HanjinChatBot
                                                 CardAction returnButton = new CardAction();
                                                 returnButton = new CardAction()
                                                 {
-                                                    Type = "openUrl",
-                                                    Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
-                                                    Title = "배송문의"
+                                                    //Type = "openUrl",
+                                                    //Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
+                                                    //Title = "배송문의"
+                                                    Type = "imBack",
+                                                    Value = "고객의말씀",
+                                                    Title = "고객의말씀"
                                                 };
                                                 cardButtons.Add(returnButton);
 
