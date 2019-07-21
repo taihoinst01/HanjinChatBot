@@ -1919,7 +1919,7 @@ namespace HanjinChatBot
                                         {
                                             Type = "postBack",
                                             Value = "[F_예약]::운송장번호직접입력",
-                                            Title = "운송장 번호 직접입력"
+                                            Title = "운송장번호직접입력"
                                         };
                                         cardButtons.Add(returnButton);
 
@@ -1956,7 +1956,7 @@ namespace HanjinChatBot
                                             {
                                                 Type = "postBack",
                                                 Value = "[F_예약]::운송장번호직접입력",
-                                                Title = "운송장 번호 직접입력"
+                                                Title = "운송장번호직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
@@ -2001,7 +2001,7 @@ namespace HanjinChatBot
                                             {
                                                 Type = "postBack",
                                                 Value = "[F_예약]::운송장번호직접입력",
-                                                Title = "운송장 번호 직접입력"
+                                                Title = "운송장번호직접입력"
                                             };
                                             startCardButtons.Add(startPlButton);
 
@@ -2391,7 +2391,7 @@ namespace HanjinChatBot
                                         {
                                             Type = "postBack",
                                             Value = "[F_예약확인]::예약번호직접입력",
-                                            Title = "예약 번호 직접입력"
+                                            Title = "예약번호직접입력"
                                         };
                                         cardButtons.Add(returnButton);
 
@@ -2429,7 +2429,7 @@ namespace HanjinChatBot
                                                 Type = "postBack",
                                                 //Value = "아니오. 휴대폰인증 취소하겠습니다",
                                                 Value = "[F_예약확인]::예약번호직접입력",
-                                                Title = "예약 번호 직접입력"
+                                                Title = "예약번호직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
@@ -2508,7 +2508,7 @@ namespace HanjinChatBot
                                                 {
                                                     Type = "postBack",
                                                     Value = "[F_예약확인]::운송장예약번호직접입력",
-                                                    Title = "운송장/예약번호 직접입력"
+                                                    Title = "운송장/예약번호직접입력"
                                                 };
                                                 numberButtons.Add(numberButton);
 
@@ -3016,7 +3016,7 @@ namespace HanjinChatBot
                                         {
                                             Type = "postBack",
                                             Value = "[F_예약취소]::예약번호직접입력",
-                                            Title = "예약 번호 직접입력"
+                                            Title = "예약번호직접입력"
                                         };
                                         cardButtons.Add(returnButton);
 
@@ -3054,7 +3054,7 @@ namespace HanjinChatBot
                                                 Type = "postBack",
                                                 //Value = "아니오. 휴대폰인증 취소하겠습니다",
                                                 Value = "[F_예약취소]::예약번호직접입력",
-                                                Title = "예약 번호 직접입력"
+                                                Title = "예약번호직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
@@ -3139,7 +3139,7 @@ namespace HanjinChatBot
                                                 {
                                                     Type = "postBack",
                                                     Value = "[F_예약취소]::예약번호직접입력",
-                                                    Title = "예약번호 직접입력"
+                                                    Title = "예약번호직접입력"
                                                 };
                                                 numberButtons.Add(numberButton);
 
@@ -3363,7 +3363,7 @@ namespace HanjinChatBot
                                             {
                                                  Type = "postBack",
                                                  Value = "[F_운송장번호확인]::반송장번호직접입력",
-                                                 Title = "예약번호/운송장 번호 직접입력"
+                                                 Title = "예약번호/운송장번호직접입력"
                                             };
                                             cardButtons.Add(mhomeButton);
 
@@ -3443,7 +3443,7 @@ namespace HanjinChatBot
                                         {
                                             Type = "postBack",
                                             Value = "[F_운송장번호확인]::반송장번호직접입력",
-                                            Title = "예약번호/운송장 번호 직접입력"
+                                            Title = "예약번호/운송장번호직접입력"
                                         };
                                         cardButtons.Add(returnButton);
 
@@ -3492,7 +3492,7 @@ namespace HanjinChatBot
                                             {
                                                 Type = "postBack",
                                                 Value = "[F_운송장번호확인]::반송장번호직접입력",
-                                                Title = "예약번호/운송장 번호 직접입력"
+                                                Title = "예약번호/운송장번호직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
@@ -3528,7 +3528,7 @@ namespace HanjinChatBot
                                             {
                                                 Type = "postBack",
                                                 Value = "[F_운송장번호확인]::반송장번호직접입력",
-                                                Title = "예약번호/운송장 번호 직접입력"
+                                                Title = "예약번호/운송장번호직접입력"
                                             };
                                             returnButtons.Add(returnListButton);
 
@@ -3999,6 +3999,7 @@ namespace HanjinChatBot
                                                 {
                                                     Title = "",
                                                     Text = statusText,
+                                                    Buttons = cardButtons,
                                                 };
 
                                                 Attachment plAttachment = plCard.ToAttachment();
@@ -4045,7 +4046,7 @@ namespace HanjinChatBot
                                         {
                                             Type = "postBack",
                                             Value = "[F_택배배송일정조회]::운송장번호직접입력",
-                                            Title = "운송장 번호 직접입력"
+                                            Title = "운송장번호직접입력"
                                         };
                                         cardButtons.Add(returnButton);
 
@@ -4083,7 +4084,7 @@ namespace HanjinChatBot
                                                 Type = "postBack",
                                                 //Value = "아니오. 휴대폰인증 취소하겠습니다",
                                                 Value = "[F_택배배송일정조회]::운송장번호직접입력",
-                                                Title = "운송장 번호 직접입력"
+                                                Title = "운송장번호직접입력"
                                             };
                                             cardButtons.Add(returnButton);
 
@@ -5063,7 +5064,7 @@ namespace HanjinChatBot
                                                 {
                                                     Type = "postBack",
                                                     Value = "[F_예약]::운송장번호직접입력",
-                                                    Title = "운송장 번호 직접입력"
+                                                    Title = "운송장번호직접입력"
                                                 };
                                                 startCardButtons.Add(startPlButton);
 
@@ -5342,7 +5343,7 @@ namespace HanjinChatBot
                                                     {
                                                         Type = "postBack",
                                                         Value = "[F_예약확인]::운송장예약번호직접입력",
-                                                        Title = "운송장/예약번호 직접입력"
+                                                        Title = "운송장/예약번호직접입력"
                                                     };
                                                     numberButtons.Add(numberButton);
 
@@ -5635,7 +5636,7 @@ namespace HanjinChatBot
                                                     {
                                                         Type = "postBack",
                                                         Value = "[F_예약취소]::예약번호직접입력",
-                                                        Title = "예약번호 직접입력"
+                                                        Title = "예약번호직접입력"
                                                     };
                                                     numberButtons.Add(numberButton);
 
@@ -6076,7 +6077,7 @@ namespace HanjinChatBot
                                                     {
                                                         Type = "postBack",
                                                         Value = "[F_운송장번호확인]::반송장번호직접입력",
-                                                        Title = "예약번호/운송장 번호 직접입력"
+                                                        Title = "예약번호/운송장번호직접입력"
                                                     };
                                                     returnButtons.Add(returnListButton);
 
