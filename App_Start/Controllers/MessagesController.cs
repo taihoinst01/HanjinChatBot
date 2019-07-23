@@ -1923,10 +1923,19 @@ namespace HanjinChatBot
                                         };
                                         cardButtons.Add(returnButton);
 
+                                        CardAction extButton = new CardAction();
+                                        extButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "반품택배예약 이용안내",
+                                            Title = "반품맞교환 택배예약 이용안내"
+                                        };
+                                        cardButtons.Add(extButton);
+
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "PC 버전에서는 홈페이지에서 예약이 가능합니다.<BR>또는 직접 운송장번호를 입력해 주세요.",
+                                            Text = "네~ 고객님<br>반품, 맞교환 택배 예약 접수는 구매하신 업체를 통해서 신청하시거나 당사를 통해서도 접수 가능합니다.<br><br>또는 운송장번호를 입력해 주십시오.",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -2398,7 +2407,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "PC 버전에서는 홈페이지에서 가능합니다.<BR>또는 직접 예약번호를 입력해 주세요.",
+                                            Text = "네~ 고객님<br>예약번호를 입력해 주십시오",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -2436,7 +2445,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3023,7 +3032,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "PC 버전에서는 홈페이지에서 가능합니다.<BR>또는 직접 예약번호를 입력해 주세요.",
+                                            Text = "네~ 고객님<br>또는 예약번호를 입력해 주십시오",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -3450,7 +3459,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard1 = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "PC 버전에서는 홈페이지에서 반송장번호 확인이 가능합니다.<BR>또는 예약번호나 운송장번호를 입력해 주십시오.",
+                                            Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>또는 예약번호나 운송장번호를 입력해 주십시오.",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment1 = plCard1.ToAttachment();
@@ -4056,7 +4065,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "PC 버전에서는 홈페이지에서 가능합니다.<BR>또는 직접 운송장 번호를 입력해 주세요.",
+                                            Text = "네~ 고객님<br>운송장번호를 입력해 주십시오",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
