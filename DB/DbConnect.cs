@@ -986,24 +986,25 @@ namespace HanjinChatBot.DB
                 cmd.Parameters.AddWithValue("@Query", Regex.Replace(queryStr, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline).Trim().ToLower());
                 cmd.Parameters.AddWithValue("@intentID", intentName.Trim());
                 cmd.Parameters.AddWithValue("@entitiesIDS", entities.Trim().ToLower());
+                /*
                 if (result.Equals("D") || result.Equals("S") || result.Equals("E") || result.Equals("B"))
                 {
                     cmd.Parameters.AddWithValue("@intentScore", "0");
                 }
                 else
                 {
-                    //if(MessagesController.relationList != null)
-                    //{
+                    
                     if (relationList.Count > 0 && relationList[0].luisEntities != null)
                     {
                         cmd.Parameters.AddWithValue("@intentScore", relationList[0].luisScore);
                     }
-                    //}
                     else
                     {
                         cmd.Parameters.AddWithValue("@intentScore", luisScore);
                     }
                 }
+                */
+                cmd.Parameters.AddWithValue("@intentScore", "0");
                 cmd.Parameters.AddWithValue("@luisID", luisID);
                 cmd.Parameters.AddWithValue("@result", result);
                 cmd.Parameters.AddWithValue("@appID", appID);
