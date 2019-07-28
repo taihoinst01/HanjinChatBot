@@ -6409,8 +6409,24 @@ namespace HanjinChatBot
                         {
                             replyresult = "H";
                         }
+
+                        if (luisIntent.Equals("None"))
+                        {
+                            if (apiIntent.Equals("None"))
+                            {
+                                int dbResult = db.insertUserQuery(relationList, luisId, luisIntent, luisEntities, luisIntentScore, replyresult, orgMent);
+                            }
+                            else
+                            {
+                                //api 일때는 처리하지 않기.
+                            }
+                        }
+                        else
+                        {
+                            int dbResult = db.insertUserQuery(relationList, luisId, luisIntent, luisEntities, luisIntentScore, replyresult, orgMent);
+                        }
                         
-                        int dbResult = db.insertUserQuery(relationList, luisId, luisIntent, luisEntities, luisIntentScore, replyresult, orgMent);
+                        
 
                         //history table insert
                         //NONE_DLG 예외처리
