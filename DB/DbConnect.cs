@@ -1410,7 +1410,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 cmd.Connection = conn;
 
-                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK, AUTH_URL, API_CHECK, SORRY_INTENT, TEMP_NUMBER ";
+                cmd.CommandText += "SELECT  TOP 1 CHANNELDATA, CONVERSATIONSID, USER_PHONE, API_INTENT, API_OLDINTENT, ISNULL(AUTH_CHECK, 'F') AS AUTH_CHECK, AUTH_NUMBER, MOBILEPC, USER_NAME, NAMECHECK, ADDRESSCHECK, AUTH_URL, API_CHECK, SORRY_INTENT, ISNULL(TEMP_NUMBER, '') AS TEMP_NUMBER ";
                 cmd.CommandText += "FROM    TBL_USERCHECK ";
                 cmd.CommandText += "WHERE  CHANNELDATA = @channeldata ";
                 cmd.CommandText += "AND      CONVERSATIONSID = @conversationsId ";

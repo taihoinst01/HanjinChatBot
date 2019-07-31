@@ -691,6 +691,11 @@ namespace HanjinChatBot
                                 apiIntent = "F_자주하는질문";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
+                            else if (apiActiveText.Equals("위탁배송가능여부"))
+                            {
+                                apiIntent = "F_위탁배송";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
                             else
                             {
 
@@ -1331,6 +1336,10 @@ namespace HanjinChatBot
                                 }
                             }
                         }
+                        else if (checkApiintent.Equals("F_위탁배송"))
+                        {
+                            
+                        }
                         else
                         {
                             if (checkApiTF.Equals("F"))
@@ -1558,7 +1567,6 @@ namespace HanjinChatBot
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
-                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!(에물레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
@@ -4784,7 +4792,7 @@ namespace HanjinChatBot
                                 UserHeroCard plCard = new UserHeroCard()
                                 {
                                     Title = "",
-                                    Text = "",
+                                    Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
                                     Buttons = cardButtons,
                                 };
                                 Attachment plAttachment = plCard.ToAttachment();
@@ -4806,219 +4814,308 @@ namespace HanjinChatBot
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
 
-                                List<UserCheck> checkUserData = new List<UserCheck>();
-                                checkUserData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
-                                String userPhone = userCheck[0].userPhone;
-                                String invoiceNm = userCheck[0].tempNumber;
-
-                                postParams = new StringBuilder();
-                                postParams.Append("wbl_num=" + invoiceNm);
-
-                                Encoding encoding = Encoding.UTF8;
-                                byte[] result = encoding.GetBytes(postParams.ToString());
-
-                                wReq = (HttpWebRequest)WebRequest.Create(goodLocation);
-                                wReq.Method = "POST";
-                                wReq.ContentType = "application/x-www-form-urlencoded";
-                                wReq.ContentLength = result.Length;
-
-                                postDataStream = wReq.GetRequestStream();
-                                postDataStream.Write(result, 0, result.Length);
-                                postDataStream.Close();
-
-                                wResp = (HttpWebResponse)wReq.GetResponse();
-                                respPostStream = wResp.GetResponseStream();
-                                readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
-                                String goodLocationJsonData = readerPost.ReadToEnd();
-                                Debug.WriteLine("post data(위탁배송데이터)====" + goodLocationJsonData);
-                                /************************************************/
-                                /*
-                                WebClient webClient = new WebClient();
-                                String sample = goodLocation + "?wbl_num= " + invoiceNumber;
-                                Stream stream = webClient.OpenRead(sample);
-                                String goodLocationJsonData = new StreamReader(stream, Encoding.GetEncoding("ks_c_5601-1987"), true).ReadToEnd();
-                                */
-                                JArray obj = JArray.Parse(goodLocationJsonData);
-
-                                String wrkCod = "";//상태코드
-                                String orgNam = ""; //집배점명
-                                String telNum = ""; //전화번호
-                                String empTel = ""; //배송직원전화번호
-                                String statusText = "";
-
-                                foreach (JObject jobj in obj)
+                                if (apiActiveText.Contains("운송장번호직접입력"))
                                 {
-
-
-
-
-
-                                    if (jobj["wrk_cod"].ToString().Equals("10"))
+                                    UserHeroCard plCard = new UserHeroCard()
                                     {
-                                        wrkCod = "상품접수";
-                                        statusText = "네~ 고객님<br><strong><font color='#0101DF'>" + wrkCod + "</font></strong>중으로 위탁장소 전달 가능 상태가 아닙니다.	<br>위탁장소 배송 가능여부는 배송직원에게 상품이 전달된 이후 확인이 가능합니다.<br>배송지역 상품 도착여부 확인 후 재문의 부탁드릴게요.";
+                                        Title = "",
+                                        Text = "정확한 운송장 번호를 입력해 주세요.",
+                                    };
 
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else if (apiActiveText.Equals("위탁배송가능여부"))
+                                {
+                                    List<CardAction> cardButtons = new List<CardAction>();
 
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("20"))
+                                    CardAction returnButton = new CardAction();
+                                    returnButton = new CardAction()
                                     {
-                                        wrkCod = "상품발송대기중";
-                                        statusText = "네~ 고객님<br><strong><font color='#0101DF'>" + wrkCod + "</font></strong>중으로 위탁장소 전달 가능 상태가 아닙니다.	<br>위탁장소 배송 가능여부는 배송직원에게 상품이 전달된 이후 확인이 가능합니다.<br>배송지역 상품 도착여부 확인 후 재문의 부탁드릴게요.";
+                                        Type = "postBack",
+                                        Value = "[F_위탁배송]::운송장번호직접입력",
+                                        Title = "운송장번호 직접입력"
+                                    };
+                                    cardButtons.Add(returnButton);
 
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("30"))
+                                    UserHeroCard plCard = new UserHeroCard()
                                     {
-                                        wrkCod = "이동중";
-                                        statusText = "네~ 고객님<br><strong><font color='#0101DF'>" + wrkCod + "</font></strong>중으로 위탁장소 전달 가능 상태가 아닙니다.	<br>위탁장소 배송 가능여부는 배송직원에게 상품이 전달된 이후 확인이 가능합니다.<br>배송지역 상품 도착여부 확인 후 재문의 부탁드릴게요.";
+                                        Title = "",
+                                        Text = "네~ 고객님<br>운송장번호를 입력해 주십시오",
+                                        Buttons = cardButtons,
+                                    };
+                                    Attachment plAttachment = plCard.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                }
+                                else
+                                {
+                                    Boolean goAPI = false;
 
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
+                                    List<UserCheck> checkUserData = new List<UserCheck>();
+                                    checkUserData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
+                                    String userPhone = userCheck[0].userPhone;
+                                    String invoiceNm = userCheck[0].tempNumber;
 
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("40"))
+                                    if (invoiceNm.Equals("") || string.IsNullOrEmpty(invoiceNm))
                                     {
-                                        wrkCod = "배송준비";
-                                        statusText = "네~ 고객님<br>위탁장소 배송 가능여부 확인은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>고객님의 요청하신 장소에 배송 후 분실시 상품에 대한 변상이 어렵고,<br>고객님께서 직접적인 피해를 보실수있사오니, 신중히 요청해 주시기 바랍니다.";
-
-                                        UserHeroCard plCard = new UserHeroCard()
+                                        if (containNum == true)
                                         {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("50"))
-                                    {
-                                        wrkCod = "배송중";
-                                        String tempDate = jobj["wrk_ymd"].ToString();
-                                        String yearText = tempDate.Substring(0, 4);
-                                        String monthText = tempDate.Substring(4, 2);
-                                        String dayText = tempDate.Substring(6, 2);
-                                        String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
-
-                                        orgNam = jobj["org_nam"].ToString();
-                                        //telNum = jobj["tel_num"].ToString();
-                                        //empTel = jobj["emp_tel"].ToString();
-                                        telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
-                                        empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
-
-                                        statusText = "네~ 고객님<br>위탁장소 배송 가능여부 확인은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>고객님의 요청하신 장소에 배송 후 분실시 상품에 대한 변상이 어렵고,<br>고객님께서 직접적인 피해를 보실수있사오니, 신중히 요청해 주시기 바랍니다.<br><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
-
-                                        UserHeroCard plCard = new UserHeroCard()
+                                            goAPI = true;
+                                            invoiceNm = Regex.Replace(activity.Text, @"\D", "");
+                                        }
+                                        else
                                         {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("60"))
-                                    {
-                                        wrkCod = "배송완료";
-                                        String tempDate = jobj["wrk_ymd"].ToString();
-                                        String yearText = tempDate.Substring(0, 4);
-                                        String monthText = tempDate.Substring(4, 2);
-                                        String dayText = tempDate.Substring(6, 2);
-                                        String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
-
-                                        orgNam = jobj["org_nam"].ToString();
-                                        telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
-                                        empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
-
-                                        statusText = "네~ 고객님<br>문의하신 운송장 번호 <strong><font color='#0101DF'>(" + invoiceNm + ")</font></strong> 번은 <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong>되어 위탁배송이 가능 상태가 아닙니다.<br><br>상품을 받지 못하셨거나, 다른 문의 사항이 있으신 경우<br>집배점 또는 배송직원에게 확인해주시기 바랍니다.<br><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("70"))
-                                    {
-                                        wrkCod = "오도착";
-                                        statusText = "[오도착]<br><strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>경유중</font></strong><br>현재 배송지역이 아닌 다른 지역에 경유 중으로 배송은 1~2일이 더 소요될 수 있는 점 양해 부탁드립니다.";
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (jobj["wrk_cod"].ToString().Equals("80"))
-                                    {
-                                        wrkCod = "미배송";
-                                        orgNam = jobj["org_nam"].ToString();
-                                        telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
-                                        empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
-
-                                        statusText = "[미배송]<br><strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
-
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = statusText,
-                                        };
-
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
+                                            goAPI = false;
+                                        }
                                     }
                                     else
                                     {
-                                        wrkCod = "오류";
-                                        statusText = "고객님께서 문의하신 운송장 번호 <strong><font color='#0101DF'>(" + invoiceNumber + ")</font></strong>는 배송조회가 되지 않습니다.<br>문의 내용이 있으시면 아래 버튼을 눌러주세요.";
+                                        goAPI = true;
+                                    }
 
+                                    if (goAPI == true)
+                                    {
+                                        postParams = new StringBuilder();
+                                        postParams.Append("wbl_num=" + invoiceNm);
+
+                                        Encoding encoding = Encoding.UTF8;
+                                        byte[] result = encoding.GetBytes(postParams.ToString());
+
+                                        wReq = (HttpWebRequest)WebRequest.Create(goodLocation);
+                                        wReq.Method = "POST";
+                                        wReq.ContentType = "application/x-www-form-urlencoded";
+                                        wReq.ContentLength = result.Length;
+
+                                        postDataStream = wReq.GetRequestStream();
+                                        postDataStream.Write(result, 0, result.Length);
+                                        postDataStream.Close();
+
+                                        wResp = (HttpWebResponse)wReq.GetResponse();
+                                        respPostStream = wResp.GetResponseStream();
+                                        readerPost = new StreamReader(respPostStream, Encoding.GetEncoding("ks_c_5601-1987"), true);
+                                        String goodLocationJsonData = readerPost.ReadToEnd();
+                                        Debug.WriteLine("post data(위탁배송데이터)====" + goodLocationJsonData);
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "TEMP_NUMBER", "");//정보나오고 기존 운송장번호 삭제
+                                        /************************************************/
+                                        /*
+                                        WebClient webClient = new WebClient();
+                                        String sample = goodLocation + "?wbl_num= " + invoiceNumber;
+                                        Stream stream = webClient.OpenRead(sample);
+                                        String goodLocationJsonData = new StreamReader(stream, Encoding.GetEncoding("ks_c_5601-1987"), true).ReadToEnd();
+                                        */
+                                        JArray obj = JArray.Parse(goodLocationJsonData);
+
+                                        String wrkCod = "";//상태코드
+                                        String orgNam = ""; //집배점명
+                                        String telNum = ""; //전화번호
+                                        String empTel = ""; //배송직원전화번호
+                                        String statusText = "";
+
+                                        foreach (JObject jobj in obj)
+                                        {
+                                            if (jobj["wrk_cod"].ToString().Equals("10"))
+                                            {
+                                                wrkCod = "상품접수";
+                                                statusText = "네~ 고객님<br><strong><font color='#0101DF'>" + wrkCod + "</font></strong>중으로 위탁장소 전달 가능 상태가 아닙니다.	<br>위탁장소 배송 가능여부는 배송직원에게 상품이 전달된 이후 확인이 가능합니다.<br>배송지역 상품 도착여부 확인 후 재문의 부탁드릴게요.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("20"))
+                                            {
+                                                wrkCod = "상품발송대기중";
+                                                statusText = "네~ 고객님<br><strong><font color='#0101DF'>" + wrkCod + "</font></strong>중으로 위탁장소 전달 가능 상태가 아닙니다.	<br>위탁장소 배송 가능여부는 배송직원에게 상품이 전달된 이후 확인이 가능합니다.<br>배송지역 상품 도착여부 확인 후 재문의 부탁드릴게요.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("30"))
+                                            {
+                                                wrkCod = "이동중";
+                                                statusText = "네~ 고객님<br><strong><font color='#0101DF'>" + wrkCod + "</font></strong>중으로 위탁장소 전달 가능 상태가 아닙니다.	<br>위탁장소 배송 가능여부는 배송직원에게 상품이 전달된 이후 확인이 가능합니다.<br>배송지역 상품 도착여부 확인 후 재문의 부탁드릴게요.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("40"))
+                                            {
+                                                wrkCod = "배송준비";
+                                                statusText = "네~ 고객님<br>위탁장소 배송 가능여부 확인은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>고객님의 요청하신 장소에 배송 후 분실시 상품에 대한 변상이 어렵고,<br>고객님께서 직접적인 피해를 보실수있사오니, 신중히 요청해 주시기 바랍니다.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("50"))
+                                            {
+                                                wrkCod = "배송중";
+                                                String tempDate = jobj["wrk_ymd"].ToString();
+                                                String yearText = tempDate.Substring(0, 4);
+                                                String monthText = tempDate.Substring(4, 2);
+                                                String dayText = tempDate.Substring(6, 2);
+                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
+
+                                                orgNam = jobj["org_nam"].ToString();
+                                                //telNum = jobj["tel_num"].ToString();
+                                                //empTel = jobj["emp_tel"].ToString();
+                                                telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
+                                                empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
+
+                                                statusText = "네~ 고객님<br>위탁장소 배송 가능여부 확인은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>고객님의 요청하신 장소에 배송 후 분실시 상품에 대한 변상이 어렵고,<br>고객님께서 직접적인 피해를 보실수있사오니, 신중히 요청해 주시기 바랍니다.<br><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("60"))
+                                            {
+                                                wrkCod = "배송완료";
+                                                String tempDate = jobj["wrk_ymd"].ToString();
+                                                String yearText = tempDate.Substring(0, 4);
+                                                String monthText = tempDate.Substring(4, 2);
+                                                String dayText = tempDate.Substring(6, 2);
+                                                String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
+
+                                                orgNam = jobj["org_nam"].ToString();
+                                                telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
+                                                empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
+
+                                                statusText = "네~ 고객님<br>문의하신 운송장 번호 <strong><font color='#0101DF'>(" + invoiceNm + ")</font></strong> 번은 <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong>되어 위탁배송이 가능 상태가 아닙니다.<br><br>상품을 받지 못하셨거나, 다른 문의 사항이 있으신 경우<br>집배점 또는 배송직원에게 확인해주시기 바랍니다.<br><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("70"))
+                                            {
+                                                wrkCod = "오도착";
+                                                statusText = "[오도착]<br><strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNm + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>경유중</font></strong><br>현재 배송지역이 아닌 다른 지역에 경유 중으로 배송은 1~2일이 더 소요될 수 있는 점 양해 부탁드립니다.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else if (jobj["wrk_cod"].ToString().Equals("80"))
+                                            {
+                                                wrkCod = "미배송";
+                                                orgNam = jobj["org_nam"].ToString();
+                                                telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
+                                                empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
+
+                                                statusText = "[미배송]<br><strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNm + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else
+                                            {
+                                                wrkCod = "오류";
+                                                statusText = "고객님께서 문의하신 운송장 번호 <strong><font color='#0101DF'>(" + invoiceNm + ")</font></strong>는 배송조회가 되지 않습니다.<br>문의 내용이 있으시면 아래 버튼을 눌러주세요.";
+
+                                                List<CardAction> cardButtons = new List<CardAction>();
+
+                                                CardAction returnButton = new CardAction();
+                                                returnButton = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = "고객의말씀",
+                                                    Title = "온라인 상담"
+                                                };
+                                                cardButtons.Add(returnButton);
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = statusText,
+                                                    Buttons = cardButtons,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
                                         List<CardAction> cardButtons = new List<CardAction>();
 
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
+                                        CardAction Button1 = new CardAction();
+                                        Button1 = new CardAction()
                                         {
                                             Type = "imBack",
-                                            Value = "고객의말씀",
-                                            Title = "온라인 상담"
+                                            Value = "배송조회",
+                                            Title = "배송조회"
                                         };
-                                        cardButtons.Add(returnButton);
+                                        cardButtons.Add(Button1);
+
+                                        CardAction Button2 = new CardAction();
+                                        Button2 = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "위탁배송가능여부",
+                                            Title = "위탁배송 가능여부 확인"
+                                        };
+                                        cardButtons.Add(Button2);
 
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = statusText,
+                                            Text = "네~ 고객님<br>문의하시려는 항목을 아래에서 선택해<br>주세요.<br>원하시는 항목이 없으면, 이렇게 입력해<br>보세요.<br><br>예) 택배예약, 배송조회, 택배요금",
                                             Buttons = cardButtons,
                                         };
 
@@ -5026,9 +5123,8 @@ namespace HanjinChatBot
                                         apiMakerReply.Attachments.Add(plAttachment);
                                         SetActivity(apiMakerReply);
                                     }
-
-
                                 }
+                                
                             }
                             else
                             {
@@ -5742,6 +5838,8 @@ namespace HanjinChatBot
                                                 checkUserData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
                                                 String userPhone = userCheck[0].userPhone;
                                                 String invoiceNm = userCheck[0].tempNumber;
+
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "TEMP_NUMBER", "");//정보나오고 기존 운송장번호 삭제
 
                                                 List<CardAction> addressButtons = new List<CardAction>();
                                                 CardAction addressButton = new CardAction();
