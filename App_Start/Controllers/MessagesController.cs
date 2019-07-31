@@ -4792,7 +4792,7 @@ namespace HanjinChatBot
                                 UserHeroCard plCard = new UserHeroCard()
                                 {
                                     Title = "",
-                                    Text = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+                                    Text = "네~ 고객님<br>문의하시려는 항목을 아래에서 선택해<br>주세요.",
                                     Buttons = cardButtons,
                                 };
                                 Attachment plAttachment = plCard.ToAttachment();
