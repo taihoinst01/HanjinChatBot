@@ -277,6 +277,12 @@ namespace HanjinChatBot.DB
                                             dlgCard.btn1Type = "imBack";
                                             dlgCard.btn1Context = "고객의 말씀";
                                         }
+
+                                        if (customerData1.Equals("온라인상담"))
+                                        {
+                                            dlgCard.btn1Type = "imBack";
+                                            dlgCard.btn1Context = "온라인 상담";
+                                        }
                                     }
                                 }
                                 
@@ -306,10 +312,16 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (customerData2.Equals("고객의 말씀"))
+                                        if (customerData2.Equals("고객의말씀"))
                                         {
                                             dlgCard.btn2Type = "imBack";
                                             dlgCard.btn2Context = "고객의 말씀";
+                                        }
+
+                                        if (customerData2.Equals("온라인상담"))
+                                        {
+                                            dlgCard.btn2Type = "imBack";
+                                            dlgCard.btn2Context = "온라인 상담";
                                         }
                                     }
                                 }
@@ -339,10 +351,16 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (customerData3.Equals("고객의 말씀"))
+                                        if (customerData3.Equals("고객의말씀"))
                                         {
                                             dlgCard.btn3Type = "imBack";
                                             dlgCard.btn3Context = "고객의 말씀";
+                                        }
+
+                                        if (customerData3.Equals("온라인상담"))
+                                        {
+                                            dlgCard.btn3Type = "imBack";
+                                            dlgCard.btn3Context = "온라인 상담";
                                         }
                                     }
                                 }
@@ -372,10 +390,16 @@ namespace HanjinChatBot.DB
                                             }
                                         }
 
-                                        if (customerData4.Equals("고객의 말씀"))
+                                        if (customerData4.Equals("고객의말씀"))
                                         {
                                             dlgCard.btn4Type = "imBack";
                                             dlgCard.btn4Context = "고객의 말씀";
+                                        }
+
+                                        if (customerData4.Equals("온라인상담"))
+                                        {
+                                            dlgCard.btn4Type = "imBack";
+                                            dlgCard.btn4Context = "온라인 상담";
                                         }
                                     }
                                 }
