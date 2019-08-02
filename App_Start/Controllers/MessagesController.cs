@@ -564,7 +564,7 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("예약내용확인") || apiActiveText.Equals("예약번호직접입력"))
+                            else if (apiActiveText.Contains("에대한예약내용확인") || apiActiveText.Equals("예약번호직접입력"))
                             {
                                 apiIntent = "F_예약확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1211,7 +1211,7 @@ namespace HanjinChatBot
                             }
                             else if (containNum == true && onlyNumber.Length > 8)//예약번호 9자리
                             {
-                                if (apiActiveText.Contains("예약내용확인"))
+                                if (apiActiveText.Contains("에대한예약내용확인"))
                                 {
 
                                 }
@@ -1990,7 +1990,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>반품, 맞교환 택배 예약 접수는 구매하신 업체를 통해서 신청하시거나 당사를 통해서도 접수 가능합니다.<br><br>고객님께서 받으셨던 택배목록에서 반품택배예약을 하시려면 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br><br>또는 운송장번호를 입력해 주십시오.",
+                                                Text = "네~ 고객님<br>반품, 맞교환 택배 예약 접수는 구매하신 업체를 통해서 신청하시거나 당사를 통해서도 접수 가능합니다.<br><br>고객님께서 받으셨던 택배목록에서 반품택배예약을 하시려면 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br><br>운송장번호를 입력해 주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -2282,7 +2282,7 @@ namespace HanjinChatBot
                                 replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
-                                if (apiActiveText.Equals("집하예정일확인"))
+                                if (apiActiveText.Equals("인"))
                                 {
 
                                 }
@@ -2310,7 +2310,7 @@ namespace HanjinChatBot
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
                                 }
-                                else if (apiActiveText.Contains("예약내용확인") || (containNum == true && onlyNumber.Length > 8))//리스트버튼 클릭이거나 직접 입력일 경우
+                                else if (apiActiveText.Contains("에대한예약내용확인") || (containNum == true && onlyNumber.Length > 8))//리스트버튼 클릭이거나 직접 입력일 경우
                                 {
                                     bookNumber = Regex.Replace(activity.Text, @"\D", "");
                                     /*
@@ -2454,7 +2454,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>예약번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3079,7 +3079,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>예약번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3469,7 +3469,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard1 = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>예약번호나 운송장번호를 입력해 주십시오.",
+                                            Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>예약번호 또는 운송장번호를 입력해 주십시오.",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment1 = plCard1.ToAttachment();
@@ -3481,7 +3481,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "예약번호나 운송장번호를 입력해 주십시오.",
+                                            Text = "예약번호 또는 운송장번호를 입력해 주십시오.",
                                         };
 
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -3518,7 +3518,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard1 = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br>또는 예약번호나 운송장번호를 입력해 주십시오.",
+                                                Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br>예약번호 또는 운송장번호를 입력해 주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment1 = plCard1.ToAttachment();
@@ -4090,7 +4090,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>또는 운송장번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>운송장번호를 입력해 주십시오",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -5759,7 +5759,7 @@ namespace HanjinChatBot
                                                             bookButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = jobj2["rsv_num"].ToString() + " 예약 내용 확인",
+                                                                Value = jobj2["rsv_num"].ToString() + " 에 대한 예약 내용 확인",
                                                                 Title = "예약 내용 확인"
                                                             };
                                                             cardButtons2.Add(bookButton);
