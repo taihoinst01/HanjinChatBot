@@ -2454,7 +2454,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>예약번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>예약목록 확인등을 위해서는 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>안심번호로 운송장이 등록된 경우에는 택배목록 조회가 되지 않습니다.<br>예약번호를 입력해주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3518,7 +3518,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard1 = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다. <br>휴대폰 인증을 하시겠습니까?<br>예약번호 또는 운송장번호를 입력해 주십시오.",
+                                                Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>택배목록 확인등을 위해서는 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>안심번호로 운송장이 등록된 경우에는 택배목록 조회가 되지 않습니다.<br>운송장번호를 입력해주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment1 = plCard1.ToAttachment();
@@ -4090,7 +4090,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>택배목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>운송장번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>택배목록 확인등을 위해서는 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>안심번호로 운송장이 등록된 경우에는 택배목록 조회가 되지 않습니다.<br>운송장번호를 입력해주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
