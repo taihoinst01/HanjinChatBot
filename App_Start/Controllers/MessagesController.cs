@@ -3905,7 +3905,7 @@ namespace HanjinChatBot
                                                 empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
 
                                                 //statusText = "<strong>·배송예정일자: </strong > " + dateText + "<br>" + "<strong>· 배송상태 : </strong><font color='#0101DF'>배송 중</font><br><strong>· 운송장번호 : </strong><font color='#0101DF'>" + invoiceNumber + "</font><br><strong>· 배송직원: </strong>☎ " + empTel + "<br><strong>· 집배점: </strong>" + orgNam + " ☎ " + telNum + "<br><br>상품 확인이 안되시거나, 자세한 문의사항은<br>담당직원 또는 집배점으로 문의해 주세요.";
-                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 배송예정시간 : " + delieveryTime + "<br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 배송예정시간 : " + delieveryTime + "<br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1일에서 2일이 소요 될 수 있는점 양해바랍니다.<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
