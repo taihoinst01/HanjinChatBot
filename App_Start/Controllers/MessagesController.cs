@@ -3079,7 +3079,7 @@ namespace HanjinChatBot
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
-                                                Text = "네~ 고객님<br>예약 목록 확인등을 위해서 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>예약번호를 입력해 주십시오",
+                                                Text = "네~ 고객님<br>예약목록 확인등을 위해서는 휴대폰 인증이 필요합니다.<br>휴대폰 인증을 하시겠습니까?<br>안심번호로 운송장이 등록된 경우에는 택배목록 조회가 되지 않습니다.<br>예약번호를 입력해주십시오.",
                                                 Buttons = cardButtons,
                                             };
                                             Attachment plAttachment = plCard.ToAttachment();
@@ -3989,7 +3989,7 @@ namespace HanjinChatBot
                                                 returnButton = new CardAction()
                                                 {
                                                     Type = "imBack",
-                                                    Value = "고객의말씀",
+                                                    Value = "온라인상담",
                                                     Title = "온라인 상담"
                                                 };
                                                 cardButtons.Add(returnButton);
@@ -4784,7 +4784,7 @@ namespace HanjinChatBot
                                 guideButton9 = new CardAction()
                                 {
                                     Type = "imBack",
-                                    Value = "고객의말씀",
+                                    Value = "온라인상담",
                                     Title = "온라인 상담"
                                 };
                                 cardButtons.Add(guideButton9);
@@ -5072,7 +5072,7 @@ namespace HanjinChatBot
                                                 returnButton = new CardAction()
                                                 {
                                                     Type = "imBack",
-                                                    Value = "고객의말씀",
+                                                    Value = "온라인상담",
                                                     Title = "온라인 상담"
                                                 };
                                                 cardButtons.Add(returnButton);
