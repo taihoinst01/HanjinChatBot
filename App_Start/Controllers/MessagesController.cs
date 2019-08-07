@@ -621,12 +621,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("주소다시입력") || apiActiveText.Equals("집배원") || apiActiveText.Equals("기사확인"))
+                            else if (apiActiveText.Equals("주소다시입력") || apiActiveText.Equals("집배원") || apiActiveText.Equals("기사확인")|| apiActiveText.Equals("이에스"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("반송장번호확인"))
+                            else if (apiActiveText.Equals("반송장번호확인")|| apiActiveText.Contains("반송확인"))
                             {
                                 apiIntent = "F_운송장번호확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -637,6 +637,11 @@ namespace HanjinChatBot
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
                             else if (apiActiveText.Equals("반품택배예약다음페이지") || apiActiveText.Contains("반품택배예약이전페이지"))
+                            {
+                                apiIntent = "F_예약";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Contains("반품신청조회"))
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -2603,7 +2608,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
                                                         }
                                                         else
                                                         {
@@ -2611,7 +2616,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + ")";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -3234,7 +3239,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "미할당";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
                                                         }
                                                         else
                                                         {
@@ -3242,7 +3247,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + ")";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -4638,47 +4643,14 @@ namespace HanjinChatBot
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
 
-                                if (authCheck.Equals("F"))
+                                if (mobilePC.Equals("PC"))
                                 {
-                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_고객의말씀]::고객의말씀");
-                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_고객의말씀");
-                                    List<CardAction> cardButtons = new List<CardAction>();
-
-                                    CardAction deliveryButton = new CardAction();
-                                    deliveryButton = new CardAction()
-                                    {
-                                        Type = "imBack",
-                                        Value = "예. 휴대폰인증 하겠습니다",
-                                        Title = "휴대폰 인증"
-                                    };
-                                    cardButtons.Add(deliveryButton);
-
-                                    UserHeroCard plCard = new UserHeroCard()
-                                    {
-                                        Title = "",
-                                        Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
-                                        Buttons = cardButtons,
-                                    };
-                                    Attachment plAttachment = plCard.ToAttachment();
-                                    apiMakerReply.Attachments.Add(plAttachment);
-                                    SetActivity(apiMakerReply);
-                                }
-                                else
-                                {
-                                    String userPhone = userCheck[0].userPhone;
-                                    String dataUserPhone = "";
-                                    String[] telNumbers = dbutil.arrayStr(userPhone);
-                                    for (int i = 0; i < telNumbers.Length; i++)
-                                    {
-                                        dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
-                                    }
-
                                     List<CardAction> addressButtons = new List<CardAction>();
                                     CardAction addressButton = new CardAction();
                                     addressButton = new CardAction()
                                     {
                                         Type = "openUrl",
-                                        Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
+                                        Value = "https://www.hanjin.co.kr/Delivery_html/help/customer_write.jsp",
                                         Title = "온라인 상담"
                                     };
                                     addressButtons.Add(addressButton);
@@ -4686,12 +4658,70 @@ namespace HanjinChatBot
                                     UserHeroCard addressPlCard3 = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                        Text = "PC 버전은 한진택배 고객의 말씀에서 온라인 상담을 진행합니다.<br>아래버튼을 눌러주세요.",
                                         Buttons = addressButtons,
                                     };
                                     Attachment plAttachment = addressPlCard3.ToAttachment();
                                     apiMakerReply.Attachments.Add(plAttachment);
                                     SetActivity(apiMakerReply);
+                                }
+                                else
+                                {
+                                    if (authCheck.Equals("F"))
+                                    {
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_고객의말씀]::고객의말씀");
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_고객의말씀");
+                                        List<CardAction> cardButtons = new List<CardAction>();
+
+                                        CardAction deliveryButton = new CardAction();
+                                        deliveryButton = new CardAction()
+                                        {
+                                            Type = "imBack",
+                                            Value = "예. 휴대폰인증 하겠습니다",
+                                            Title = "휴대폰 인증"
+                                        };
+                                        cardButtons.Add(deliveryButton);
+
+                                        UserHeroCard plCard = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                            Buttons = cardButtons,
+                                        };
+                                        Attachment plAttachment = plCard.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
+                                    else
+                                    {
+                                        String userPhone = userCheck[0].userPhone;
+                                        String dataUserPhone = "";
+                                        String[] telNumbers = dbutil.arrayStr(userPhone);
+                                        for (int i = 0; i < telNumbers.Length; i++)
+                                        {
+                                            dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
+                                        }
+
+                                        List<CardAction> addressButtons = new List<CardAction>();
+                                        CardAction addressButton = new CardAction();
+                                        addressButton = new CardAction()
+                                        {
+                                            Type = "openUrl",
+                                            Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
+                                            Title = "온라인 상담"
+                                        };
+                                        addressButtons.Add(addressButton);
+
+                                        UserHeroCard addressPlCard3 = new UserHeroCard()
+                                        {
+                                            Title = "",
+                                            Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                            Buttons = addressButtons,
+                                        };
+                                        Attachment plAttachment = addressPlCard3.ToAttachment();
+                                        apiMakerReply.Attachments.Add(plAttachment);
+                                        SetActivity(apiMakerReply);
+                                    }
                                 }
                             }
                             else
@@ -5747,7 +5777,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font>";
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font>";
                                                             }
                                                             else
                                                             {
@@ -5755,7 +5785,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj2["wrk_dy"].ToString() + ")";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
@@ -6020,7 +6050,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font>";
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font>";
                                                             }
                                                             else
                                                             {
@@ -6028,7 +6058,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj3["wrk_dy"].ToString() + ")";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
