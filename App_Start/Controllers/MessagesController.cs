@@ -641,7 +641,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("반품신청조회"))
+                            else if (apiActiveText.Contains("반품신청조회")|| apiActiveText.Equals("택배보내고싶어요"))
+                            {
+                                apiIntent = "F_예약";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            else if (apiActiveText.Contains("주소변경")&& apiActiveText.Contains("반품"))
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -972,6 +977,7 @@ namespace HanjinChatBot
                                 if (commonReply.Attachments.Count > 0)
                                 {
                                     SetActivity(commonReply);
+                                    replyresult = "H";
                                     /*
                                     //NONE_DLG 예외처리
                                     if (luisIntent.Equals("NONE_DLG"))
@@ -4476,6 +4482,7 @@ namespace HanjinChatBot
                                 {
                                     if (checkFindAddressCnt.Equals("T")) //주소로서 데이터를 찾아야 한다
                                     {
+                                        checkFindAddressCnt = "F";
                                         db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "ADDRESSCHECK", checkFindAddressCnt);
                                         /*
                                     * POST METHOD
