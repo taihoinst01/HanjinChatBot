@@ -4383,7 +4383,8 @@ namespace HanjinChatBot
                                     SetActivity(apiMakerReply);
 
                                 }
-                                else if (containNum == true && checkFindAddressCnt.Equals("F"))//주소찾기의 숫자가 아닌 운송장 번호로서 찾는다.
+                                //else if (containNum == true && checkFindAddressCnt.Equals("F"))//주소찾기의 숫자가 아닌 운송장 번호로서 찾는다.
+                                else if (checkNum == true && onlyNumber.Length > 8)//주소찾기의 숫자가 아닌 운송장 번호로서 찾는다.(숫자만들어왔을경우)
                                 {
                                     invoiceNumber = Regex.Replace(activity.Text, @"\D", "");
                                     /*
@@ -4601,6 +4602,8 @@ namespace HanjinChatBot
                                     }
                                     else
                                     {
+                                        checkFindAddressCnt = "F";
+                                        db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "ADDRESSCHECK", checkFindAddressCnt);
                                         List<CardList> text = new List<CardList>();
                                         List<CardAction> cardButtons = new List<CardAction>();
 
