@@ -229,7 +229,7 @@ namespace HanjinChatBot
                 }
 
                 //한진 API
-                /*
+                
                 DButil.HistoryLog("db SelectapiConfig start !! ");
                 List<APIConfList> confAPIList = db.SelectAPIConfig();
                 DButil.HistoryLog("db SelectConfig end!! ");
@@ -240,46 +240,58 @@ namespace HanjinChatBot
                     {
                         case "DELIVERYLIST":
                             DeliveryList = confAPIList[i].apiUrl;
+                            Debug.WriteLine("DeliveryList===" + DeliveryList);
                             break;
                         case "RETURNDELIVERYRESULT":
                             ReturnDeliveryResult = confAPIList[i].apiUrl;
+                            Debug.WriteLine("ReturnDeliveryResult===" + ReturnDeliveryResult);
                             break;
                         case "RETURNDELIVERYREQUEST":
                             ReturnDeliveryRequest = confAPIList[i].apiUrl;
+                            Debug.WriteLine("ReturnDeliveryRequest===" + ReturnDeliveryRequest);
                             break;
                         case "DELIVERYCOLLECTION":
                             DeliveryCollection = confAPIList[i].apiUrl;
+                            Debug.WriteLine("DeliveryCollection===" + DeliveryCollection);
                             break;
                         case "BOOKCHECK":
                             bookCheck = confAPIList[i].apiUrl;
+                            Debug.WriteLine("bookCheck===" + bookCheck);
                             break;
                         case "BOOKCANCELYN":
                             bookCancelYN = confAPIList[i].apiUrl;
+                            Debug.WriteLine("bookCancelYN===" + bookCancelYN);
                             break;
                         case "BOOKCANCELRESULT":
                             bookCancelResult = confAPIList[i].apiUrl;
+                            Debug.WriteLine("bookCancelResult===" + bookCancelResult);
                             break;
                         case "GOODLOCATION":
                             goodLocation = confAPIList[i].apiUrl;
+                            Debug.WriteLine("goodLocation===" + goodLocation);
                             break;
                         case "FINDORGINFO":
                             findOrgInfo = confAPIList[i].apiUrl;
+                            Debug.WriteLine("findOrgInfo===" + findOrgInfo);
                             break;
                         case "FINDWAYBILLNM":
                             findWayBillNm = confAPIList[i].apiUrl;
+                            Debug.WriteLine("findWayBillNm===" + findWayBillNm);
                             break;
                         case "REQUESTAUTH":
                             requestAuth = confAPIList[i].apiUrl;
+                            Debug.WriteLine("requestAuth===" + requestAuth);
                             break;
                         case "RESPONSEAUTH":
                             responseAuth = confAPIList[i].apiUrl;
+                            Debug.WriteLine("responseAuth===" + responseAuth);
                             break;
                         default: //미 정의 레코드
                             DButil.HistoryLog("*APIconf type : " + confAPIList[i].apiName + "* conf apiUrl : " + confAPIList[i].apiUrl);
                             break;
                     }
                 }
-                */
+                
                 LUIS_MINSCORE_LIMIT = "0.2";
 
                 Debug.WriteLine("* DB conn : " + activity.Type);
@@ -4384,7 +4396,7 @@ namespace HanjinChatBot
 
                                 }
                                 //else if (containNum == true && checkFindAddressCnt.Equals("F"))//주소찾기의 숫자가 아닌 운송장 번호로서 찾는다.
-                                else if (checkNum == true && onlyNumber.Length > 8)//주소찾기의 숫자가 아닌 운송장 번호로서 찾는다.(숫자만들어왔을경우)
+                                else if (checkNum == true && onlyNumber.Length > 11)//주소찾기의 숫자가 아닌 운송장 번호로서 찾는다.(숫자만들어왔을경우)
                                 {
                                     invoiceNumber = Regex.Replace(activity.Text, @"\D", "");
                                     /*
@@ -6173,7 +6185,7 @@ namespace HanjinChatBot
 
                                                 Encoding encoding4 = Encoding.UTF8;
                                                 byte[] result4 = encoding4.GetBytes(postParams.ToString());
-
+                                                
                                                 wReq = (HttpWebRequest)WebRequest.Create(DeliveryList);
                                                 wReq.Method = "POST";
                                                 wReq.ContentType = "application/x-www-form-urlencoded";
@@ -6814,6 +6826,9 @@ namespace HanjinChatBot
                 {
                     Debug.Print(e.StackTrace);
                     DButil.HistoryLog("ERROR===" + e.Message);
+
+                    checkFindAddressCnt = "F";
+                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "ADDRESSCHECK", checkFindAddressCnt);
 
                     Activity sorryReply = activity.CreateReply();
 
