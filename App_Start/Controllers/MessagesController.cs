@@ -359,7 +359,7 @@ namespace HanjinChatBot
                 DButil.HistoryLog("telNumber : " + telNumber);
                 int checkTelNumber = telNumber.Length;
                 DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
-                if (telMessage.Contains("tel:") && checkTelNumber > 5)
+                if ((telMessage.Contains("tel:") && checkTelNumber > 5)|| telMessage.Contains("hsc:") && checkTelNumber > 5)
                 {
                     String[] telNumbers = dbutil.arrayStr(telNumber);
                     DButil.HistoryLog("telNumbers : " + telNumbers.Length);
