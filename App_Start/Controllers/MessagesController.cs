@@ -344,7 +344,7 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
             }
-            else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) //전화번호 받아오는 부분 처리
+            else if ((activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:"))|| (activity.Type == ActivityTypes.Message && activity.Text.Contains("hsc:"))) //전화번호 받아오는 부분 처리
             {
                 DButil.HistoryLog("* activity.TEL text : " + activity.Text);
                 /*
