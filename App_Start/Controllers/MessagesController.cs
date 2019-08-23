@@ -344,44 +344,6 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
             }
-            /*
-            else if ((activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) || (activity.Type == ActivityTypes.Message && activity.Text.Contains("hsc:"))) //전화번호 받아오는 부분 처리
-            {
-                DButil.HistoryLog("* activity.TEL text : " + activity.Text);
-              
-                String realTelNumber = "";
-                DButil.HistoryLog("start tel : ");
-                String telMessage = activity.Text;
-                DButil.HistoryLog("telMessage : " + telMessage);
-                String mobilePc = "";
-                String telNumber = telMessage.Substring(4,11); //tel:ABDDERFSDVD  tel:ABACHBIFACA
-                DButil.HistoryLog("telNumber : " + telNumber);
-                Debug.WriteLine("telNumber : " + telNumber);
-                int checkTelNumber = telNumber.Length;
-                DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
-                if ((telMessage.Contains("tel:") && checkTelNumber > 5) || (telMessage.Contains("hsc:") && checkTelNumber > 5))
-                {
-                    String[] telNumbers = dbutil.arrayStr(telNumber);
-                    DButil.HistoryLog("telNumbers : " + telNumbers.Length);
-                    for (int i = 0; i < telNumbers.Length; i++)
-                    {
-                        realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
-                        DButil.HistoryLog("realTelNumber : " + realTelNumber);
-                    }
-                    mobilePc = "MOBILE";
-                    DButil.HistoryLog("realTelNumber : " + realTelNumber);
-                    DButil.HistoryLog("CHATBOT TYPE IS MOBILE");
-                }
-                else
-                {
-                    mobilePc = "PC";
-                    DButil.HistoryLog("CHATBOT TYPE IS PC");
-                }
-                
-                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
-                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePc);
-            }
-            */
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("consulting:")) //챗봇상담후기
             {
                 DButil.HistoryLog("* activity.consulting text : " + activity.Text);
@@ -405,8 +367,8 @@ namespace HanjinChatBot
                 checkAuthNameCnt = uData[0].nameCheck;
                 checkFindAddressCnt = uData[0].addressCheck;
 
-                //if (activity.Text.Contains("hsc:"))
-                if (activity.Text.Contains("tel:"))
+                if (activity.Text.Contains("hsc:"))
+                //if (activity.Text.Contains("tel:"))
                 {
                     DButil.HistoryLog("* activity.TEL text : " + activity.Text);
                     /*
@@ -422,7 +384,7 @@ namespace HanjinChatBot
                     Debug.WriteLine("telNumber : " + telNumber);
                     int checkTelNumber = telNumber.Length;
                     DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
-                    if ((telMessage.Contains("tel:") && checkTelNumber > 5) || (telMessage.Contains("hsc:") && checkTelNumber > 5))
+                    if (telMessage.Contains("hsc:") && checkTelNumber > 5)
                     {
                         String[] telNumbers = dbutil.arrayStr(telNumber);
                         DButil.HistoryLog("telNumbers : " + telNumbers.Length);
@@ -458,7 +420,7 @@ namespace HanjinChatBot
                 }
                 else
                 {
-                    if (activity.Text.Contains("tel:"))
+                    if (activity.Text.Contains("hsc:"))
                     {
                         response = Request.CreateResponse(HttpStatusCode.OK);
                         return response;
