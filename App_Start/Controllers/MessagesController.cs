@@ -344,12 +344,11 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
             }
+            /*
             else if ((activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) || (activity.Type == ActivityTypes.Message && activity.Text.Contains("hsc:"))) //전화번호 받아오는 부분 처리
             {
                 DButil.HistoryLog("* activity.TEL text : " + activity.Text);
-                /*
-                 * 전화번호 처리
-                 * */
+              
                 String realTelNumber = "";
                 DButil.HistoryLog("start tel : ");
                 String telMessage = activity.Text;
@@ -381,23 +380,15 @@ namespace HanjinChatBot
                 
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePc);
-                /*
-                * 바로 질문이 URL 로 넘어오는 부분 처리
-                * */
-                DButil.HistoryLog("start 바로 질문이 URL 로 넘어오는 부분 처리 : ");
-                if (activity.Text.Contains("&hdw:"))
-                {
-                    String[] word_dataArray = activity.Text.Split('&');
-                    String word_data = word_dataArray[1].Substring(4);
-                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_NAME", word_data);//임시로 데이터를 이곳에 넣는다.
-                }
             }
+            */
             else if (activity.Type == ActivityTypes.Message && activity.Text.Contains("consulting:")) //챗봇상담후기
             {
                 DButil.HistoryLog("* activity.consulting text : " + activity.Text);
                 db.UserReportDataInsert(activity.Text);
             }
-            else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
+            //else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
+            else if (activity.Type == ActivityTypes.Message)
             {
                 /*
                  * MOBILE PC 검토..없으면 무조건 PC로 한다.
@@ -413,19 +404,63 @@ namespace HanjinChatBot
                 uData = db.UserDataConfirm(activity.ChannelId, activity.Conversation.Id);
                 checkAuthNameCnt = uData[0].nameCheck;
                 checkFindAddressCnt = uData[0].addressCheck;
-                /*
-               * 바로 질문이 URL 로 넘어오는 부분 처리
-               * */
-                if (uData[0].userName == null || uData[0].userName.Equals(""))
+
+                //if (activity.Text.Contains("hsc:"))
+                if (activity.Text.Contains("tel:"))
                 {
-                    
+                    DButil.HistoryLog("* activity.TEL text : " + activity.Text);
+                    /*
+                     * 전화번호 처리
+                     * */
+                    String realTelNumber = "";
+                    DButil.HistoryLog("start tel : ");
+                    String telMessage = activity.Text;
+                    DButil.HistoryLog("telMessage : " + telMessage);
+                    String mobilePc = "";
+                    String telNumber = telMessage.Substring(4, 11); //tel:ABDDERFSDVD  tel:ABACHBIFACA
+                    DButil.HistoryLog("telNumber : " + telNumber);
+                    Debug.WriteLine("telNumber : " + telNumber);
+                    int checkTelNumber = telNumber.Length;
+                    DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
+                    if ((telMessage.Contains("tel:") && checkTelNumber > 5) || (telMessage.Contains("hsc:") && checkTelNumber > 5))
+                    {
+                        String[] telNumbers = dbutil.arrayStr(telNumber);
+                        DButil.HistoryLog("telNumbers : " + telNumbers.Length);
+                        for (int i = 0; i < telNumbers.Length; i++)
+                        {
+                            realTelNumber = realTelNumber + dbutil.getTelNumber(telNumbers[i]);
+                            DButil.HistoryLog("realTelNumber : " + realTelNumber);
+                        }
+                        mobilePc = "MOBILE";
+                        DButil.HistoryLog("realTelNumber : " + realTelNumber);
+                        DButil.HistoryLog("CHATBOT TYPE IS MOBILE");
+                    }
+                    else
+                    {
+                        mobilePc = "PC";
+                        DButil.HistoryLog("CHATBOT TYPE IS PC");
+                    }
+
+                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", realTelNumber);
+                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePc);
                 }
                 else
                 {
-                    activity.Text = uData[0].userName;
-                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_NAME", "");
+
                 }
 
+                if (activity.Text.Contains("&hdw:"))
+                {
+                    DButil.HistoryLog("start 바로 질문이 URL 로 넘어오는 부분 처리 : ");
+                    String[] word_dataArray = activity.Text.Split('&');
+                    String word_data = word_dataArray[1].Substring(4);
+                    activity.Text = word_data;
+                }
+                else
+                {
+
+                }
+                
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
                 try
                 {
