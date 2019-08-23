@@ -455,13 +455,15 @@ namespace HanjinChatBot
                     String[] word_dataArray = activity.Text.Split('&');
                     String word_data = word_dataArray[1].Substring(4);
                     activity.Text = word_data;
-                    DButil.HistoryLog("activity.Text===" + activity.Text);
                 }
                 else
                 {
-                    DButil.HistoryLog("activity.Text===" + activity.Text);
-                    //response = Request.CreateResponse(HttpStatusCode.OK);
-                    //return response;
+                    if (activity.Text.Contains("tel:"))
+                    {
+                        response = Request.CreateResponse(HttpStatusCode.OK);
+                        return response;
+                    }
+
                 }
                 
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
