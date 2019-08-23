@@ -229,7 +229,7 @@ namespace HanjinChatBot
                 }
 
                 //한진 API
-                
+
                 DButil.HistoryLog("db SelectapiConfig start !! ");
                 List<APIConfList> confAPIList = db.SelectAPIConfig();
                 DButil.HistoryLog("db SelectConfig end!! ");
@@ -291,7 +291,7 @@ namespace HanjinChatBot
                             break;
                     }
                 }
-                
+
                 LUIS_MINSCORE_LIMIT = "0.2";
 
                 Debug.WriteLine("* DB conn : " + activity.Type);
@@ -344,7 +344,7 @@ namespace HanjinChatBot
                 DButil.HistoryLog("* activity.ServiceUrl : " + activity.ServiceUrl);
 
             }
-            else if ((activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:"))|| (activity.Type == ActivityTypes.Message && activity.Text.Contains("hsc:"))) //전화번호 받아오는 부분 처리
+            else if ((activity.Type == ActivityTypes.Message && activity.Text.Contains("tel:")) || (activity.Type == ActivityTypes.Message && activity.Text.Contains("hsc:"))) //전화번호 받아오는 부분 처리
             {
                 DButil.HistoryLog("* activity.TEL text : " + activity.Text);
                 /*
@@ -355,11 +355,12 @@ namespace HanjinChatBot
                 String telMessage = activity.Text;
                 DButil.HistoryLog("telMessage : " + telMessage);
                 String mobilePc = "";
-                String telNumber = telMessage.Substring(4); //tel:ABDDERFSDVD  tel:ABACHBIFACA
+                String telNumber = telMessage.Substring(4,14); //tel:ABDDERFSDVD  tel:ABACHBIFACA
                 DButil.HistoryLog("telNumber : " + telNumber);
+                Debug.WriteLine("telNumber : " + telNumber);
                 int checkTelNumber = telNumber.Length;
                 DButil.HistoryLog("checkTelNumber : " + checkTelNumber);
-                if ((telMessage.Contains("tel:") && checkTelNumber > 5)|| (telMessage.Contains("hsc:") && checkTelNumber > 5))
+                if ((telMessage.Contains("tel:") && checkTelNumber > 5) || (telMessage.Contains("hsc:") && checkTelNumber > 5))
                 {
                     String[] telNumbers = dbutil.arrayStr(telNumber);
                     DButil.HistoryLog("telNumbers : " + telNumbers.Length);
@@ -389,7 +390,15 @@ namespace HanjinChatBot
             }
             else if (activity.Type == ActivityTypes.Message && !activity.Text.Contains("tel:"))
             {
-                DButil.HistoryLog("* activity.TEL text : " + activity.Text);
+                /*
+                 * 바로 질문이 URL 로 넘어오는 부분 처리
+                 * */
+                if (activity.Type == ActivityTypes.Message && activity.Text.Contains("&hdw:"))
+                {
+                    String[] word_dataArray = activity.Text.Split('&');
+                    String word_data = word_dataArray[1].Substring(4);
+                    activity.Text = word_data;
+                }
 
                 /*
                  * MOBILE PC 검토..없으면 무조건 PC로 한다.
@@ -633,12 +642,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("주소다시입력") || apiActiveText.Equals("집배원") || apiActiveText.Equals("기사확인")|| apiActiveText.Equals("이에스"))
+                            else if (apiActiveText.Equals("주소다시입력") || apiActiveText.Equals("집배원") || apiActiveText.Equals("기사확인") || apiActiveText.Equals("이에스"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("반송장번호확인")|| apiActiveText.Contains("반송확인"))
+                            else if (apiActiveText.Equals("반송장번호확인") || apiActiveText.Contains("반송확인"))
                             {
                                 apiIntent = "F_운송장번호확인";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -653,12 +662,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("반품신청조회")|| apiActiveText.Equals("택배보내고싶어요"))
+                            else if (apiActiveText.Contains("반품신청조회") || apiActiveText.Equals("택배보내고싶어요"))
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("주소변경")&& apiActiveText.Contains("반품"))
+                            else if (apiActiveText.Contains("주소변경") && apiActiveText.Contains("반품"))
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1363,7 +1372,7 @@ namespace HanjinChatBot
                         }
                         else if (checkApiintent.Equals("F_위탁배송"))
                         {
-                            
+
                         }
                         else
                         {
@@ -1590,10 +1599,11 @@ namespace HanjinChatBot
                             authName = uData[0].userName;//모바일 인증 체크(이름)
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
-                            //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
+                            requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!개발테스트용
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************
@@ -5179,7 +5189,7 @@ namespace HanjinChatBot
                                         SetActivity(apiMakerReply);
                                     }
                                 }
-                                
+
                             }
                             else
                             {
@@ -6185,7 +6195,7 @@ namespace HanjinChatBot
 
                                                 Encoding encoding4 = Encoding.UTF8;
                                                 byte[] result4 = encoding4.GetBytes(postParams.ToString());
-                                                
+
                                                 wReq = (HttpWebRequest)WebRequest.Create(DeliveryList);
                                                 wReq.Method = "POST";
                                                 wReq.ContentType = "application/x-www-form-urlencoded";
