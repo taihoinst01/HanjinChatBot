@@ -3954,8 +3954,8 @@ namespace HanjinChatBot
                                                 orgNam = jobj["org_nam"].ToString();
                                                 telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                                 
-                                                snd_nam = jobj["snd_nam"].ToString();
-                                                rcv_nam = jobj["rcv_nam"].ToString();
+                                                snd_nam = jobj["snd_nam"].ToString().Replace("*", "\\*"); ;
+                                                rcv_nam = jobj["rcv_nam"].ToString().Replace("*", "\\*"); ;
 
                                                 String goodNameTemp = jobj["god_nam"].ToString();
                                                 int goodNameLength = jobj["god_nam"].ToString().Length;
@@ -3995,8 +3995,8 @@ namespace HanjinChatBot
                                                 telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
                                                 empTel = " <a href='tel:" + jobj["emp_tel"].ToString() + "'>" + jobj["emp_tel"].ToString() + "</a>";
                                                 
-                                                snd_nam = jobj["snd_nam"].ToString();
-                                                rcv_nam = jobj["rcv_nam"].ToString();
+                                                snd_nam = jobj["snd_nam"].ToString().Replace("*", "\\*"); ;
+                                                rcv_nam = jobj["rcv_nam"].ToString().Replace("*", "\\*"); ;
                                                 String goodNameTemp = jobj["god_nam"].ToString();
                                                 int goodNameLength = jobj["god_nam"].ToString().Length;
                                                 String goodName = "";
@@ -4046,9 +4046,9 @@ namespace HanjinChatBot
                                                 {
                                                     goodName = goodNameTemp;
                                                 }
-                                                snd_nam = jobj["snd_nam"].ToString();
-                                                rcv_nam = jobj["rcv_nam"].ToString();
-                                                rct_nam = jobj["rct_nam"].ToString();
+                                                snd_nam = jobj["snd_nam"].ToString().Replace("*","\\*");
+                                                rcv_nam = jobj["rcv_nam"].ToString().Replace("*", "\\*"); ;
+                                                rct_nam = jobj["rct_nam"].ToString().Replace("*", "\\*"); ;
 
                                                 //statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
                                                 statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 수령인 : <strong>" + rct_nam + "</strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 송하인명 : <strong>" + snd_nam + "</strong><br>· 수하인명 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
