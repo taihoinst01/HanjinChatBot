@@ -2423,6 +2423,8 @@ namespace HanjinChatBot
                                     foreach (JObject jobj in obj)
                                     {
                                         String bookCheckText = "";
+                                        String orgNam = ""; //집배점정보
+                                        String telNum = ""; //집배점전화번호
 
                                         if (jobj["ret_cod"].ToString().Equals("1000"))
                                         {
@@ -2432,6 +2434,21 @@ namespace HanjinChatBot
                                             String dayText = tempDate.Substring(6, 2);
                                             String dateText = yearText + "년 " + monthText + "월 " + dayText + "일";
 
+                                            String goodNameTemp = jobj["god_nam"].ToString();
+                                            int goodNameLength = jobj["god_nam"].ToString().Length;
+                                            String goodName = "";
+                                            if (goodNameLength > 20)
+                                            {
+                                                goodName = goodNameTemp.Substring(0, 15) + "....";
+                                            }
+                                            else
+                                            {
+                                                goodName = goodNameTemp;
+                                            }
+
+                                            orgNam = jobj["org_nam"].ToString();
+                                            telNum = " <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a>";
+
                                             if (jobj["wrk_cod"].ToString().Equals("03"))
                                             {
                                                 String tempDate1 = jobj["wrk_ymd"].ToString();
@@ -2439,7 +2456,9 @@ namespace HanjinChatBot
                                                 String monthText1 = tempDate1.Substring(4, 2);
                                                 String dayText1 = tempDate1.Substring(6, 2);
                                                 String dateText1 = yearText1 + "년 " + monthText1 + "월 " + dayText1 + "일";
-                                                bookCheckText = "예약번호 <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong>는 " + dateText1 + " 예약 취소 되었습니다.<br>예약문의 사항은 " + jobj["org_nam"].ToString() + " 집배점 ☎ <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a> 으로 문의 부탁드립니다.";
+                                                                                                
+                                                //bookCheckText = "예약번호 <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong>는 " + dateText1 + " 예약 취소 되었습니다.<br>예약문의 사항은 " + jobj["org_nam"].ToString() + " 집배점 ☎ <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a> 으로 문의 부탁드립니다.";
+                                                bookCheckText = "· 예약번호 : <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong><br>· 예약상태 : <strong><font color='#0101DF'>예약취소</font></strong><br>· 예약일시 : <strong><font color='#0101DF'>" + dateText1 + "</font></strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br><br>예약문의 사항은 집배점으로 문의 부탁드립니다";
                                             }
                                             else if (jobj["wrk_cod"].ToString().Equals("11"))
                                             {
@@ -2448,11 +2467,18 @@ namespace HanjinChatBot
                                                 String monthText1 = tempDate1.Substring(4, 2);
                                                 String dayText1 = tempDate1.Substring(6, 2);
                                                 String dateText1 = yearText1 + "년 " + monthText1 + "월 " + dayText1 + "일";
-                                                bookCheckText = "예약번호 <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong>는 " + dateText1 + " 정상 집하 완료된 건입니다.<br>해당 운송장번호는 <strong>" + jobj["wbl_num"].ToString() + "</strong> 입니다.";
+                                                //bookCheckText = "예약번호 <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong>는 " + dateText1 + " 정상 집하 완료된 건입니다.<br>해당 운송장번호는 <strong>" + jobj["wbl_num"].ToString() + "</strong> 입니다.";
+                                                bookCheckText = "· 예약번호 : <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong><br>· 예약상태 : <strong><font color='#0101DF'>정상집하</font></strong><br>· 예약일시 : <strong><font color='#0101DF'>" + dateText1 + "</font></strong><br>· 운송장번호 : <strong><font color='#0101DF'>" + jobj["wbl_num"].ToString() + "</font></strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br><br>예약문의 사항은 집배점으로 문의 부탁드립니다";
                                             }
                                             else
                                             {
-                                                bookCheckText = "예약번호 <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong>는 " + dateText + " 정상 예약접수된 건입니다.<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 ☎ <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a> 으로 문의 부탁드립니다.";
+                                                String tempDate1 = jobj["wrk_ymd"].ToString();
+                                                String yearText1 = tempDate1.Substring(0, 4);
+                                                String monthText1 = tempDate1.Substring(4, 2);
+                                                String dayText1 = tempDate1.Substring(6, 2);
+                                                String dateText1 = yearText1 + "년 " + monthText1 + "월 " + dayText1 + "일";
+                                                //bookCheckText = "예약번호 <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong>는 " + dateText + " 정상 예약접수된 건입니다.<br>방문일정 또는 예약변경 사항, 문의사항은 " + jobj["org_nam"].ToString() + " 집배점 ☎ <a href='tel:" + jobj["tel_num"].ToString() + "'>" + jobj["tel_num"].ToString() + "</a> 으로 문의 부탁드립니다.";
+                                                bookCheckText = "· 예약번호 : <strong><font color='#0101DF'>(" + bookNumber + ")</font></strong><br>· 예약상태 : <strong><font color='#0101DF'>정상예약</font></strong><br>· 예약일시 : <strong><font color='#0101DF'>" + dateText1 + "</font></strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br><br>방문일정 또는 예약변경 사항, 문의사항은 집배점으로 문의 부탁드립니다";
                                             }
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9011"))
@@ -6548,7 +6574,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font>";
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font>";
                                                             }
                                                             else
                                                             {
@@ -6556,7 +6582,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj2["wrk_dy"].ToString() + ")";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
