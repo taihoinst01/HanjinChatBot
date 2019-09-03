@@ -2068,6 +2068,15 @@ namespace HanjinChatBot
                                             };
                                             cardButtons.Add(extButton);
 
+                                            CardAction extButton1 = new CardAction();
+                                            extButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "개인택배예약",
+                                                Title = "개인택배예약"
+                                            };
+                                            cardButtons.Add(extButton1);
+
                                             UserHeroCard plCard = new UserHeroCard()
                                             {
                                                 Title = "",
