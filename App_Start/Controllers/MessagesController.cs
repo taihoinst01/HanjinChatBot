@@ -2069,7 +2069,7 @@ namespace HanjinChatBot
                                             cardButtons.Add(extButton);
 
                                             CardAction extButton1 = new CardAction();
-                                            extButton = new CardAction()
+                                            extButton1 = new CardAction()
                                             {
                                                 Type = "imBack",
                                                 Value = "개인택배예약",
