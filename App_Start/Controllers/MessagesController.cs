@@ -682,6 +682,11 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
+                            else if (apiActiveText.Equals("예약") || apiActiveText.Equals("개인택배"))
+                            {
+                                apiIntent = "F_예약";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
                             else if (apiActiveText.Contains("반품접수부탁드려요") || apiActiveText.Contains("반품예약해주세요") || apiActiveText.Contains("반품예약어떻게하나요"))
                             {
                                 apiIntent = "F_예약";
@@ -2259,7 +2264,7 @@ namespace HanjinChatBot
                                                     UserHeroCard plCard = new UserHeroCard()
                                                     {
                                                         Title = "",
-                                                        Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj["snd_nam"].ToString(),
+                                                        Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj["snd_nam"].ToString(),
                                                         //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                         Tap = plButton
                                                     };
@@ -2717,7 +2722,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·보내는 분 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
                                                         }
                                                         else
                                                         {
@@ -2725,7 +2730,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + ")";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·보내는 분 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -3348,7 +3353,7 @@ namespace HanjinChatBot
                                                         if (tempDate == "" || tempDate.Equals(""))
                                                         {
                                                             dateText = "미할당";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·보내는 분 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font>";
                                                         }
                                                         else
                                                         {
@@ -3356,7 +3361,7 @@ namespace HanjinChatBot
                                                             String monthText = tempDate.Substring(4, 2);
                                                             String dayText = tempDate.Substring(6, 2);
                                                             dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj["wrk_dy"].ToString() + ")";
-                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                            cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·보내는 분 : </strong>" + jobj["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                         }
 
                                                         CardAction bookButton = new CardAction();
@@ -3807,7 +3812,7 @@ namespace HanjinChatBot
                                                     UserHeroCard plCard1 = new UserHeroCard()
                                                     {
                                                         Title = "",
-                                                        Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj["snd_nam"].ToString(),
+                                                        Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj["snd_nam"].ToString(),
                                                         //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                         Tap = plButton
                                                     };
@@ -4004,7 +4009,7 @@ namespace HanjinChatBot
                                                     goodName = goodNameTemp;
                                                 }
                                                 //statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송준비중</font></strong><br>배송지역 터미널에 도착하여, 배송 준비중입니다.<br>배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으며 배송은 1~2일 소요 될 수 있는 점 양해바랍니다.";
-                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송준비중</font></strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 송하인명 : <strong>" + snd_nam + "</strong><br>· 수하인명 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br><br>배송지역 터미널에 도착하여, 배송 준비중입니다.<br>배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으며 배송은 1~2일 소요 될 수 있는 점 양해바랍니다.";
+                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송준비중</font></strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 보내는 분 : <strong>" + snd_nam + "</strong><br>· 받는 분 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br><br>배송지역 터미널에 도착하여, 배송 준비중입니다.<br>배송예정 시간 확인은 당일 도착 물량에 따라 변동이 될 수 있으며 배송은 1~2일 소요 될 수 있는 점 양해바랍니다.";
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
@@ -4045,7 +4050,7 @@ namespace HanjinChatBot
                                                 }
 
                                                 //statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 배송예정시간 : " + delieveryTime + "<br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1일에서 2일이 소요 될 수 있는점 양해바랍니다.<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
-                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 배송예정시간 : " + delieveryTime + "<br>· 상품명 : <strong>" + goodNameTemp + "</strong><br>· 송하인명 : <strong>" + snd_nam + "</strong><br>· 수하인명 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1일에서 2일이 소요 될 수 있는점 양해바랍니다.<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>배송중</font></strong><br>· 배송예정시간 : " + delieveryTime + "<br>· 상품명 : <strong>" + goodNameTemp + "</strong><br>· 보내는 분 : <strong>" + snd_nam + "</strong><br>· 받는 분 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>배송예정 시간은 당일 도착 물량에 따라 변동이 될 수 있으며, 배송은 1일에서 2일이 소요 될 수 있는점 양해바랍니다.<br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
@@ -4086,7 +4091,7 @@ namespace HanjinChatBot
                                                 rct_nam = jobj["rct_nam"].ToString().Replace("*", "\\*"); ;
 
                                                 //statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
-                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 수령인 : <strong>" + rct_nam + "</strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 송하인명 : <strong>" + snd_nam + "</strong><br>· 수하인명 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 수령인 : <strong>" + rct_nam + "</strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 보내는 분 : <strong>" + snd_nam + "</strong><br>· 받는 분 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
@@ -4148,8 +4153,8 @@ namespace HanjinChatBot
                                                 returnButton = new CardAction()
                                                 {
                                                     Type = "imBack",
-                                                    Value = "온라인상담",
-                                                    Title = "온라인 상담"
+                                                    Value = "1:1온라인 상담",
+                                                    Title = "1:1온라인 상담"
                                                 };
                                                 cardButtons.Add(returnButton);
 
@@ -4430,7 +4435,7 @@ namespace HanjinChatBot
                                                             UserHeroCard plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj["snd_nam"].ToString(),
+                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj["snd_nam"].ToString(),
                                                                 //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                                 Tap = plButton
                                                             };
@@ -4727,7 +4732,7 @@ namespace HanjinChatBot
                                                             UserHeroCard plCard = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj["snd_nam"].ToString(),
+                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj["snd_nam"].ToString(),
                                                                 //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj["wbl_num"].ToString() + "/" + jobj["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                                 Tap = plButton
                                                             };
@@ -5439,14 +5444,15 @@ namespace HanjinChatBot
                                     {
                                         Type = "openUrl",
                                         Value = "https://www.hanjin.co.kr/Delivery_html/help/customer_write.jsp",
-                                        Title = "온라인 상담"
+                                        Title = "1:1온라인 상담"
                                     };
                                     addressButtons.Add(addressButton);
 
                                     UserHeroCard addressPlCard3 = new UserHeroCard()
                                     {
                                         Title = "",
-                                        Text = "PC 버전은 한진택배 고객의 말씀에서 온라인 상담을 진행합니다.<br>아래버튼을 눌러주세요.",
+                                        //Text = "PC 버전은 한진택배 고객의 말씀에서 1:1온라인 상담을 진행합니다.<br>아래버튼을 눌러주세요.",
+                                        Text = "네~ 고객님,<br>1:1온라인 상담으로 연결해 드리겠습니다.<br>아래 버튼을 눌러주세요",
                                         Buttons = addressButtons,
                                     };
                                     Attachment plAttachment = addressPlCard3.ToAttachment();
@@ -5473,7 +5479,7 @@ namespace HanjinChatBot
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                            Text = "모바일앱에서 1:1온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
                                             Buttons = cardButtons,
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
@@ -5496,14 +5502,14 @@ namespace HanjinChatBot
                                         {
                                             Type = "openUrl",
                                             Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
-                                            Title = "온라인 상담"
+                                            Title = "1:1온라인 상담"
                                         };
                                         addressButtons.Add(addressButton);
 
                                         UserHeroCard addressPlCard3 = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                            Text = "모바일앱에서 1:1온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
                                             Buttons = addressButtons,
                                         };
                                         Attachment plAttachment = addressPlCard3.ToAttachment();
@@ -5623,7 +5629,7 @@ namespace HanjinChatBot
                                 guideButton11 = new CardAction()
                                 {
                                     Type = "imBack",
-                                    Value = "온라인상담",
+                                    Value = "1:1온라인상담",
                                     Title = "1:1온라인상담"
                                 };
                                 cardButtons.Add(guideButton11);
@@ -5911,8 +5917,8 @@ namespace HanjinChatBot
                                                 returnButton = new CardAction()
                                                 {
                                                     Type = "imBack",
-                                                    Value = "온라인상담",
-                                                    Title = "온라인 상담"
+                                                    Value = "1:1온라인 상담",
+                                                    Title = "1:1온라인 상담"
                                                 };
                                                 cardButtons.Add(returnButton);
 
@@ -6380,7 +6386,7 @@ namespace HanjinChatBot
                                                         UserHeroCard plCard1 = new UserHeroCard()
                                                         {
                                                             Title = "",
-                                                            Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj1["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj1["snd_nam"].ToString(),
+                                                            Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj1["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj1["snd_nam"].ToString(),
                                                             //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj1["wbl_num"].ToString() + "/" + jobj1["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                             Tap = plButton
                                                         };
@@ -6583,7 +6589,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font>";
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·받는 분 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font>";
                                                             }
                                                             else
                                                             {
@@ -6591,7 +6597,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj2["wrk_dy"].ToString() + ")";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·수하인명 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj2["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·받는 분 : </strong>" + jobj2["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj2["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
@@ -6715,14 +6721,14 @@ namespace HanjinChatBot
                                                 {
                                                     Type = "openUrl",
                                                     Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=B",
-                                                    Title = "온라인 상담"
+                                                    Title = "1:1온라인 상담"
                                                 };
                                                 addressButtons.Add(addressButton);
 
                                                 UserHeroCard addressPlCard3 = new UserHeroCard()
                                                 {
                                                     Title = "",
-                                                    Text = "모바일앱에서 온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                                    Text = "모바일앱에서 1:1온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
                                                     Buttons = addressButtons,
                                                 };
                                                 plAttachment = addressPlCard3.ToAttachment();
@@ -6856,7 +6862,7 @@ namespace HanjinChatBot
                                                             if (tempDate == "" || tempDate.Equals(""))
                                                             {
                                                                 dateText = "미할당";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font>";
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·보내는 분 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font>";
                                                             }
                                                             else
                                                             {
@@ -6864,7 +6870,7 @@ namespace HanjinChatBot
                                                                 String monthText = tempDate.Substring(4, 2);
                                                                 String dayText = tempDate.Substring(6, 2);
                                                                 dateText = yearText + "년 " + monthText + "월 " + dayText + "일(" + jobj3["wrk_dy"].ToString() + ")";
-                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·송하인명 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
+                                                                cardShowText = "<strong>·예약번호 : </strong><strong><font color='#0101DF'>(" + jobj3["rsv_num"].ToString() + ")</font></strong><br><strong>· 상품명 : </strong>" + goodName + " <br><strong>·보내는 분 : </strong>" + jobj3["rcv_nam"].ToString() + " <br><strong>·예약상태 : </strong><font color='#0101DF'>" + jobj3["wrk_nam"].ToString() + "</font><br><strong>·날짜 : </strong>" + dateText;
                                                             }
 
                                                             CardAction bookButton = new CardAction();
@@ -7112,7 +7118,7 @@ namespace HanjinChatBot
                                                             UserHeroCard plCard4 = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj4["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj4["snd_nam"].ToString(),
+                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj4["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj4["snd_nam"].ToString(),
                                                                 //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj4["wbl_num"].ToString() + "/" + jobj4["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                                 Tap = bookButton,
                                                             };
@@ -7347,7 +7353,7 @@ namespace HanjinChatBot
                                                             UserHeroCard plCard4 = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj4["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj4["snd_nam"].ToString(),
+                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj4["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj4["snd_nam"].ToString(),
                                                                 //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj4["wbl_num"].ToString() + "/" + jobj4["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                                 Tap = bookButton,
                                                             };
@@ -7602,7 +7608,7 @@ namespace HanjinChatBot
                                                             plCard4 = new UserHeroCard()
                                                             {
                                                                 Title = "",
-                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj4["wbl_num"].ToString() + ")</font></strong><br><strong>· 송하인명 : </strong>" + jobj4["snd_nam"].ToString(),
+                                                                Text = dateText + "<strong>· 배송상태 : <font color='#0101DF'>" + deliveryStatusText + "</font></strong><br><strong>· 상품명 : </strong><font color='#585858'>" + goodName + "</font><br><strong>· 운송장번호 : <font color='#0101DF'>(" + jobj4["wbl_num"].ToString() + ")</font></strong><br><strong>· 보내는 분 : </strong>" + jobj4["snd_nam"].ToString(),
                                                                 //Text = "<div class=\"takeBack\">" + dateText + "<div class=\"prodInfo\"><span class=\"prodName\">" + goodName + "</span><span class=\"prodNum\">" + jobj4["wbl_num"].ToString() + "/" + jobj4["snd_nam"].ToString() + "</span><span class=\"prodStatus\">" + deliveryStatusText + "</span></div></div>",
                                                                 Tap = returnNmButton,
                                                             };
