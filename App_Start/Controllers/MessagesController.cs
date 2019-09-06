@@ -1413,6 +1413,10 @@ namespace HanjinChatBot
                             {
 
                             }
+                            else if (apiActiveText.Contains("수령인") || activity.Text.Contains("누가받았어") || activity.Text.Contains("못받았다고요"))
+                            {
+                                apiActiveText = "운송장번호직접입력";
+                            }
                             else
                             {
                                 if (checkApiTF.Equals("F"))
@@ -4091,7 +4095,7 @@ namespace HanjinChatBot
                                                 rct_nam = jobj["rct_nam"].ToString().Replace("*", "\\*"); ;
 
                                                 //statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
-                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 수령인 : <strong>" + rct_nam + "</strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 보내는 분 : <strong>" + snd_nam + "</strong><br>· 받는 분 : <strong>" + rcv_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
+                                                statusText = "<strong>· 운송장번호 : <font color='#0101DF'>(" + invoiceNumber + ")</font></strong><br>· 배송상태 : <strong><font color='#0101DF'>" + dateText + " 배송완료</font></strong><br>· 상품명 : <strong>" + goodName + "</strong><br>· 보내는 분 : <strong>" + snd_nam + "</strong><br>· 받는 분 : <strong>" + rcv_nam + "</strong><br>· 수령인 : <strong>" + rct_nam + "</strong><br>· 집배점 : " + orgNam + " ☎ <strong>" + telNum + "</strong><br>· 배송직원 : ☎ <strong>" + empTel + "</strong><br><br>자세한 문의 사항은 집배점 또는 배송직원에게 확인해주시기 바랍니다.<br>※ 운전중이거나 근무시간이 아닌 경우 통화가 어려울 수 있습니다.";
 
                                                 UserHeroCard plCard = new UserHeroCard()
                                                 {
