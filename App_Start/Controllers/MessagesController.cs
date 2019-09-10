@@ -1656,9 +1656,8 @@ namespace HanjinChatBot
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            //requestPhone = "12345674567";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
-                            //requestPhone = "01075013741";//TEST 용 반드시 지울 것!!!!이채원강사
-                            //requestPhone = "01027185020";//TEST 용 반드시 지울 것!!!!개발테스트용
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************
@@ -6101,15 +6100,43 @@ namespace HanjinChatBot
                                         {
                                             checkAuthNameCnt = "F";
                                             db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "NAMECHECK", checkAuthNameCnt); //인증 이름부분
-                                            UserHeroCard plCard = new UserHeroCard()
-                                            {
-                                                Title = "",
-                                                Text = "최근 30일 이내 고객님의 휴대폰 번호로 조회되는 배송/집하목록이 없어 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
-                                            };
 
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            apiMakerReply.Attachments.Add(plAttachment);
-                                            SetActivity(apiMakerReply);
+                                            if (uData[0].authUrl.Equals("[F_고객의말씀]::고객의말씀"))
+                                            {
+                                                List<CardAction> cardButtons = new List<CardAction>();
+                                                CardAction cardButton = new CardAction();
+                                                cardButton = new CardAction()
+                                                {
+                                                    Type = "openUrl",
+                                                    Value = "https://m.hanex.hanjin.co.kr/customer/vocRegistView",
+                                                    Title = "1:1 온라인 상담"
+                                                };
+                                                cardButtons.Add(cardButton);
+
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = "최근 30일 이내 고객님의 휴대폰 번호로 조회되는 배송/집하목록이 없어 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
+                                                    Buttons = cardButtons,
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            else
+                                            {
+                                                UserHeroCard plCard = new UserHeroCard()
+                                                {
+                                                    Title = "",
+                                                    Text = "최근 30일 이내 고객님의 휴대폰 번호로 조회되는 배송/집하목록이 없어 인증되지 않았습니다.<br>불편을 드려 죄송합니다",
+                                                };
+
+                                                Attachment plAttachment = plCard.ToAttachment();
+                                                apiMakerReply.Attachments.Add(plAttachment);
+                                                SetActivity(apiMakerReply);
+                                            }
+                                            
                                         }
                                         else if (jobj["ret_cod"].ToString().Equals("9032"))
                                         {
