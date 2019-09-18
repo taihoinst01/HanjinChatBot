@@ -732,27 +732,27 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약취소";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("받는상품목록배송조회다음페이지") && apiActiveText.Contains(">>"))
+                            else if (apiActiveText.Contains("받는상품배송조회다음페이지") && apiActiveText.Contains(">>"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("받는상품목록배송조회이전페이지") || apiActiveText.Contains("<<"))
+                            else if (apiActiveText.Contains("받는상품배송조회이전페이지") || apiActiveText.Contains("<<"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("보낸상품목록배송조회다음페이지") && apiActiveText.Contains(">>"))
+                            else if (apiActiveText.Contains("보낸상품배송조회다음페이지") && apiActiveText.Contains(">>"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("보낸상품목록배송조회이전페이지") || apiActiveText.Contains("<<"))
+                            else if (apiActiveText.Contains("보낸상품배송조회이전페이지") || apiActiveText.Contains("<<"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Equals("보낸상품목록배송조회") || apiActiveText.Equals("받는상품목록배송조회"))
+                            else if (apiActiveText.Equals("보낸상품배송조회") || apiActiveText.Equals("받는상품배송조회"))
                             {
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1397,19 +1397,19 @@ namespace HanjinChatBot
 
                                 }
                             }
-                            else if (apiActiveText.Contains("받는상품목록배송조회다음페이지") && activity.Text.Contains(">>"))
+                            else if (apiActiveText.Contains("받는상품배송조회다음페이지") && activity.Text.Contains(">>"))
                             {
 
                             }
-                            else if (apiActiveText.Contains("받는상품목록배송조회이전페이지") && activity.Text.Contains("<<"))
+                            else if (apiActiveText.Contains("받는상품배송조회이전페이지") && activity.Text.Contains("<<"))
                             {
 
                             }
-                            else if (apiActiveText.Contains("보낸상품목록배송조회다음페이지") && activity.Text.Contains(">>"))
+                            else if (apiActiveText.Contains("보낸상품배송조회다음페이지") && activity.Text.Contains(">>"))
                             {
 
                             }
-                            else if (apiActiveText.Contains("보낸상품목록배송조회이전페이지") && activity.Text.Contains("<<"))
+                            else if (apiActiveText.Contains("보낸상품배송조회이전페이지") && activity.Text.Contains("<<"))
                             {
 
                             }
@@ -1771,7 +1771,6 @@ namespace HanjinChatBot
                                 {
                                     if (apiActiveText.Contains("반품택배예약진행") || apiActiveText.Contains("받은주소에서반품"))//반품택배예약 진행
                                     {
-                                        Debug.WriteLine("onlynumber===========================================" + onlyNumber);
                                         postParams = new StringBuilder();
                                         postParams.Append("gbn_cod=CHATBOT");
                                         postParams.Append("&wbl_num=" + onlyNumber);
@@ -4206,7 +4205,7 @@ namespace HanjinChatBot
                                     /*************************************
                                      * 배송조회 보내는 거 받는 거 구분 시작
                                      * **********************************/
-                                    if (apiActiveText.Contains("보낸상품목록배송조회"))
+                                    if (apiActiveText.Contains("보낸상품배송조회"))
                                     {
                                         if (mobilePC.Equals("PC"))
                                         {
@@ -4236,7 +4235,7 @@ namespace HanjinChatBot
                                             //모바일 인증 체크
                                             if (authCheck.Equals("F"))
                                             {
-                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_택배배송일정조회]::보낸상품목록배송조회");
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_택배배송일정조회]::보낸상품배송조회");
                                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_택배배송일정조회");
                                                 List<CardAction> cardButtons = new List<CardAction>();
 
@@ -4272,11 +4271,11 @@ namespace HanjinChatBot
                                             else
                                             {
                                                 int totalPage = 0;
-                                                if (apiActiveText.Contains("보낸상품목록배송조회다음페이지") && activity.Text.Contains(">>"))
+                                                if (apiActiveText.Contains("보낸상품배송조회다음페이지") && activity.Text.Contains(">>"))
                                                 {
                                                     deliveryListPageNum++;
                                                 }
-                                                else if (apiActiveText.Contains("보낸상품목록배송조회이전페이지") && activity.Text.Contains("<<"))
+                                                else if (apiActiveText.Contains("보낸상품배송조회이전페이지") && activity.Text.Contains("<<"))
                                                 {
                                                     deliveryListPageNum--;
                                                 }
@@ -4465,7 +4464,7 @@ namespace HanjinChatBot
                                                             nextButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "보낸상품목록배송조회 다음페이지>>",
+                                                                Value = "보낸상품 배송조회 다음페이지>>",
                                                                 Title = "다음페이지",
                                                             };
                                                             pageButtons.Add(nextButton);
@@ -4481,7 +4480,7 @@ namespace HanjinChatBot
                                                             prevButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "보낸상품목록배송조회 이전페이지<<",
+                                                                Value = "보낸상품 배송조회 이전페이지<<",
                                                                 Title = "이전페이지",
                                                             };
                                                             pageButtons.Add(prevButton);
@@ -4503,7 +4502,7 @@ namespace HanjinChatBot
                                             }
                                         }
                                     }
-                                    else if (apiActiveText.Contains("받는상품목록배송조회"))
+                                    else if (apiActiveText.Contains("받는상품배송조회"))
                                     {
                                         if (mobilePC.Equals("PC"))
                                         {
@@ -4533,7 +4532,7 @@ namespace HanjinChatBot
                                             //모바일 인증 체크
                                             if (authCheck.Equals("F"))
                                             {
-                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_택배배송일정조회]::받는상품목록배송조회");
+                                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_택배배송일정조회]::받는상품배송조회");
                                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_택배배송일정조회");
                                                 List<CardAction> cardButtons = new List<CardAction>();
 
@@ -4569,11 +4568,11 @@ namespace HanjinChatBot
                                             else
                                             {
                                                 int totalPage = 0;
-                                                if (apiActiveText.Contains("받는상품목록배송조회다음페이지") && activity.Text.Contains(">>"))
+                                                if (apiActiveText.Contains("받는상품배송조회다음페이지") && activity.Text.Contains(">>"))
                                                 {
                                                     deliveryListPageNum++;
                                                 }
-                                                else if (apiActiveText.Contains("받는상품목록배송조회이전페이지") && activity.Text.Contains("<<"))
+                                                else if (apiActiveText.Contains("받는상품배송조회이전페이지") && activity.Text.Contains("<<"))
                                                 {
                                                     deliveryListPageNum--;
                                                 }
@@ -4762,7 +4761,7 @@ namespace HanjinChatBot
                                                             nextButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "받는상품목록배송조회 다음페이지>>",
+                                                                Value = "받는상품 배송조회 다음페이지>>",
                                                                 Title = "다음페이지",
                                                             };
                                                             pageButtons.Add(nextButton);
@@ -4778,7 +4777,7 @@ namespace HanjinChatBot
                                                             prevButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "받는상품목록배송조회 이전페이지<<",
+                                                                Value = "받는상품 배송조회 이전페이지<<",
                                                                 Title = "이전페이지",
                                                             };
                                                             pageButtons.Add(prevButton);
@@ -4809,8 +4808,8 @@ namespace HanjinChatBot
                                         deliveryButton = new CardAction()
                                         {
                                             Type = "imBack",
-                                            Value = "보낸상품목록배송조회",
-                                            Title = "보낸상품목록배송조회"
+                                            Value = "보낸상품 배송조회",
+                                            Title = "보낸상품 배송조회"
                                         };
                                         cardButtons.Add(deliveryButton);
 
@@ -4818,8 +4817,8 @@ namespace HanjinChatBot
                                         returnButton = new CardAction()
                                         {
                                             Type = "imBack",
-                                            Value = "받는상품목록배송조회",
-                                            Title = "받는상품목록배송조회"
+                                            Value = "받는상품 배송조회",
+                                            Title = "받는상품 배송조회"
                                         };
                                         cardButtons.Add(returnButton);
 
@@ -6977,16 +6976,16 @@ namespace HanjinChatBot
                                                 /**************************************************/
                                             }
                                             //else if (authUrl.Equals("[F_택배배송일정조회]::나의배송목록"))
-                                            else if (authUrl.Equals("[F_택배배송일정조회]::받는상품목록배송조회"))
+                                            else if (authUrl.Equals("[F_택배배송일정조회]::받는상품배송조회"))
                                             {
                                                 /**************************************************/
                                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_택배배송일정조회");
                                                 int totalPage = 0;
-                                                if (apiActiveText.Contains("받는상품목록배송조회다음페이지") && activity.Text.Contains(">>"))
+                                                if (apiActiveText.Contains("받는상품배송조회다음페이지") && activity.Text.Contains(">>"))
                                                 {
                                                     deliveryListPageNum++;
                                                 }
-                                                else if (apiActiveText.Contains("받는상품목록배송조회이전페이지") && activity.Text.Contains("<<"))
+                                                else if (apiActiveText.Contains("받는상품배송조회이전페이지") && activity.Text.Contains("<<"))
                                                 {
                                                     deliveryListPageNum--;
                                                 }
@@ -7177,7 +7176,7 @@ namespace HanjinChatBot
                                                             nextButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "받는상품목록배송조회 다음페이지>>",
+                                                                Value = "받는상품 배송조회 다음페이지>>",
                                                                 Title = "다음페이지",
                                                             };
                                                             pageButtons.Add(nextButton);
@@ -7193,7 +7192,7 @@ namespace HanjinChatBot
                                                             prevButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "받는상품목록배송조회 이전페이지<<",
+                                                                Value = "받는상품 배송조회 이전페이지<<",
                                                                 Title = "이전페이지",
                                                             };
                                                             pageButtons.Add(prevButton);
@@ -7212,16 +7211,16 @@ namespace HanjinChatBot
                                                 }
                                                 /**************************************************/
                                             }
-                                            else if (authUrl.Equals("[F_택배배송일정조회]::보낸상품목록배송조회"))
+                                            else if (authUrl.Equals("[F_택배배송일정조회]::보낸상품배송조회"))
                                             {
                                                 /**************************************************/
                                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_택배배송일정조회");
                                                 int totalPage = 0;
-                                                if (apiActiveText.Contains("보낸상품목록배송조회다음페이지") && activity.Text.Contains(">>"))
+                                                if (apiActiveText.Contains("보낸상품배송조회다음페이지") && activity.Text.Contains(">>"))
                                                 {
                                                     deliveryListPageNum++;
                                                 }
-                                                else if (apiActiveText.Contains("보낸상품목록배송조회이전페이지") && activity.Text.Contains("<<"))
+                                                else if (apiActiveText.Contains("보낸상품배송조회이전페이지") && activity.Text.Contains("<<"))
                                                 {
                                                     deliveryListPageNum--;
                                                 }
@@ -7412,7 +7411,7 @@ namespace HanjinChatBot
                                                             nextButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "보낸상품목록배송조회 다음페이지>>",
+                                                                Value = "보낸상품 배송조회 다음페이지>>",
                                                                 Title = "다음페이지",
                                                             };
                                                             pageButtons.Add(nextButton);
@@ -7428,7 +7427,7 @@ namespace HanjinChatBot
                                                             prevButton = new CardAction()
                                                             {
                                                                 Type = "imBack",
-                                                                Value = "보낸상품목록배송조회 이전페이지<<",
+                                                                Value = "보낸상품 배송조회 이전페이지<<",
                                                                 Title = "이전페이지",
                                                             };
                                                             pageButtons.Add(prevButton);
