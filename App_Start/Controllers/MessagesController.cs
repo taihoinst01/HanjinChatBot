@@ -647,6 +647,11 @@ namespace HanjinChatBot
                                 apiIntent = "F_집배점/기사연락처";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
+                            else if (apiActiveText.Equals("배송사원연결"))
+                            {
+                                apiIntent = "F_집배점/기사연락처";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
                             else if (apiActiveText.Equals("주소다시입력") || apiActiveText.Equals("집배원") || apiActiveText.Equals("기사확인") || apiActiveText.Equals("이에스"))
                             {
                                 apiIntent = "F_집배점/기사연락처";
@@ -672,12 +677,12 @@ namespace HanjinChatBot
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("반품신청조회") || apiActiveText.Equals("택배보내고싶어요"))
+                            else if (apiActiveText.Equals("반품신청조회") || apiActiveText.Equals("택배보내고싶어요"))
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (apiActiveText.Contains("주소변경") && apiActiveText.Contains("반품"))
+                            else if (apiActiveText.Contains("주소변경") && apiActiveText.Equals("반품"))
                             {
                                 apiIntent = "F_예약";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
@@ -1657,7 +1662,7 @@ namespace HanjinChatBot
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "12345674567";//TEST 용 반드시 지울 것!!!!김은영대리
-                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            //srequestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************
