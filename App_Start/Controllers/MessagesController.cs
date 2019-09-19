@@ -1662,7 +1662,7 @@ namespace HanjinChatBot
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "12345674567";//TEST 용 반드시 지울 것!!!!김은영대리
-                            //srequestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
+                            //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!
                             /*****************************************************************

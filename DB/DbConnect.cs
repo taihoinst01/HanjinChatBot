@@ -66,6 +66,7 @@ namespace HanjinChatBot.DB
                 cmd.CommandText += " FROM TBL_DLG     ";
                 cmd.CommandText += " WHERE DLG_GROUP = '1'      ";
                 cmd.CommandText += " AND USE_YN = 'Y'           ";
+                cmd.CommandText += " AND DLG_ORDER_NO > 0           ";
                 cmd.CommandText += " ORDER BY DLG_ORDER_NO            ";
 
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
