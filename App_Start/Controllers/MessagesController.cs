@@ -637,6 +637,106 @@ namespace HanjinChatBot
                         }
                         else
                         {
+                            /*
+                            String apiIntentFromDB = "";
+                            apiIntentFromDB = db.getAPITFromDB(apiActiveText);
+
+                            if (apiIntentFromDB == "") //equal 이 아닌 contain 일경우
+                            {
+                                if (apiActiveText.Contains("반송확인"))
+                                {
+                                    apiIntent = "F_운송장번호확인";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("예휴대폰인증") || apiActiveText.Contains("아니오휴대폰인증"))
+                                {
+                                    apiIntent = "F_모바일인증";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("반품택배예약다음페이지") && apiActiveText.Contains(">>"))
+                                {
+                                    apiIntent = "F_예약";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("반품택배예약이전페이지") && apiActiveText.Contains("<<"))
+                                {
+                                    apiIntent = "F_예약";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("반품접수부탁드려요") || apiActiveText.Contains("반품예약해주세요") || apiActiveText.Contains("반품예약어떻게하나요"))
+                                {
+                                    apiIntent = "F_예약";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("상품이어디있나요") || apiActiveText.Contains("배송이언제되나요"))
+                                {
+                                    apiIntent = "F_택배배송일정조회";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("예약목록다음페이지") && apiActiveText.Contains(">>"))
+                                {
+                                    apiIntent = "F_예약확인";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("예약목록이전페이지") && apiActiveText.Contains("<<"))
+                                {
+                                    apiIntent = "F_예약확인";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("예약조회해주세요") || apiActiveText.Contains("예약확인해주세요") || apiActiveText.Contains("예약목록"))
+                                {
+                                    apiIntent = "F_예약확인";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("예약취소목록다음페이지") && apiActiveText.Contains(">>"))
+                                {
+                                    apiIntent = "F_예약취소";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("예약취소목록이전페이지") && apiActiveText.Contains("<<"))
+                                {
+                                    apiIntent = "F_예약취소";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("접수한예약을취소하고싶어요"))
+                                {
+                                    apiIntent = "F_예약취소";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("받는상품배송조회다음페이지") && apiActiveText.Contains(">>"))
+                                {
+                                    apiIntent = "F_택배배송일정조회";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("받는상품배송조회이전페이지") || apiActiveText.Contains("<<"))
+                                {
+                                    apiIntent = "F_택배배송일정조회";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("보낸상품배송조회다음페이지") && apiActiveText.Contains(">>"))
+                                {
+                                    apiIntent = "F_택배배송일정조회";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else if (apiActiveText.Contains("보낸상품배송조회이전페이지") || apiActiveText.Contains("<<"))
+                                {
+                                    apiIntent = "F_택배배송일정조회";
+                                    db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                            else // equal 검색
+                            {
+                                apiIntent = apiIntentFromDB;
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
+                            */
+
+
+                            
                             if (apiActiveText.Equals("집하예정일확인") || apiActiveText.Equals("예약번호확인") || apiActiveText.Equals("나의예약확인") || apiActiveText.Equals("예약확인"))
                             {
                                 apiIntent = "F_예약확인";
@@ -781,6 +881,7 @@ namespace HanjinChatBot
                             {
 
                             }
+                            
                         }
                         Debug.WriteLine("API INTENT 두번째 호출(문장를 통해서)===" + apiIntent);
                         /*
@@ -1661,7 +1762,7 @@ namespace HanjinChatBot
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
-                            //requestPhone = "12345674567";//TEST 용 반드시 지울 것!!!!김은영대리
+                            //requestPhone = "01097444750";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "MOBILEPC", mobilePC);//TEST 용 반드시 지울 것!!!!

@@ -990,7 +990,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "sp_insertusehistory4";
+                cmd.CommandText = "sp_insertusehistory4M";
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -1020,7 +1020,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "sp_insertusehistory4";
+                cmd.CommandText = "sp_insertusehistory4M";
 
                 cmd.CommandType = CommandType.StoredProcedure;
 
@@ -1713,6 +1713,49 @@ namespace HanjinChatBot.DB
         }
 
         /*
+         * API INTENT DATA from DB
+         * */
+        public String getAPITFromDB(string query)
+        {
+
+            String s_query = query;
+            SqlDataReader rdr = null;
+            String apiIntent = "";
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+
+                cmd.CommandText += "SELECT API_INTENT ";
+                cmd.CommandText += "FROM TBL_API_INTENT ";
+                cmd.CommandText += "WHERE API_QUERY = @s_query";
+
+                cmd.Parameters.AddWithValue("@s_query", s_query);
+
+                rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                try
+                {
+                    while (rdr.Read())
+                    {
+                        apiIntent = rdr["API_INTENT"] as string;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Debug.WriteLine(e.Message);
+                }
+                rdr.Close();
+                
+            }
+            return apiIntent;
+
+        }
+
+        /*
          * LUIS MIN DATA
          * */
         public String getLuisMINData(string luisIMinntent)
@@ -1867,7 +1910,7 @@ namespace HanjinChatBot.DB
                 cmd.Connection = conn;
 
                 cmd.CommandText += "INSERT INTO TBL_CHATBOT_USEREPORT(R_COUNT, R_COMMENT, R_WDATE) ";
-                cmd.CommandText += " VALUES (@rCount, @rComment,GETDATE())";
+                cmd.CommandText += " VALUES (@rCount, @rComment, DATEADD(hh, 9,GETDATE()))";
 
 
                 cmd.Parameters.AddWithValue("@rCount", rCount);
