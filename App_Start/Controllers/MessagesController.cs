@@ -630,16 +630,6 @@ namespace HanjinChatBot
                                 apiIntent = "F_택배배송일정조회";
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
-                            else if (onlyNumber.Length==12)
-                            {
-                                apiIntent = "F_택배배송일정조회";
-                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
-                            }
-                            else if (onlyNumber.Length == 9)
-                            {
-                                apiIntent = "F_예약확인";
-                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
-                            }
                             else
                             {
 
@@ -1317,12 +1307,17 @@ namespace HanjinChatBot
                         }
                         else if (checkApiintent.Equals("F_예약"))
                         {
-                            if (containNum == true && onlyNumber.Length > 8)
+                            if (containNum == true && onlyNumber.Length == 12)
                             {
                                 if (apiActiveText.Contains("운송장번호") && apiActiveText.Contains("반품택배예약"))
                                 {
                                     apiIntent = "F_예약";
                                 }
+                            }
+                            else if (containNum == true && onlyNumber.Length == 9)
+                            {
+                                apiIntent = "F_예약확인";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
                             else if (apiActiveText.Contains("반품택배예약") || apiActiveText.Contains("택배배송목록"))
                             {
@@ -1354,7 +1349,7 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (containNum == true && onlyNumber.Length > 8)//예약번호 9자리
+                            else if (containNum == true && onlyNumber.Length == 9)//예약번호 9자리
                             {
                                 if (apiActiveText.Contains("예약취소확인"))
                                 {
@@ -1385,6 +1380,11 @@ namespace HanjinChatBot
 
                                 }
                             }
+                            else if (containNum == true && onlyNumber.Length == 12)
+                            {
+                                apiIntent = "F_택배배송일정조회";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                            }
                             else if (apiActiveText.Contains("예약취소목록다음페이지") && activity.Text.Contains(">>"))
                             {
 
@@ -1411,12 +1411,17 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (containNum == true && onlyNumber.Length > 8)//예약번호 9자리
+                            else if (containNum == true && onlyNumber.Length == 9)//예약번호 9자리
                             {
                                 if (apiActiveText.Contains("에대한예약내용확인"))
                                 {
 
                                 }
+                            }
+                            else if (containNum == true && onlyNumber.Length == 12)
+                            {
+                                apiIntent = "F_택배배송일정조회";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
                             else if (apiActiveText.Contains("예약목록다음페이지") && activity.Text.Contains(">>"))
                             {
@@ -1511,7 +1516,7 @@ namespace HanjinChatBot
                             {
 
                             }
-                            else if (containNum == true && onlyNumber.Length > 8)
+                            else if (containNum == true && onlyNumber.Length == 12)
                             {
                                 if (apiActiveText.Contains("에대한배송일정조회") && apiActiveText.Contains("운송장번호"))
                                 {
@@ -1521,6 +1526,11 @@ namespace HanjinChatBot
                                 {
 
                                 }
+                            }
+                            else if (containNum == true && onlyNumber.Length == 9)
+                            {
+                                apiIntent = "F_예약확인";
+                                db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
                             }
                             else if (apiActiveText.Contains("받는상품배송조회다음페이지") && activity.Text.Contains(">>"))
                             {
@@ -1554,6 +1564,17 @@ namespace HanjinChatBot
                         {
 
                         }
+                        else if (onlyNumber.Length == 12)
+                        {
+                            apiIntent = "F_택배배송일정조회";
+                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                        }
+                        else if (onlyNumber.Length == 9)
+                        {
+                            apiIntent = "F_예약확인";
+                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_CHECK", "T");
+                        }
+                        
                         else
                         {
                             if (checkApiTF.Equals("F"))
@@ -3695,39 +3716,42 @@ namespace HanjinChatBot
                                 {
                                     if (mobilePC.Equals("PC"))
                                     {
-                                        //no show
-                                        List<CardAction> cardButtons = new List<CardAction>();
-
-                                        CardAction returnButton = new CardAction();
-                                        returnButton = new CardAction()
+                                        if (apiActiveText.Contains("반송장번호직접입력"))
                                         {
-                                            Type = "postBack",
-                                            Value = "[F_운송장번호확인]::반송장번호직접입력",
-                                            Title = "예약번호/운송장번호 직접입력"
-                                        };
-                                        cardButtons.Add(returnButton);
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "예약번호 또는 운송장번호를 입력해 주십시오.",
+                                            };
 
-                                        UserHeroCard plCard1 = new UserHeroCard()
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
+                                        else
                                         {
-                                            Title = "",
-                                            Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>예약번호 또는 운송장번호를 입력해 주십시오.",
-                                            Buttons = cardButtons,
-                                        };
-                                        Attachment plAttachment1 = plCard1.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment1);
-                                        SetActivity(apiMakerReply);
-                                    }
-                                    else if (apiActiveText.Contains("반송장번호직접입력"))
-                                    {
-                                        UserHeroCard plCard = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "예약번호 또는 운송장번호를 입력해 주십시오.",
-                                        };
+                                            //no show
+                                            List<CardAction> cardButtons = new List<CardAction>();
 
-                                        Attachment plAttachment = plCard.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
+                                            CardAction returnButton = new CardAction();
+                                            returnButton = new CardAction()
+                                            {
+                                                Type = "postBack",
+                                                Value = "[F_운송장번호확인]::반송장번호직접입력",
+                                                Title = "예약번호/운송장번호 직접입력"
+                                            };
+                                            cardButtons.Add(returnButton);
+
+                                            UserHeroCard plCard1 = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "네~ 고객님<br>상품 수령하신 운송장번호로 반품택배 예약접수를 하신 경우, 운송장번호 조회가 가능하며, 예약번호를 아신다면 예약번호로 반송 운송장번호 확인이 가능합니다.<br><br>예약번호 또는 운송장번호를 입력해 주십시오.",
+                                                Buttons = cardButtons,
+                                            };
+                                            Attachment plAttachment1 = plCard1.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment1);
+                                            SetActivity(apiMakerReply);
+                                        }
                                     }
                                     else
                                     {
@@ -6036,9 +6060,27 @@ namespace HanjinChatBot
                                             else
                                             {
                                                 wrkCod = "오류";
-                                                statusText = "고객님께서 문의하신 운송장 번호 <strong><font color='#0101DF'>(" + invoiceNm + ")</font></strong>는 배송조회가 되지 않습니다.<br>문의 내용이 있으시면 아래 버튼을 눌러주세요.";
+                                                statusText = "고객님께서 문의하신 운송장 번호 <strong><font color='#0101DF'>(" + invoiceNm + ")</font></strong>는 조회가 되지 않습니다.<br>정확한 번호를 입력하거나 온라인 상담으로 문의해 주세요";
 
                                                 List<CardAction> cardButtons = new List<CardAction>();
+
+                                                CardAction returnButton1 = new CardAction();
+                                                returnButton1 = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = "배송조회",
+                                                    Title = "배송조회"
+                                                };
+                                                cardButtons.Add(returnButton1);
+
+                                                CardAction returnButton2 = new CardAction();
+                                                returnButton2 = new CardAction()
+                                                {
+                                                    Type = "imBack",
+                                                    Value = "예약확인",
+                                                    Title = "예약확인"
+                                                };
+                                                cardButtons.Add(returnButton2);
 
                                                 CardAction returnButton = new CardAction();
                                                 returnButton = new CardAction()
@@ -7990,15 +8032,24 @@ namespace HanjinChatBot
                         //history table insert
                         //NONE_DLG 예외처리
                         //db.insertHistory(activity.Conversation.Id, activity.ChannelId, ((endTime - MessagesController.startTime).Milliseconds), "", "", "", "", replyresult);
-                        if (luisIntent.Equals("NONE_DLG"))
-                        {
-                            replyresult = "D";
-                        }
-
                         if (replyresult.Equals("")|| replyresult=="")
                         {
                             replyresult = "H";
                         }
+
+                        if (luisIntent.Equals("None"))
+                        {
+                            if (apiIntent.Equals("None"))
+                            {
+
+                            }
+                            else
+                            {
+                                luisIntent = apiIntent;
+                                luisEntities = apiIntent;
+                            }
+                        }
+
 
                         db.insertHistory(null, activity.Conversation.Id, activity.ChannelId, ((endTime - MessagesController.startTime).Milliseconds), luisIntent, luisEntities, luisIntentScore, dlgId, replyresult, orgMent);
                         replyresult = "";
