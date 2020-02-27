@@ -1801,7 +1801,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
-                            mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01097444750";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
