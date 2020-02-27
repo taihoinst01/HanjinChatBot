@@ -1801,7 +1801,7 @@ namespace HanjinChatBot
                             authNumber = uData[0].authNumber;//모바일 인증 체크(인증번호)
 
                             //mobilePC = "MOBILE";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
-                            //mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
+                            mobilePC = "PC";//TEST 용 반드시 지울 것!!!!(에뮬레이터용)
                             //requestPhone = "01097444750";//TEST 용 반드시 지울 것!!!!김은영대리
                             //requestPhone = "01022840610";//TEST 용 반드시 지울 것!!!!김은영대리
                             //db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "USER_PHONE", requestPhone);//TEST 용 반드시 지울 것!!!!
@@ -1855,27 +1855,15 @@ namespace HanjinChatBot
                                 }
                                 else if (apiActiveText.Contains("다른주소로변경반품"))
                                 {
-                                    //모바일 인증
-                                    if (authCheck.Equals("F"))
+                                    if (mobilePC.Equals("PC"))
                                     {
                                         db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약]::다른주소로변경반품");
                                         db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_예약");
-                                        List<CardAction> cardButtons = new List<CardAction>();
-
-                                        CardAction deliveryButton = new CardAction();
-                                        deliveryButton = new CardAction()
-                                        {
-                                            Type = "imBack",
-                                            Value = "예. 휴대폰인증 하겠습니다",
-                                            Title = "휴대폰 인증"
-                                        };
-                                        cardButtons.Add(deliveryButton);
-
+                                        
                                         UserHeroCard plCard = new UserHeroCard()
                                         {
                                             Title = "",
-                                            Text = "반품하시려는 주소가 받은 주소와 다를 경우 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 반품접수를 진행해 주세요.",
-                                            Buttons = cardButtons,
+                                            Text = "반품하시려는 주소가 받은 주소와 다를 경우 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 반품접수를 진행해 주세요.<br>불편을 드려 죄송합니다.",
                                         };
                                         Attachment plAttachment = plCard.ToAttachment();
                                         apiMakerReply.Attachments.Add(plAttachment);
@@ -1883,34 +1871,65 @@ namespace HanjinChatBot
                                     }
                                     else
                                     {
-                                        String userPhone = userCheck[0].userPhone;
-                                        String dataUserPhone = "";
-                                        String[] telNumbers = dbutil.arrayStr(userPhone);
-                                        for (int i = 0; i < telNumbers.Length; i++)
+                                        //모바일 인증
+                                        if (authCheck.Equals("F"))
                                         {
-                                            dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_예약]::다른주소로변경반품");
+                                            db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", "F_예약");
+                                            List<CardAction> cardButtons = new List<CardAction>();
+
+                                            CardAction deliveryButton = new CardAction();
+                                            deliveryButton = new CardAction()
+                                            {
+                                                Type = "imBack",
+                                                Value = "예. 휴대폰인증 하겠습니다",
+                                                Title = "휴대폰 인증"
+                                            };
+                                            cardButtons.Add(deliveryButton);
+
+                                            UserHeroCard plCard = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "반품하시려는 주소가 받은 주소와 다를 경우 모바일앱에서 진행됩니다.<br>모바일인증을 하신 후에 모바일앱에서 반품접수를 진행해 주세요.",
+                                                Buttons = cardButtons,
+                                            };
+                                            Attachment plAttachment = plCard.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
                                         }
-
-                                        List<CardAction> addressButtons = new List<CardAction>();
-                                        CardAction addressButton = new CardAction();
-                                        addressButton = new CardAction()
+                                        else
                                         {
-                                            Type = "openUrl",
-                                            Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=A&wbl=" + onlyNumber,
-                                            Title = "반품접수"
-                                        };
-                                        addressButtons.Add(addressButton);
+                                            String userPhone = userCheck[0].userPhone;
+                                            String dataUserPhone = "";
+                                            String[] telNumbers = dbutil.arrayStr(userPhone);
+                                            for (int i = 0; i < telNumbers.Length; i++)
+                                            {
+                                                dataUserPhone = dataUserPhone + dbutil.getTelEnglish(telNumbers[i]);
+                                            }
 
-                                        UserHeroCard addressPlCard3 = new UserHeroCard()
-                                        {
-                                            Title = "",
-                                            Text = "모바일앱에서 반품접수를 진행해 주세요.",
-                                            Buttons = addressButtons,
-                                        };
-                                        Attachment plAttachment = addressPlCard3.ToAttachment();
-                                        apiMakerReply.Attachments.Add(plAttachment);
-                                        SetActivity(apiMakerReply);
+                                            List<CardAction> addressButtons = new List<CardAction>();
+                                            CardAction addressButton = new CardAction();
+                                            addressButton = new CardAction()
+                                            {
+                                                Type = "openUrl",
+                                                Value = "https://m.hanex.hanjin.co.kr/member/ssoCTI?tel_num=" + dataUserPhone + "&auth_num=" + authNumber + "&type=A&wbl=" + onlyNumber,
+                                                Title = "반품접수"
+                                            };
+                                            addressButtons.Add(addressButton);
+
+                                            UserHeroCard addressPlCard3 = new UserHeroCard()
+                                            {
+                                                Title = "",
+                                                Text = "모바일앱에서 반품접수를 진행해 주세요.",
+                                                Buttons = addressButtons,
+                                            };
+                                            Attachment plAttachment = addressPlCard3.ToAttachment();
+                                            apiMakerReply.Attachments.Add(plAttachment);
+                                            SetActivity(apiMakerReply);
+                                        }
                                     }
+
+                                    
                                 }
                                 //반품택배예약가능여부 확인
                                 else if (containNum == true) //반품택배예약 중에서 숫자만 추출한다.
