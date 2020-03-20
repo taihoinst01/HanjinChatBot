@@ -1815,19 +1815,34 @@ namespace HanjinChatBot
                                 replyresult = "H";
                                 apiOldIntent = apiIntent;
                                 db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "API_OLDINTENT", apiOldIntent);
-                                //개인택배예약
-                                if (apiActiveText.Contains("개인택배예약"))
+                                //개인택배예약(일반택배예약추가)
+                                if (apiActiveText.Contains("개인택배예약")|| apiActiveText.Contains("일반택배예약"))
                                 {
                                     List<CardAction> cardButtons = new List<CardAction>();
 
-                                    CardAction bookButton = new CardAction();
-                                    bookButton = new CardAction()
+                                    if (mobilePC.Equals("PC"))
                                     {
-                                        Type = "openUrl",
-                                        Value = "https://m.hanex.hanjin.co.kr/inquiry/outcoming/reservationMain",
-                                        Title = "예약접수"
-                                    };
-                                    cardButtons.Add(bookButton);
+                                        CardAction bookButton = new CardAction();
+                                        bookButton = new CardAction()
+                                        {
+                                            Type = "openUrl",
+                                            Value = "https://www.hanjin.co.kr/Delivery_html/reserve/care_check.jsp?rsr_gbn=A",
+                                            Title = "예약접수"
+                                        };
+                                        cardButtons.Add(bookButton);
+                                    }
+                                    else
+                                    {
+                                        CardAction bookButton = new CardAction();
+                                        bookButton = new CardAction()
+                                        {
+                                            Type = "openUrl",
+                                            Value = "https://app.hanjin.co.kr/app/view/JUVEJTgzJTlEJUVCJUIwJUIwJUVDJTk4JTg4JUVDJTk1JUJE?rsv_typ=A&from=web",
+                                            Title = "예약접수"
+                                        };
+                                        cardButtons.Add(bookButton);
+                                    }
+                                    
 
                                     UserHeroCard plCard = new UserHeroCard()
                                     {
@@ -5631,6 +5646,29 @@ namespace HanjinChatBot
                                 }
                                 else
                                 {
+                                    /****
+                                     * 2020.03.20 인증없이 앱으로 연결 수정
+                                     * */
+                                    List<CardAction> addressButtons = new List<CardAction>();
+                                    CardAction addressButton = new CardAction();
+                                    addressButton = new CardAction()
+                                    {
+                                        Type = "openUrl",
+                                        Value = "https://app.hanjin.co.kr/app/view/JXVBQ0UwJXVBQzFEJXVDNzU4JXVCOUQwJXVDNTAwJXVCNEYxJXVCODVE",
+                                        Title = "1:1온라인 상담"
+                                    };
+                                    addressButtons.Add(addressButton);
+
+                                    UserHeroCard addressPlCard3 = new UserHeroCard()
+                                    {
+                                        Title = "",
+                                        Text = "모바일앱에서 1:1온라인 상담으로 진행합니다.<br>아래버튼을 눌러주세요.",
+                                        Buttons = addressButtons,
+                                    };
+                                    Attachment plAttachment = addressPlCard3.ToAttachment();
+                                    apiMakerReply.Attachments.Add(plAttachment);
+                                    SetActivity(apiMakerReply);
+                                    /*
                                     if (authCheck.Equals("F"))
                                     {
                                         db.UserCheckUpdate(activity.ChannelId, activity.Conversation.Id, "AUTH_URL", "[F_고객의말씀]::고객의말씀");
@@ -5686,6 +5724,7 @@ namespace HanjinChatBot
                                         apiMakerReply.Attachments.Add(plAttachment);
                                         SetActivity(apiMakerReply);
                                     }
+                                    */
                                 }
                             }
                             else
