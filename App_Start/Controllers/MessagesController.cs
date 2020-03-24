@@ -41,7 +41,7 @@ namespace HanjinChatBot
         public static int appID = Convert.ToInt32(rootWebConfig.ConnectionStrings.ConnectionStrings[chatBotAppID].ToString());
 
         //config 변수 선언
-        static public string[] LUIS_NM = new string[2];        //루이스 이름(일반)
+        static public string[] LUIS_NM = new string[2];         //루이스 이름(일반)
         static public string[] LUIS_APP_ID = new string[2];    //루이스 app_id(일반대화셋)
         static public string[] LUIS_APINM = new string[2];        //루이스 이름(API)
         static public string[] LUIS_APPAPI_ID = new string[2];    //루이스 app_id(API)
