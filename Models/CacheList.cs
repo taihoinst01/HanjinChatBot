@@ -14,5 +14,6 @@ namespace HanjinChatBot.Models
         public int dlgId;
         public int dlgOrderNo;
         public string dlgApiDefine;
+        public string trainFlag;
     }
 }

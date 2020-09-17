@@ -652,7 +652,7 @@ namespace HanjinChatBot.DB
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = conn;
-                cmd.CommandText += "SELECT LUIS_ID, LUIS_INTENT, LUIS_ENTITIES, ISNULL(LUIS_INTENT_SCORE,'') AS LUIS_INTENT_SCORE FROM TBL_QUERY_ANALYSIS_RESULT WHERE LOWER(QUERY) = LOWER(@msg) AND RESULT ='H'";
+                cmd.CommandText += "SELECT LUIS_ID, LUIS_INTENT, LUIS_ENTITIES, ISNULL(LUIS_INTENT_SCORE,'') AS LUIS_INTENT_SCORE, TRAIN_FLAG FROM TBL_QUERY_ANALYSIS_RESULT WHERE LOWER(QUERY) = LOWER(@msg) AND RESULT ='H'";
 
                 cmd.Parameters.AddWithValue("@msg", orgMent);
                 rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -663,12 +663,13 @@ namespace HanjinChatBot.DB
                     string intentId = rdr["LUIS_INTENT"] as String;
                     string entitiesId = rdr["LUIS_ENTITIES"] as String;
                     string luisScore = rdr["LUIS_INTENT_SCORE"] as String;
-
+                    string trainFlag = rdr["TRAIN_FLAG"] as String;
 
                     result.luisId = luisId;
                     result.luisIntent = intentId;
                     result.luisEntities = entitiesId;
                     result.luisScore = luisScore;
+                    result.trainFlag = trainFlag;
                 }
             }
             return result;
