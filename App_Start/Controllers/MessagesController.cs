@@ -493,6 +493,66 @@ namespace HanjinChatBot
                         queryStr = orgMent;
                         cacheList = db.CacheChk(orgMent.Replace(" ", ""));                     // 캐시 체크 (TBL_QUERY_ANALYSIS_RESULT 조회..)
 
+                        //gjlim v2009
+                        if (cacheList.trainFlag == "K")
+                        {
+
+                            relationList = db.DefineTypeChkSpare(cacheList.luisIntent, cacheList.luisEntities);
+
+                            if (relationList != null)
+                            {
+                                dlgId = "";
+                                mobilePC = uData[0].mobilePc;
+                                for (int m = 0; m < relationList.Count; m++)
+                                {
+                                    DialogList dlg = db.SelectDialog(relationList[m].dlgId, mobilePC);
+                                    dlgId += Convert.ToString(dlg.dlgId) + ",";
+                                    Activity commonReply = activity.CreateReply();
+                                    Attachment tempAttachment = new Attachment();
+                                    DButil.HistoryLog("dlg.dlgType : " + dlg.dlgType);
+
+                                    string userSSO = "NONE";
+
+                                    if (dlg.dlgType.Equals(CARDDLG))
+                                    {
+                                        foreach (CardList tempcard in dlg.dialogCard)
+                                        {
+                                            tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity, userSSO);
+
+                                            if (tempAttachment != null)
+                                            {
+                                                commonReply.Attachments.Add(tempAttachment);
+                                            }
+
+                                            //2018-04-19:KSO:Carousel 만드는부분 추가
+                                            if (tempcard.card_order_no > 1)
+                                            {
+                                                commonReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //DButil.HistoryLog("* facebook dlg.dlgId : " + dlg.dlgId);
+                                        DButil.HistoryLog("* activity.ChannelId : " + activity.ChannelId);
+
+                                        tempAttachment = dbutil.getAttachmentFromDialog(dlg, activity);
+                                        commonReply.Attachments.Add(tempAttachment);
+                                    }
+
+                                    if (commonReply.Attachments.Count > 0)
+                                    {
+                                        SetActivity(commonReply);
+                                        replyresult = "H";
+                                    }
+                                }
+                            }
+
+                            response = Request.CreateResponse(HttpStatusCode.OK);
+                            return response;
+
+                        }
+
                         String checkText = Regex.Replace(activity.Text, @"[^a-zA-Z0-9ㄱ-힣]", "", RegexOptions.Singleline);//공백 및 특수문자 제거
                         int chectTextLength = checkText.Length;
 
@@ -1112,60 +1172,7 @@ namespace HanjinChatBot
                             }
                         }
 
-                        //gjlim v2009
-                        if (cacheList.trainFlag == "K")
-                        {
-                            if (relationList != null)
-                            {
-                                dlgId = "";
-                                mobilePC = uData[0].mobilePc;
-                                for (int m = 0; m < relationList.Count; m++)
-                                {
-                                    DialogList dlg = db.SelectDialog(relationList[m].dlgId, mobilePC);
-                                    dlgId += Convert.ToString(dlg.dlgId) + ",";
-                                    Activity commonReply = activity.CreateReply();
-                                    Attachment tempAttachment = new Attachment();
-                                    DButil.HistoryLog("dlg.dlgType : " + dlg.dlgType);
-
-                                    string userSSO = "NONE";
-
-                                    if (dlg.dlgType.Equals(CARDDLG))
-                                    {
-                                        foreach (CardList tempcard in dlg.dialogCard)
-                                        {
-                                            tempAttachment = dbutil.getAttachmentFromDialog(tempcard, activity, userSSO);
-
-                                            if (tempAttachment != null)
-                                            {
-                                                commonReply.Attachments.Add(tempAttachment);
-                                            }
-
-                                            //2018-04-19:KSO:Carousel 만드는부분 추가
-                                            if (tempcard.card_order_no > 1)
-                                            {
-                                                commonReply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        //DButil.HistoryLog("* facebook dlg.dlgId : " + dlg.dlgId);
-                                        DButil.HistoryLog("* activity.ChannelId : " + activity.ChannelId);
-
-                                        tempAttachment = dbutil.getAttachmentFromDialog(dlg, activity);
-                                        commonReply.Attachments.Add(tempAttachment);
-                                    }
-
-                                    if (commonReply.Attachments.Count > 0)
-                                    {
-                                        SetActivity(commonReply);
-                                        replyresult = "H";
-                                    }
-                                }
-                            }
-
-                        }
-                        else if (relationList != null)
+                        if (relationList != null)
                         {
                             dlgId = "";
                             mobilePC = uData[0].mobilePc;
