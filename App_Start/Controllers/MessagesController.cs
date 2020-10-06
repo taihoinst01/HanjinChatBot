@@ -6392,7 +6392,7 @@ namespace HanjinChatBot
                                                 cardButton = new CardAction()
                                                 {
                                                     Type = "openUrl",
-                                                    Value = "https://m.hanex.hanjin.co.kr/customer/vocRegistView",
+                                                    Value = "https://www.hanjin.co.kr/Delivery_html/help/customer_write.jsp",
                                                     Title = "1:1 온라인 상담"
                                                 };
                                                 cardButtons.Add(cardButton);
