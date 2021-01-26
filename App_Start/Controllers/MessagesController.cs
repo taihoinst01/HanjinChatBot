@@ -1886,7 +1886,8 @@ namespace HanjinChatBot
                                         bookButton = new CardAction()
                                         {
                                             Type = "openUrl",
-                                            Value = "https://www.hanjin.co.kr/Delivery_html/reserve/care_check.jsp?rsr_gbn=A",
+                                            Value = "https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/Reserve1.do?mCode=MN023",
+                                                     
                                             Title = "예약접수"
                                         };
                                         cardButtons.Add(bookButton);
@@ -1897,7 +1898,7 @@ namespace HanjinChatBot
                                         bookButton = new CardAction()
                                         {
                                             Type = "openUrl",
-                                            Value = "https://app.hanjin.co.kr/app/view/JUVEJTgzJTlEJUVCJUIwJUIwJUVDJTk4JTg4JUVDJTk1JUJE?rsv_typ=A&from=web",
+                                            Value = "https://www.hanjin.co.kr/kor/CMS/DeliveryMgr/Reserve1.do?mCode=MN023",
                                             Title = "예약접수"
                                         };
                                         cardButtons.Add(bookButton);
